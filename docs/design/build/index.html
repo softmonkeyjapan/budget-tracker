@@ -1,0 +1,1638 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Budget Tracker v2 — design system et écrans HTML">
+  <title>Budget Tracker v2 — UI Guidelines</title>
+  <style>
+/*! tailwindcss v4.2.1 | MIT License | https://tailwindcss.com */
+@layer properties;
+@layer theme, base, components, utilities;
+@layer theme {
+  :root, :host {
+    --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+      "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
+    --color-red-50: oklch(97.1% 0.013 17.38);
+    --color-red-500: oklch(63.7% 0.237 25.331);
+    --color-orange-100: oklch(95.4% 0.038 75.164);
+    --color-orange-400: oklch(75% 0.183 55.934);
+    --color-orange-500: oklch(70.5% 0.213 47.604);
+    --color-amber-100: oklch(96.2% 0.059 95.617);
+    --color-amber-400: oklch(82.8% 0.189 84.429);
+    --color-amber-500: oklch(76.9% 0.188 70.08);
+    --color-emerald-50: oklch(97.9% 0.021 166.113);
+    --color-emerald-100: oklch(95% 0.052 163.051);
+    --color-emerald-400: oklch(76.5% 0.177 163.223);
+    --color-emerald-500: oklch(69.6% 0.17 162.48);
+    --color-emerald-600: oklch(59.6% 0.145 163.225);
+    --color-emerald-700: oklch(50.8% 0.118 165.612);
+    --color-blue-50: oklch(97% 0.014 254.604);
+    --color-blue-100: oklch(93.2% 0.032 255.585);
+    --color-blue-500: oklch(62.3% 0.214 259.815);
+    --color-blue-600: oklch(54.6% 0.245 262.881);
+    --color-violet-100: oklch(94.3% 0.029 294.588);
+    --color-violet-400: oklch(70.2% 0.183 293.541);
+    --color-violet-500: oklch(60.6% 0.25 292.717);
+    --color-rose-100: oklch(94.1% 0.03 12.58);
+    --color-rose-500: oklch(64.5% 0.246 16.439);
+    --color-slate-100: oklch(96.8% 0.007 247.896);
+    --color-slate-200: oklch(92.9% 0.013 255.508);
+    --color-slate-800: oklch(27.9% 0.041 260.031);
+    --color-white: #fff;
+    --spacing: 0.25rem;
+    --text-xs: 0.75rem;
+    --text-xs--line-height: calc(1 / 0.75);
+    --text-sm: 0.875rem;
+    --text-sm--line-height: calc(1.25 / 0.875);
+    --text-lg: 1.125rem;
+    --text-lg--line-height: calc(1.75 / 1.125);
+    --text-xl: 1.25rem;
+    --text-xl--line-height: calc(1.75 / 1.25);
+    --text-2xl: 1.5rem;
+    --text-2xl--line-height: calc(2 / 1.5);
+    --text-3xl: 1.875rem;
+    --text-3xl--line-height: calc(2.25 / 1.875);
+    --text-4xl: 2.25rem;
+    --text-4xl--line-height: calc(2.5 / 2.25);
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
+    --radius-lg: 0.5rem;
+    --radius-2xl: 1rem;
+    --default-font-family: var(--font-sans);
+    --default-mono-font-family: var(--font-mono);
+    --color-peach: #ffd2c4;
+    --color-coral: #ff8a66;
+    --shadow-soft: 0 8px 24px rgb(40 52 77 / 7%);
+  }
+}
+@layer base {
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+  html, :host {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+    font-feature-settings: var(--default-font-feature-settings, normal);
+    font-variation-settings: var(--default-font-variation-settings, normal);
+    -webkit-tap-highlight-color: transparent;
+  }
+  hr {
+    height: 0;
+    color: inherit;
+    border-top-width: 1px;
+  }
+  abbr:where([title]) {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  a {
+    color: inherit;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+  }
+  b, strong {
+    font-weight: bolder;
+  }
+  code, kbd, samp, pre {
+    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+    font-feature-settings: var(--default-mono-font-feature-settings, normal);
+    font-variation-settings: var(--default-mono-font-variation-settings, normal);
+    font-size: 1em;
+  }
+  small {
+    font-size: 80%;
+  }
+  sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+  sub {
+    bottom: -0.25em;
+  }
+  sup {
+    top: -0.5em;
+  }
+  table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+  :-moz-focusring {
+    outline: auto;
+  }
+  progress {
+    vertical-align: baseline;
+  }
+  summary {
+    display: list-item;
+  }
+  ol, ul, menu {
+    list-style: none;
+  }
+  img, svg, video, canvas, audio, iframe, embed, object {
+    display: block;
+    vertical-align: middle;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+  button, input, select, optgroup, textarea, ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+  :where(select:is([multiple], [size])) optgroup {
+    font-weight: bolder;
+  }
+  :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px;
+  }
+  ::file-selector-button {
+    margin-inline-end: 4px;
+  }
+  ::placeholder {
+    opacity: 1;
+  }
+  @supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
+    ::placeholder {
+      color: currentcolor;
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, currentcolor 50%, transparent);
+      }
+    }
+  }
+  textarea {
+    resize: vertical;
+  }
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+  ::-webkit-date-and-time-value {
+    min-height: 1lh;
+    text-align: inherit;
+  }
+  ::-webkit-datetime-edit {
+    display: inline-flex;
+  }
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+  ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {
+    padding-block: 0;
+  }
+  ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
+  :-moz-ui-invalid {
+    box-shadow: none;
+  }
+  button, input:where([type="button"], [type="reset"], [type="submit"]), ::file-selector-button {
+    appearance: button;
+  }
+  ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
+    height: auto;
+  }
+  [hidden]:where(:not([hidden="until-found"])) {
+    display: none !important;
+  }
+}
+@layer utilities {
+  .visible {
+    visibility: visible;
+  }
+  .absolute {
+    position: absolute;
+  }
+  .relative {
+    position: relative;
+  }
+  .inset-6 {
+    inset: calc(var(--spacing) * 6);
+  }
+  .inset-12 {
+    inset: calc(var(--spacing) * 12);
+  }
+  .start {
+    inset-inline-start: var(--spacing);
+  }
+  .mx-auto {
+    margin-inline: auto;
+  }
+  .mt-1 {
+    margin-top: calc(var(--spacing) * 1);
+  }
+  .mt-2 {
+    margin-top: calc(var(--spacing) * 2);
+  }
+  .mt-3 {
+    margin-top: calc(var(--spacing) * 3);
+  }
+  .mt-4 {
+    margin-top: calc(var(--spacing) * 4);
+  }
+  .mt-5 {
+    margin-top: calc(var(--spacing) * 5);
+  }
+  .mt-6 {
+    margin-top: calc(var(--spacing) * 6);
+  }
+  .mt-8 {
+    margin-top: calc(var(--spacing) * 8);
+  }
+  .mb-2 {
+    margin-bottom: calc(var(--spacing) * 2);
+  }
+  .block {
+    display: block;
+  }
+  .flex {
+    display: flex;
+  }
+  .grid {
+    display: grid;
+  }
+  .inline {
+    display: inline;
+  }
+  .table {
+    display: table;
+  }
+  .h-8 {
+    height: calc(var(--spacing) * 8);
+  }
+  .h-9 {
+    height: calc(var(--spacing) * 9);
+  }
+  .h-10 {
+    height: calc(var(--spacing) * 10);
+  }
+  .h-11 {
+    height: calc(var(--spacing) * 11);
+  }
+  .h-12 {
+    height: calc(var(--spacing) * 12);
+  }
+  .h-14 {
+    height: calc(var(--spacing) * 14);
+  }
+  .h-44 {
+    height: calc(var(--spacing) * 44);
+  }
+  .h-48 {
+    height: calc(var(--spacing) * 48);
+  }
+  .w-8 {
+    width: calc(var(--spacing) * 8);
+  }
+  .w-9 {
+    width: calc(var(--spacing) * 9);
+  }
+  .w-10 {
+    width: calc(var(--spacing) * 10);
+  }
+  .w-11 {
+    width: calc(var(--spacing) * 11);
+  }
+  .w-12 {
+    width: calc(var(--spacing) * 12);
+  }
+  .w-14 {
+    width: calc(var(--spacing) * 14);
+  }
+  .w-44 {
+    width: calc(var(--spacing) * 44);
+  }
+  .w-48 {
+    width: calc(var(--spacing) * 48);
+  }
+  .w-full {
+    width: 100%;
+  }
+  .max-w-32 {
+    max-width: calc(var(--spacing) * 32);
+  }
+  .min-w-0 {
+    min-width: calc(var(--spacing) * 0);
+  }
+  .flex-1 {
+    flex: 1;
+  }
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .flex-wrap {
+    flex-wrap: wrap;
+  }
+  .place-content-center {
+    place-content: center;
+  }
+  .items-center {
+    align-items: center;
+  }
+  .justify-between {
+    justify-content: space-between;
+  }
+  .justify-end {
+    justify-content: flex-end;
+  }
+  .gap-2 {
+    gap: calc(var(--spacing) * 2);
+  }
+  .gap-3 {
+    gap: calc(var(--spacing) * 3);
+  }
+  .gap-4 {
+    gap: calc(var(--spacing) * 4);
+  }
+  .gap-5 {
+    gap: calc(var(--spacing) * 5);
+  }
+  .gap-6 {
+    gap: calc(var(--spacing) * 6);
+  }
+  .space-y-3 {
+    :where(& > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * 3) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-y-reverse)));
+    }
+  }
+  .space-y-4 {
+    :where(& > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * 4) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-y-reverse)));
+    }
+  }
+  .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .overflow-hidden {
+    overflow: hidden;
+  }
+  .rounded-2xl {
+    border-radius: var(--radius-2xl);
+  }
+  .rounded-full {
+    border-radius: calc(infinity * 1px);
+  }
+  .rounded-lg {
+    border-radius: var(--radius-lg);
+  }
+  .border {
+    border-style: var(--tw-border-style);
+    border-width: 1px;
+  }
+  .border-l {
+    border-left-style: var(--tw-border-style);
+    border-left-width: 1px;
+  }
+  .border-l-2 {
+    border-left-style: var(--tw-border-style);
+    border-left-width: 2px;
+  }
+  .border-dashed {
+    --tw-border-style: dashed;
+    border-style: dashed;
+  }
+  .border-orange-100 {
+    border-color: var(--color-orange-100);
+  }
+  .border-slate-100 {
+    border-color: var(--color-slate-100);
+  }
+  .border-slate-200 {
+    border-color: var(--color-slate-200);
+  }
+  .bg-amber-100 {
+    background-color: var(--color-amber-100);
+  }
+  .bg-amber-400 {
+    background-color: var(--color-amber-400);
+  }
+  .bg-blue-50 {
+    background-color: var(--color-blue-50);
+  }
+  .bg-blue-100 {
+    background-color: var(--color-blue-100);
+  }
+  .bg-blue-500 {
+    background-color: var(--color-blue-500);
+  }
+  .bg-coral {
+    background-color: var(--color-coral);
+  }
+  .bg-emerald-50 {
+    background-color: var(--color-emerald-50);
+  }
+  .bg-emerald-100 {
+    background-color: var(--color-emerald-100);
+  }
+  .bg-emerald-400 {
+    background-color: var(--color-emerald-400);
+  }
+  .bg-orange-100 {
+    background-color: var(--color-orange-100);
+  }
+  .bg-orange-400 {
+    background-color: var(--color-orange-400);
+  }
+  .bg-peach\/50 {
+    background-color: color-mix(in srgb, #ffd2c4 50%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-peach) 50%, transparent);
+    }
+  }
+  .bg-red-50 {
+    background-color: var(--color-red-50);
+  }
+  .bg-red-500 {
+    background-color: var(--color-red-500);
+  }
+  .bg-rose-100 {
+    background-color: var(--color-rose-100);
+  }
+  .bg-rose-500 {
+    background-color: var(--color-rose-500);
+  }
+  .bg-violet-100 {
+    background-color: var(--color-violet-100);
+  }
+  .bg-violet-400 {
+    background-color: var(--color-violet-400);
+  }
+  .bg-violet-500 {
+    background-color: var(--color-violet-500);
+  }
+  .bg-white {
+    background-color: var(--color-white);
+  }
+  .p-3 {
+    padding: calc(var(--spacing) * 3);
+  }
+  .p-4 {
+    padding: calc(var(--spacing) * 4);
+  }
+  .p-5 {
+    padding: calc(var(--spacing) * 5);
+  }
+  .p-6 {
+    padding: calc(var(--spacing) * 6);
+  }
+  .px-3 {
+    padding-inline: calc(var(--spacing) * 3);
+  }
+  .px-4 {
+    padding-inline: calc(var(--spacing) * 4);
+  }
+  .py-1 {
+    padding-block: calc(var(--spacing) * 1);
+  }
+  .pl-4 {
+    padding-left: calc(var(--spacing) * 4);
+  }
+  .pl-5 {
+    padding-left: calc(var(--spacing) * 5);
+  }
+  .text-center {
+    text-align: center;
+  }
+  .text-2xl {
+    font-size: var(--text-2xl);
+    line-height: var(--tw-leading, var(--text-2xl--line-height));
+  }
+  .text-3xl {
+    font-size: var(--text-3xl);
+    line-height: var(--tw-leading, var(--text-3xl--line-height));
+  }
+  .text-4xl {
+    font-size: var(--text-4xl);
+    line-height: var(--tw-leading, var(--text-4xl--line-height));
+  }
+  .text-lg {
+    font-size: var(--text-lg);
+    line-height: var(--tw-leading, var(--text-lg--line-height));
+  }
+  .text-sm {
+    font-size: var(--text-sm);
+    line-height: var(--tw-leading, var(--text-sm--line-height));
+  }
+  .text-xl {
+    font-size: var(--text-xl);
+    line-height: var(--tw-leading, var(--text-xl--line-height));
+  }
+  .text-xs {
+    font-size: var(--text-xs);
+    line-height: var(--tw-leading, var(--text-xs--line-height));
+  }
+  .font-bold {
+    --tw-font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-bold);
+  }
+  .font-extrabold {
+    --tw-font-weight: var(--font-weight-extrabold);
+    font-weight: var(--font-weight-extrabold);
+  }
+  .whitespace-nowrap {
+    white-space: nowrap;
+  }
+  .text-amber-500 {
+    color: var(--color-amber-500);
+  }
+  .text-blue-500 {
+    color: var(--color-blue-500);
+  }
+  .text-blue-600 {
+    color: var(--color-blue-600);
+  }
+  .text-coral {
+    color: var(--color-coral);
+  }
+  .text-emerald-500 {
+    color: var(--color-emerald-500);
+  }
+  .text-emerald-600 {
+    color: var(--color-emerald-600);
+  }
+  .text-emerald-700 {
+    color: var(--color-emerald-700);
+  }
+  .text-orange-500 {
+    color: var(--color-orange-500);
+  }
+  .text-red-500 {
+    color: var(--color-red-500);
+  }
+  .text-rose-500 {
+    color: var(--color-rose-500);
+  }
+  .text-slate-800 {
+    color: var(--color-slate-800);
+  }
+  .text-violet-500 {
+    color: var(--color-violet-500);
+  }
+  .capitalize {
+    text-transform: capitalize;
+  }
+  .antialiased {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .shadow-soft {
+    --tw-shadow: 0 8px 24px var(--tw-shadow-color, rgb(40 52 77 / 7%));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .md\:grid-cols-2 {
+    @media (width >= 48rem) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .lg\:grid-cols-3 {
+    @media (width >= 64rem) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .xl\:grid-cols-3 {
+    @media (width >= 80rem) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .xl\:grid-cols-\[\.8fr_1\.3fr\] {
+    @media (width >= 80rem) {
+      grid-template-columns: .8fr 1.3fr;
+    }
+  }
+  .xl\:grid-cols-\[1\.2fr_\.8fr\] {
+    @media (width >= 80rem) {
+      grid-template-columns: 1.2fr .8fr;
+    }
+  }
+  .xl\:grid-cols-\[1\.4fr_\.8fr\] {
+    @media (width >= 80rem) {
+      grid-template-columns: 1.4fr .8fr;
+    }
+  }
+  .xl\:grid-cols-\[1\.6fr_\.7fr\] {
+    @media (width >= 80rem) {
+      grid-template-columns: 1.6fr .7fr;
+    }
+  }
+}
+:root {
+  --peach: #ffd2c4;
+  --coral: #ff8a66;
+  --app: #f3f5fa;
+  --card: #fff;
+  --ink: #172033;
+  --muted: #8a90a2;
+  --line: #e6e9f0;
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  background: linear-gradient(135deg,#ffd7ca,#ffcabc);
+  color: var(--ink);
+  font-family: "Nunito Sans","Poppins",ui-rounded,system-ui,sans-serif;
+}
+button,a,input {
+  font: inherit;
+}
+button,a {
+  -webkit-tap-highlight-color: transparent;
+}
+button:focus-visible,a:focus-visible,input:focus-visible {
+  outline: 3px solid rgb(47 128 237 / 35%);
+  outline-offset: 2px;
+}
+h1 {
+  font-size: clamp(1.75rem,3vw,2.25rem);
+  line-height: 1.1;
+  font-weight: 800;
+}
+h2 {
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+.canvas {
+  min-height: 100vh;
+  padding: 26px 26px 26px 188px;
+}
+.shell {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 292px;
+  grid-template-rows: 82px minmax(calc(100vh - 134px),auto);
+  max-width: 1540px;
+  min-width: 0;
+  margin: auto;
+  overflow: hidden;
+  border-radius: 26px;
+  background: var(--app);
+  box-shadow: 0 28px 70px rgb(74 41 31 / 16%);
+}
+.topbar {
+  grid-column: 1/-1;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 0 34px;
+  background: linear-gradient(90deg,#f3f5fa 0 80%,#fff 80%);
+  border-bottom: 1px solid rgb(230 233 240 / 65%);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: max-content;
+  font-size: 1.35rem;
+}
+.logo {
+  position: relative;
+  width: 34px;
+  height: 28px;
+  display: block;
+}
+.logo i:first-child {
+  position: absolute;
+  inset: 0 10px 7px 0;
+  background: #12ae80;
+  clip-path: polygon(0 0,100% 0,0 100%);
+}
+.logo i:last-child {
+  position: absolute;
+  inset: 7px 0 0 10px;
+  background: #ffb315;
+  clip-path: polygon(100% 0,100% 100%,0 100%);
+}
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 190px;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 12px;
+  background: rgb(255 255 255 / 76%);
+  color: #64748b;
+  box-shadow: 0 3px 16px rgb(40 52 77 / 4%);
+}
+.search input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+}
+.desktop-nav {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  margin-left: auto;
+  height: 100%;
+}
+.desktop-nav a {
+  display: grid;
+  place-items: center;
+  position: relative;
+  color: #697186;
+  text-decoration: none;
+  font-size: .84rem;
+}
+.desktop-nav a.active {
+  color: #111827;
+  font-weight: 800;
+}
+.desktop-nav a.active:after {
+  content: "";
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  bottom: 23px;
+  height: 3px;
+  border-radius: 3px;
+  background: #2f80ed;
+}
+.bell {
+  margin-left: auto;
+  font-size: 1.3rem;
+}
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  color: white;
+  font-weight: 900;
+  background: linear-gradient(135deg,#8a5cf6,#2f80ed 45%,#ff8a66);
+}
+.main {
+  min-width: 0;
+  padding: 26px 30px 34px;
+  overflow: hidden;
+}
+.sidebar {
+  min-width: 0;
+  padding: 30px 26px;
+  background: #fff;
+  border-left: 1px solid var(--line);
+}
+.page-title {
+  min-height: 82px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.page-title p,.muted {
+  color: var(--muted);
+}
+.card {
+  border: 1px solid rgb(230 233 240 / 80%);
+  border-radius: 16px;
+  background: white;
+  box-shadow: var(--shadow-soft);
+}
+.icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  font-weight: 900;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 55%),0 5px 12px rgb(40 52 77 / 8%);
+}
+.label {
+  font-size: .78rem;
+  color: var(--muted);
+  font-weight: 700;
+}
+.caption {
+  font-size: .72rem;
+  color: var(--muted);
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 66px;
+  border-bottom: 1px solid #eef0f5;
+}
+.row:last-child {
+  border: 0;
+}
+.pill,.secondary {
+  min-height: 42px;
+  padding: 0 15px;
+  border: 1px solid #e3e7ef;
+  border-radius: 12px;
+  background: #fff;
+  color: #586176;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgb(40 52 77 / 5%);
+}
+.primary {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 11px;
+  background: #247cf0;
+  color: white;
+  font-weight: 800;
+  box-shadow: 0 8px 18px rgb(47 128 237 / 22%);
+}
+.confirm {
+  min-height: 32px;
+  min-width: 32px;
+  border: 0;
+  border-radius: 8px;
+  background: #18b981;
+  color: #fff;
+  font-weight: 900;
+}
+.add-row {
+  min-height: 44px;
+  margin-top: 12px;
+  color: #697186;
+  background: transparent;
+  border: 1px dashed #aeb6c6;
+  border-radius: 12px;
+  padding: 0 14px;
+}
+.dots {
+  border: 0;
+  background: transparent;
+  color: #718096;
+}
+.section-title {
+  margin: 28px 0 14px;
+}
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(6,minmax(0,1fr));
+  gap: 12px;
+}
+.chart-grid {
+  display: grid;
+  grid-template-columns: 42px minmax(0,1fr);
+  min-height: 250px;
+  margin-top: 16px;
+}
+.chart-y {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2px 7px 28px 0;
+  color: #8991a3;
+  font-size: .65rem;
+  text-align: right;
+}
+.chart-bars {
+  display: grid;
+  grid-template-columns: repeat(12,minmax(24px,1fr));
+  align-items: end;
+  gap: 7px;
+  min-width: 560px;
+  padding-top: 10px;
+  background: repeating-linear-gradient(to bottom,#edf0f5 0 1px,transparent 1px 25%);
+  overflow: hidden;
+}
+.bar-slot {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  position: relative;
+  height: 220px;
+  gap: 3px;
+}
+.bar-slot small {
+  position: absolute;
+  bottom: 0;
+  color: #778094;
+  font-size: .62rem;
+}
+.bar {
+  width: 38%;
+  max-width: 14px;
+  margin-bottom: 25px;
+  border-radius: 5px 5px 2px 2px;
+}
+.bar.previous {
+  background: #e5e8ef;
+}
+.bar.current {
+  background: #2182f4;
+}
+.stack {
+  display: flex;
+  flex-direction: column-reverse;
+  width: 62%;
+  margin-bottom: 25px;
+  border-radius: 5px 5px 2px 2px;
+  overflow: hidden;
+}
+.stack i {
+  height: 25%;
+}
+.filters {
+  display: flex;
+  gap: 10px;
+  padding: 16px;
+  border-bottom: 1px solid #eef0f5;
+}
+.table {
+  min-width: 760px;
+}
+.tr {
+  display: grid;
+  grid-template-columns: 110px 1fr 1.4fr 150px 35px;
+  align-items: center;
+  min-height: 66px;
+  padding: 0 18px;
+  border-bottom: 1px solid #eef0f5;
+  font-size: .86rem;
+}
+.table-head {
+  min-height: 50px;
+  color: #778094;
+  font-size: .75rem;
+  background: #fafbfc;
+}
+.tabs {
+  display: flex;
+  gap: 50px;
+  padding: 8px 4px 18px;
+  border-bottom: 1px solid #e8ebf1;
+  color: #687186;
+}
+.tabs b {
+  color: #247cf0;
+}
+.field {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid #dce1ea;
+  border-radius: 9px;
+  background: #fff;
+  padding: 0 12px;
+  outline: none;
+}
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  border: 1px solid #dce1ea;
+  border-radius: 9px;
+}
+.segmented button {
+  height: 42px;
+  border: 0;
+  background: #fff;
+}
+.segmented .selected {
+  background: #fff1ed;
+  color: #ef5f41;
+}
+.toggle {
+  width: 40px;
+  height: 22px;
+  accent-color: #247cf0;
+}
+.progress {
+  height: 9px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e9ecf2;
+}
+.progress i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+.status {
+  display: inline-block;
+  border-radius: 999px;
+  background: #fff0e9;
+  padding: 4px 10px;
+  color: #ed633f;
+  font-size: .65rem;
+  font-weight: 900;
+}
+.subheading {
+  margin: 25px 0 12px;
+  font-size: .8rem;
+  color: #727b8e;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(8,1fr);
+  gap: 12px;
+}
+.color-grid div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: .75rem;
+}
+.color-grid span {
+  height: 54px;
+  border-radius: 12px;
+  border: 1px solid rgb(0 0 0 / 5%);
+}
+.color-grid small {
+  color: var(--muted);
+}
+.rules {
+  display: grid;
+  gap: 9px;
+  margin-top: 15px;
+  padding-left: 20px;
+  color: #5d6577;
+  font-size: .9rem;
+  list-style: disc;
+}
+.preview-nav {
+  position: fixed;
+  z-index: 30;
+  top: 26px;
+  bottom: 26px;
+  left: 16px;
+  width: 156px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 18px 12px;
+  border-radius: 20px;
+  background: rgb(255 255 255 / 88%);
+  box-shadow: 0 16px 40px rgb(74 41 31 / 12%);
+  backdrop-filter: blur(16px);
+}
+.preview-nav b {
+  padding: 4px 9px 12px;
+}
+.preview-nav a {
+  padding: 10px 9px;
+  border-radius: 10px;
+  color: #687186;
+  text-decoration: none;
+  font-size: .78rem;
+}
+.preview-nav a.active {
+  background: #eaf3ff;
+  color: #247cf0;
+  font-weight: 900;
+}
+.mobile-switcher {
+  display: none;
+}
+@media (max-width:1180px) {
+  .canvas {
+    padding-left: 160px;
+  }
+  .shell {
+    grid-template-columns: minmax(0,1fr);
+  }
+  .sidebar {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+  .topbar {
+    background: var(--app);
+  }
+  .category-grid {
+    grid-template-columns: repeat(3,1fr);
+  }
+  .desktop-nav {
+    display: none;
+  }
+}
+@media (max-width:760px) {
+  body {
+    background: var(--app);
+  }
+  .canvas {
+    padding: 0 0 72px;
+  }
+  .shell {
+    display: block;
+    min-height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .topbar {
+    height: 68px;
+    padding: 0 16px;
+    gap: 12px;
+  }
+  .brand b {
+    font-size: 1rem;
+  }
+  .search,.bell {
+    display: none;
+  }
+  .avatar {
+    margin-left: auto;
+  }
+  .main,.sidebar {
+    padding: 18px 14px;
+  }
+  .page-title {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .page-title>.flex-1 {
+    min-width: 180px;
+  }
+  .category-grid {
+    display: flex;
+    overflow-x: auto;
+  }
+  .category-grid>.card {
+    min-width: 145px;
+  }
+  .filters {
+    overflow-x: auto;
+  }
+  .filters .search {
+    display: flex;
+    min-width: 220px;
+  }
+  .table {
+    overflow-x: auto;
+  }
+  .chart-grid {
+    overflow-x: auto;
+  }
+  .preview-nav {
+    display: none;
+  }
+  .mobile-switcher {
+    position: fixed;
+    z-index: 50;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    padding: 7px;
+    border-radius: 15px;
+    background: rgb(23 32 51 / 92%);
+    backdrop-filter: blur(12px);
+  }
+  .mobile-switcher a {
+    flex: none;
+    padding: 8px 10px;
+    border-radius: 9px;
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: .68rem;
+  }
+  .mobile-switcher a.active {
+    background: #2f80ed;
+    color: white;
+    font-weight: 800;
+  }
+  .color-grid {
+    grid-template-columns: repeat(4,1fr);
+  }
+}
+.income-pie {
+  background: conic-gradient(#ff8a66 0 40%,#23c48e 40% 56%,#2f80ed 56% 64%,#8a5cf6 64% 69%,#ff5b62 69% 72%,#eef0f5 72%);
+}
+.usage-list .row {
+  min-height: 54px;
+}
+.balance-strip {
+  display: grid;
+  grid-template-columns: repeat(12,1fr);
+  align-items: end;
+  gap: 12px;
+  height: 155px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-bottom: 1px solid #e6e9f0;
+}
+.balance-strip div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 135px;
+  gap: 7px;
+}
+.balance-strip i {
+  width: 18px;
+  border-radius: 6px 6px 2px 2px;
+  background: #2f80ed;
+}
+.balance-strip small {
+  font-size: .62rem;
+  color: #8a90a2;
+}
+.tree-root,.tree-child {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tree-children {
+  margin: 10px 0 0 22px;
+  padding-left: 26px;
+  border-left: 1px solid #e5e9f0;
+}
+.tree-child {
+  position: relative;
+  min-height: 58px;
+  border-top: 1px solid #f0f2f6;
+}
+.tree-line {
+  position: absolute;
+  left: -26px;
+  width: 20px;
+  border-top: 1px solid #e5e9f0;
+}
+.inherit-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px #f5f6f9;
+}
+.form-label {
+  position: relative;
+  display: block;
+  margin-top: 20px;
+  color: #727b8e;
+  font-size: .75rem;
+  font-weight: 700;
+}
+.form-label .field {
+  display: block;
+  margin-top: 7px;
+  color: #172033;
+  font-size: .9rem;
+}
+.color-swatch {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 9px;
+}
+.inherit-note {
+  padding: 16px;
+  border-radius: 14px;
+  background: #fff4ef;
+  color: #7c4a3b;
+}
+.inherit-note p {
+  margin-top: 4px;
+  font-size: .78rem;
+  line-height: 1.5;
+}
+.form-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.form-step>span {
+  display: grid;
+  place-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #eaf3ff;
+  color: #2f80ed;
+  font-weight: 900;
+}
+.category-choice,.child-choice {
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+  gap: 10px;
+  margin-top: 14px;
+}
+.child-choice {
+  grid-template-columns: repeat(3,1fr);
+}
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 68px;
+  padding: 12px;
+  border: 1px solid #e3e7ef;
+  border-radius: 14px;
+  background: #fff;
+  cursor: pointer;
+}
+.choice input {
+  display: none;
+}
+.choice.selected {
+  border-color: #2f80ed;
+  background: #f4f8ff;
+  box-shadow: 0 0 0 2px rgb(47 128 237 / 10%);
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 20px;
+  margin-top: 26px;
+}
+.form-grid .full {
+  grid-column: 1/-1;
+}
+.amount-field {
+  padding-right: 70px;
+}
+.field-suffix {
+  position: absolute;
+  right: 12px;
+  bottom: 13px;
+  color: #8a90a2;
+}
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 26px;
+}
+.summary-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: center;
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgb(40 52 77 / 7%);
+}
+.summary-card>strong {
+  grid-column: 1/-1;
+  padding-top: 12px;
+  border-top: 1px solid #eef0f5;
+  font-size: 1.25rem;
+}
+.compact-form {
+  max-width: 760px;
+  margin: auto;
+}
+.income-hero {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  border-radius: 16px;
+  background: #f0fbf7;
+}
+.component-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 24px;
+  margin-top: 20px;
+}
+.mini-flow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+.mini-flow b {
+  padding: 10px;
+  border-radius: 10px;
+  background: #f3f5fa;
+}
+.usage-demo {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  margin-top: 14px;
+}
+.usage-demo .progress {
+  grid-column: 1/-1;
+}
+.toast {
+  position: fixed;
+  z-index: 99;
+  right: 24px;
+  bottom: 24px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: #172033;
+  color: white;
+  font-weight: 800;
+  box-shadow: 0 12px 30px rgb(23 32 51 / 25%);
+}
+@media (max-width:760px) {
+  .category-choice,.child-choice,.component-grid {
+    grid-template-columns: 1fr;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .form-grid .full {
+    grid-column: auto;
+  }
+  .balance-strip {
+    min-width: 620px;
+  }
+  .tree-root {
+    flex-wrap: wrap;
+  }
+  .toast {
+    left: 14px;
+    right: 14px;
+    bottom: 76px;
+    text-align: center;
+  }
+}
+@property --tw-space-y-reverse {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-font-weight {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-inset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-ring-inset {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-offset-width {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --tw-ring-offset-color {
+  syntax: "*";
+  inherits: false;
+  initial-value: #fff;
+}
+@property --tw-ring-offset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@layer properties {
+  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+    *, ::before, ::after, ::backdrop {
+      --tw-space-y-reverse: 0;
+      --tw-border-style: solid;
+      --tw-font-weight: initial;
+      --tw-shadow: 0 0 #0000;
+      --tw-shadow-color: initial;
+      --tw-shadow-alpha: 100%;
+      --tw-inset-shadow: 0 0 #0000;
+      --tw-inset-shadow-color: initial;
+      --tw-inset-shadow-alpha: 100%;
+      --tw-ring-color: initial;
+      --tw-ring-shadow: 0 0 #0000;
+      --tw-inset-ring-color: initial;
+      --tw-inset-ring-shadow: 0 0 #0000;
+      --tw-ring-inset: initial;
+      --tw-ring-offset-width: 0px;
+      --tw-ring-offset-color: #fff;
+      --tw-ring-offset-shadow: 0 0 #0000;
+    }
+  }
+}
+
+</style>
+</head>
+<body>
+  <aside class="preview-nav" aria-label="Écrans">
+    <b>Écrans v2</b>
+    <a href="#design-system">Design system</a>
+    <a href="#dashboard">Dashboard mensuel</a>
+    <a href="#general">Comparaison</a>
+    <a href="#categories">Catégories</a>
+    <a href="#expense">Saisie dépense</a>
+    <a href="#income">Entrée d’argent</a>
+  </aside>
+  <div id="app"></div>
+  <nav class="mobile-switcher" aria-label="Écrans mobiles"></nav>
+  <script>
+/* Budget Tracker v2 — JavaScript vanilla, sans dépendance */
+const screens = [
+  ["design-system","Design system","DS"], ["dashboard","Dashboard mensuel","Mois"],
+  ["general","Comparaison","Général"], ["categories","Catégories","Catégories"],
+  ["expense","Saisie dépense","Dépense"], ["income","Entrée d’argent","Entrée"]
+];
+const roots = {
+  alimentaire:{label:"Alimentaire",glyph:"▾",tone:"bg-emerald-100 text-emerald-500",children:["Alimentation générale","Boucherie","Restaurants"]},
+  charges:{label:"Charges fixes",glyph:"⌂",tone:"bg-orange-100 text-orange-500",children:["Loyer","Internet","Électricité"]},
+  transport:{label:"Transport",glyph:"▣",tone:"bg-blue-100 text-blue-500",children:["Carburant","Entretien","Bus"]},
+  loisirs:{label:"Loisirs",glyph:"✦",tone:"bg-violet-100 text-violet-500",children:["Sorties","Jeux","Sport"]},
+  sante:{label:"Santé",glyph:"♥",tone:"bg-rose-100 text-rose-500",children:["Pharmacie","Médecin"]}
+};
+const format = n => `${new Intl.NumberFormat("fr-FR").format(n)} FCFP`;
+const icon = (key,small=false) => `<span class="icon ${small?"h-9 w-9 text-lg":"h-11 w-11 text-xl"} ${roots[key].tone}">${roots[key].glyph}</span>`;
+const card = (html,cls="") => `<section class="card ${cls}">${html}</section>`;
+const pill = text => `<button class="pill">${text}</button>`;
+const title = (name,subtitle,action="") => `<div class="page-title"><div class="flex-1"><h1>${name}</h1><p>${subtitle}</p></div>${action}</div>`;
+const stat = (name,value,color,glyph,delta="") => card(`<span class="icon h-12 w-12 bg-${color}-50 text-${color}-500 text-xl">${glyph}</span><div class="min-w-0"><p class="label">${name}</p><p class="mt-1 truncate text-xl font-extrabold text-${color}-500">${value}</p>${delta?`<p class="caption mt-1">${delta}</p>`:""}</div>`,"flex items-center gap-4 p-5");
+const categoryRow = (key,amount,percent,child="") => `<div class="row">${icon(key)}<div class="min-w-0 flex-1"><p class="font-bold text-slate-800">${child||roots[key].label}</p><p class="caption">${child?roots[key].label:"Catégorie racine"}</p></div>${percent!==undefined?`<strong class="text-blue-500">${percent} %</strong>`:""}${amount!==undefined?`<strong class="whitespace-nowrap text-sm">${format(amount)}</strong>`:""}</div>`;
+const donut = () => `<div class="relative mx-auto h-48 w-48 rounded-full income-pie"><div class="absolute inset-12 grid place-content-center rounded-full bg-white text-center"><strong class="text-2xl">260 000</strong><span class="caption">revenus</span></div></div>`;
+const monthBars = () => `<div class="chart-grid"><div class="chart-y"><span>300k</span><span>225k</span><span>150k</span><span>75k</span><span>0</span></div><div class="chart-bars">${[56,68,61,74,66,81,73,88,80,92,86,95].map((v,i)=>`<div class="bar-slot"><i class="bar previous" style="height:${v*.72}%"></i><i class="bar current" style="height:${v}%"></i><small>${["Sep","Oct","Nov","Déc","Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août"][i]}</small></div>`).join("")}</div></div>`;
+const topbar = current => `<header class="topbar"><div class="brand"><span class="logo"><i></i><i></i></span><b>Budget Tracker</b></div><label class="search">⌕ <input placeholder="Rechercher" aria-label="Rechercher"></label><nav class="desktop-nav">${screens.slice(1).map(s=>`<a class="${s[0]===current?"active":""}" href="#${s[0]}">${s[2]}</a>`).join("")}</nav><span class="bell">♧</span><span class="avatar">LT</span></header>`;
+const shell = (screen,main,aside) => `<div class="canvas"><div class="shell">${topbar(screen)}<main class="main">${main}</main><aside class="sidebar">${aside}</aside></div></div>`;
+const recent = [
+  ["charges","Loyer","01 août","Appartement",82000], ["alimentaire","Alimentation générale","03 août","Supermarché",14850],
+  ["transport","Carburant","08 août","Station-service",8200], ["loisirs","Sorties","12 août","Cinéma",3400],
+  ["sante","Pharmacie","15 août","Ordonnance",5250]
+];
+function lastExpenses(){return card(`<div class="flex justify-between"><h2>5 dernières dépenses</h2><button class="secondary">Tout voir</button></div><div class="table mt-3"><div class="tr table-head"><span>Date</span><span>Catégorie</span><span>Description</span><span>Montant</span><span></span></div>${recent.map(r=>`<div class="tr"><span>${r[2]}</span><span class="flex items-center gap-2">${icon(r[0],true)}<span><b>${r[1]}</b><small class="caption block">${roots[r[0]].label}</small></span></span><span>${r[3]}</span><strong class="text-red-500">−${format(r[4])}</strong><button class="dots">•••</button></div>`).join("")}</div>`,"overflow-hidden p-5");}
+function dashboard(){const main=title("Août 2026","Vue mensuelle",pill("‹　Août 2026　›"))+`<div class="grid gap-4 lg:grid-cols-3">${stat("Entrées d’argent",format(260000),"emerald","↗","2 entrées ce mois")+stat("Dépenses",format(186450),"red","↓","72 % des revenus")+stat("Solde",format(73550),"blue","▰","28 % disponible")}</div>`+card(`<div><h2>Répartition des revenus</h2><p class="caption mt-1">100 % = entrées d’argent du mois</p>${donut()}</div><div class="usage-list"><h2>Utilisation par catégorie</h2>${categoryRow("charges",102900,40)+categoryRow("alimentaire",41800,16)+categoryRow("transport",21500,8)+categoryRow("loisirs",12750,5)+categoryRow("sante",7500,3)}</div>`,`mt-4 grid gap-6 p-5 xl:grid-cols-[.8fr_1.3fr]`)+`<div class="mt-4">${lastExpenses()}</div>`;const aside=`<h2>Entrées du mois</h2>${card(`<p class="caption">03 août · Salaire</p><b>${format(230000)}</b>`,"mt-4 p-4")+card(`<p class="caption">21 août · Mission freelance</p><b>${format(30000)}</b>`,"mt-3 p-4")}<button class="primary mt-4 w-full" onclick="location.hash='#income'">＋ Ajouter une entrée</button><h2 class="mt-8">Actions rapides</h2><button class="secondary mt-3 w-full" onclick="location.hash='#expense'">＋ Nouvelle dépense</button>`;return shell("dashboard",main,aside);}
+function general(){const main=title("Comparaison mensuelle","Septembre 2025 — Août 2026",pill("12 derniers mois　⌄"))+`<div class="grid gap-4 lg:grid-cols-3">${stat("Revenus cumulés",format(3120000),"emerald","↗","+8,4 % sur 12 mois")+stat("Dépenses cumulées",format(2438600),"red","↓","+3,1 % sur 12 mois")+stat("Solde cumulé",format(681400),"blue","▰","21,8 % conservé")}</div>`+card(`<div class="flex justify-between"><h2>Revenus et dépenses par mois</h2><p class="caption"><span class="text-emerald-500">■ Revenus</span>　<span class="text-red-500">■ Dépenses</span></p></div>${monthBars()}`,"mt-4 p-5")+card(`<h2>Solde mensuel</h2><div class="balance-strip">${[65,82,54,91,70,110,88,105,76,120,98,74].map((v,i)=>`<div><i style="height:${v}px"></i><small>${["Sep","Oct","Nov","Déc","Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août"][i]}</small></div>`).join("")}</div>`,"mt-4 p-5");const aside=`<h2>Points clés</h2>${card(`<p class="caption">Meilleur solde</p><b>Juin · ${format(96500)}</b>`,"mt-4 p-4")+card(`<p class="caption">Dépenses moyennes</p><b>${format(203217)}</b>`,"mt-3 p-4")+card(`<p class="caption">Revenus moyens</p><b>${format(260000)}</b>`,"mt-3 p-4")}<h2 class="mt-8">Lecture</h2><p class="muted mt-2 text-sm">Comparaison fondée uniquement sur les entrées et dépenses réelles de chaque mois.</p>`;return shell("general",main,aside);}
+function categories(){const tree=Object.entries(roots).map(([key,r])=>card(`<div class="tree-root">${icon(key)}<div class="flex-1"><b>${r.label}</b><p class="caption">${r.children.length} sous-catégories</p></div><button class="secondary">＋ Enfant</button><button class="dots">•••</button></div><div class="tree-children">${r.children.map((child,i)=>`<div class="tree-child"><span class="tree-line"></span>${icon(key,true)}<div class="flex-1"><b>${child}</b><p class="caption">${i===1&&key==="alimentaire"?"Couleur propre":"Hérite de "+r.label}</p></div><span class="inherit-dot ${i===1&&key==="alimentaire"?"bg-amber-400":r.tone.split(" ")[0]}"></span><button class="dots">•••</button></div>`).join("")}</div>`,"p-4")).join("");const main=title("Catégories","Hiérarchie racine → enfant",`<button class="primary">＋ Catégorie racine</button>`)+`<div class="space-y-3">${tree}</div>`;const aside=`<h2>Modifier la catégorie</h2><label class="form-label">Nom<input class="field" value="Alimentaire"></label><label class="form-label">Niveau<select class="field"><option>Catégorie racine</option><option>Catégorie enfant</option></select></label><p class="form-label">Icône</p><div class="flex flex-wrap gap-2">${Object.keys(roots).map(k=>icon(k)).join("")}</div><p class="form-label">Couleur</p><div class="flex gap-2">${["orange","emerald","blue","violet","rose","amber"].map(c=>`<button class="color-swatch bg-${c}-400" aria-label="${c}"></button>`).join("")}</div><div class="mt-6 flex gap-2"><button class="secondary flex-1">Annuler</button><button class="primary flex-1">Enregistrer</button></div><div class="inherit-note"><b>Héritage</b><p>Un enfant sans couleur ou icône propre reprend celles de sa racine.</p></div>`;return shell("categories",main,aside);}
+function expense(){const main=title("Nouvelle dépense","Enregistrer un mouvement réel",pill("Août 2026"))+card(`<form class="entry-form" onsubmit="event.preventDefault();showToast('Dépense enregistrée')"><div class="form-step"><span>1</span><div><h2>Catégorie racine</h2><p class="caption">Choisissez d’abord une famille</p></div></div><div class="category-choice">${Object.keys(roots).map((k,i)=>`<label class="choice ${i===0?"selected":""}"><input type="radio" name="root" ${i===0?"checked":""}>${icon(k)}<b>${roots[k].label}</b></label>`).join("")}</div><div class="form-step mt-8"><span>2</span><div><h2>Catégorie enfant</h2><p class="caption">La dépense est toujours rattachée à un enfant</p></div></div><div class="child-choice">${roots.alimentaire.children.map((c,i)=>`<label class="choice ${i===0?"selected":""}"><input type="radio" name="child" ${i===0?"checked":""}>${icon("alimentaire",true)}<span><b>${c}</b><small class="caption block">Alimentaire</small></span></label>`).join("")}</div><div class="form-grid"><label class="form-label">Montant<input class="field amount-field" inputmode="numeric" value="14 850"><span class="field-suffix">FCFP</span></label><label class="form-label">Date<input class="field" type="date" value="2026-08-05"></label><label class="form-label full">Description <small>(optionnelle)</small><input class="field" value="Supermarché semaine 1"></label></div><div class="form-actions"><button type="button" class="secondary">Annuler</button><button class="primary">Enregistrer la dépense</button></div></form>`,"p-6");const aside=`<h2>Résumé</h2><div class="summary-card">${icon("alimentaire")}<div><p class="caption">Alimentaire</p><b>Alimentation générale</b></div><strong>14 850 FCFP</strong></div><h2 class="mt-8">Saisie rétroactive</h2><p class="muted mt-2 text-sm">La date peut appartenir à n’importe quel mois passé. Le mouvement apparaîtra automatiquement dans ce mois.</p>`;return shell("expense",main,aside);}
+function income(){const main=title("Nouvelle entrée d’argent","Aucune catégorie nécessaire",pill("Août 2026"))+card(`<form class="entry-form compact-form" onsubmit="event.preventDefault();showToast('Entrée enregistrée')"><div class="income-hero"><span class="icon h-14 w-14 bg-emerald-100 text-emerald-500 text-2xl">↗</span><div><h2>Entrée réelle</h2><p class="caption">Salaire, freelance, remboursement ou autre revenu</p></div></div><div class="form-grid mt-6"><label class="form-label">Montant<input class="field amount-field" inputmode="numeric" value="230 000"><span class="field-suffix">FCFP</span></label><label class="form-label">Date<input class="field" type="date" value="2026-08-03"></label><label class="form-label full">Description <small>(optionnelle)</small><input class="field" value="Salaire août 2026"></label></div><div class="form-actions"><button type="button" class="secondary">Annuler</button><button class="primary">Enregistrer l’entrée</button></div></form>`,"p-6")+card(`<h2>Entrées récentes</h2><div class="row"><span class="icon h-10 w-10 bg-emerald-100 text-emerald-500">↗</span><div class="flex-1"><b>Salaire juillet 2026</b><p class="caption">03 juillet</p></div><strong class="text-emerald-500">+230 000 FCFP</strong></div><div class="row"><span class="icon h-10 w-10 bg-emerald-100 text-emerald-500">↗</span><div class="flex-1"><b>Mission freelance</b><p class="caption">21 juillet</p></div><strong class="text-emerald-500">+30 000 FCFP</strong></div>`,"mt-4 p-5");const aside=`<h2>Règle métier</h2><div class="inherit-note mt-4"><b>Pas de catégorie</b><p>Une entrée d’argent contient uniquement montant, date et description facultative.</p></div><h2 class="mt-8">Impact mensuel</h2>${card(`<p class="caption">Revenus après saisie</p><b class="text-emerald-500">${format(490000)}</b>`,"mt-3 p-4")}<p class="muted mt-4 text-sm">Les pourcentages d’utilisation seront recalculés sur ce nouveau total.</p>`;return shell("income",main,aside);}
+function designSystem(){const colors=[["Pêche","#FFD2C4"],["Corail","#FF8A66"],["Surface","#F3F5FA"],["Bleu","#2F80ED"],["Vert","#23C48E"],["Rouge","#FF5B62"],["Encre","#172033"],["Gris","#8A90A2"]];const main=title("Design system v2","Cockpit financier chaleureux · modèle sans budget manuel")+card(`<h2>Fondations visuelles inchangées</h2><h3 class="subheading">Palette</h3><div class="color-grid">${colors.map(c=>`<div><span style="background:${c[1]}"></span><b>${c[0]}</b><small>${c[1]}</small></div>`).join("")}</div><h3 class="subheading">Typographie</h3><div class="grid gap-5 md:grid-cols-2"><div><p class="text-4xl font-extrabold">Titre principal</p><p class="caption">32 / 40 · ExtraBold</p></div><div><p class="text-2xl font-extrabold">Titre de section</p><p class="caption">22 / 30 · ExtraBold</p></div><div>Corps de texte rond, calme et amical.</div><div><b>Montant 186 450 FCFP</b></div></div>`,"p-6")+card(`<h2>Nouveaux composants métier</h2><div class="component-grid"><div><p class="label">CAMEMBERT REVENUS</p>${donut()}</div><div><p class="label">HIÉRARCHIE</p>${categoryRow("alimentaire",undefined,undefined)+categoryRow("alimentaire",14850,6,"Alimentation générale")}</div><div><p class="label">SÉLECTION 2 NIVEAUX</p><div class="mini-flow"><b>Alimentaire</b><span>→</span><b>Alimentation générale</b></div><p class="caption mt-2">Racine puis enfant obligatoire</p></div><div><p class="label">UTILISATION</p><div class="usage-demo"><b>Charges fixes</b><strong>40 %</strong><span class="progress"><i class="bg-orange-400" style="width:40%"></i></span></div></div></div>`,"mt-4 p-6")+card(`<h2>Règles métier UI</h2><ul class="rules"><li>Le revenu réel mensuel constitue toujours la base 100 %.</li><li>Aucun objectif ou budget manuel n’est affiché ou édité.</li><li>Toute dépense exige une racine puis une catégorie enfant.</li><li>Une entrée d’argent ne possède jamais de catégorie.</li><li>Un enfant sans style propre hérite couleur et icône de sa racine.</li><li>Toute vue et toute saisie sont scopées par date/mois.</li></ul>`,"mt-4 p-6");const aside=`<h2>Écrans inclus</h2><ol class="rules"><li>Dashboard mensuel</li><li>Comparaison mensuelle</li><li>Catégories hiérarchiques</li><li>Saisie de dépense</li><li>Saisie d’entrée</li></ol><div class="inherit-note mt-8"><b>Retiré</b><p>Budget mensuel, objectifs, BudgetProgress, CategoryBudgetRow et récurrentes.</p></div>`;return shell("design-system",main,aside);}
+const pages={"design-system":designSystem,dashboard,general,categories,expense,income};
+function showToast(message){let t=document.createElement("div");t.className="toast";t.textContent="✓ "+message;document.body.append(t);setTimeout(()=>t.remove(),2200);}
+function render(){const key=location.hash.slice(1);const id=pages[key]?key:"design-system";document.querySelector("#app").innerHTML=pages[id]();document.querySelectorAll(".preview-nav a,.mobile-switcher a").forEach(a=>a.classList.toggle("active",a.hash===`#${id}`));}
+document.querySelector(".mobile-switcher").innerHTML=screens.map(s=>`<a href="#${s[0]}">${s[2]}</a>`).join("");
+addEventListener("hashchange",render);render();
+
+</script>
+</body>
+</html>
