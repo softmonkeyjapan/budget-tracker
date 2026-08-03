@@ -56,7 +56,7 @@ function submit() {
 
         <div class="grid grid-cols-1 gap-6 p-6 lg:grid-cols-3">
             <div class="space-y-6 lg:col-span-2">
-            <div class="rounded-card bg-white p-6 shadow-soft">
+            <div class="rounded-card bg-surface p-6 shadow-soft">
                 <div class="flex items-center gap-4 rounded-control bg-income/10 p-4">
                     <span
                         class="flex h-12 w-12 shrink-0 items-center justify-center rounded-control bg-income/20 text-2xl text-income"
@@ -113,7 +113,7 @@ function submit() {
                     <div class="flex justify-end gap-2">
                         <Link
                             :href="route('incomes.index', { month })"
-                            class="rounded-control border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink shadow-pill hover:bg-app"
+                            class="rounded-control border border-line bg-surface px-5 py-2.5 text-sm font-semibold text-ink shadow-pill hover:bg-app"
                         >
                             Annuler
                         </Link>
@@ -124,7 +124,7 @@ function submit() {
                 </form>
             </div>
 
-            <div class="rounded-card bg-white p-6 shadow-soft">
+            <div class="rounded-card bg-surface p-6 shadow-soft">
                 <h3 class="mb-3 text-sm font-semibold text-ink">Entrées récentes</h3>
                 <p v-if="recentIncomes.length === 0" class="text-sm text-muted">
                     Aucune entrée ce mois-ci pour l'instant.
@@ -154,7 +154,7 @@ function submit() {
             </div>
             </div>
 
-            <div class="h-fit rounded-card bg-white p-6 shadow-soft">
+            <div class="h-fit rounded-card bg-surface p-6 shadow-soft">
                 <h3 class="mb-3 text-sm font-semibold text-ink">Règle métier</h3>
                 <p class="rounded-control bg-peach/20 p-3 text-xs text-ink">
                     <strong>Pas de catégorie.</strong> Une entrée d'argent contient uniquement
@@ -162,7 +162,7 @@ function submit() {
                 </p>
 
                 <h3 class="mb-3 mt-6 text-sm font-semibold text-ink">Impact mensuel</h3>
-                <div class="rounded-control bg-app p-3">
+                <div class="rounded-control bg-surface-secondary p-3">
                     <p class="text-xs text-muted">Revenus après saisie</p>
                     <p class="text-lg font-bold text-income">
                         {{ amountLabel(projectedTotal) }}

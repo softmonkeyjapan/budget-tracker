@@ -119,7 +119,7 @@ function destroy() {
         </template>
 
         <div class="p-6">
-            <div class="overflow-hidden rounded-card bg-white shadow-soft">
+            <div class="overflow-hidden rounded-card bg-surface shadow-soft">
                 <div
                     class="grid grid-cols-[100px_1fr_1fr_140px_170px] gap-2 border-b border-line px-5 py-3 text-xs font-semibold uppercase tracking-wide text-muted"
                 >
@@ -192,7 +192,7 @@ function destroy() {
                         <select
                             id="edit-category"
                             v-model.number="editForm.category_id"
-                            class="mt-1 block w-full rounded-control border-line text-ink shadow-sm focus:border-nav focus:ring-nav"
+                            class="mt-1 block w-full rounded-control border-line bg-surface text-ink shadow-sm focus:border-nav focus:ring-nav"
                         >
                             <optgroup v-for="root in categories" :key="root.id" :label="root.name">
                                 <option v-for="child in root.children" :key="child.id" :value="child.id">

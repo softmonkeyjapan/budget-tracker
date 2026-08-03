@@ -4,6 +4,17 @@ const screens = [
   ["general","Comparaison","Général"], ["categories","Catégories","Catégories"],
   ["expense","Saisie dépense","Dépense"], ["income","Entrée d’argent","Entrée"]
 ];
+function getPreferredTheme(){
+  try { const saved=localStorage.getItem("budget-tracker-theme"); if(saved) return saved; } catch {}
+  return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+function applyTheme(theme,persist=true){
+  document.documentElement.dataset.theme=theme;
+  if(persist){ try { localStorage.setItem("budget-tracker-theme",theme); } catch {} }
+  const button=document.querySelector(".theme-toggle");
+  if(button){ button.textContent=theme==="dark"?"☀":"☾"; button.setAttribute("aria-label",theme==="dark"?"Activer le mode clair":"Activer le mode sombre"); }
+}
+function toggleTheme(){ applyTheme(document.documentElement.dataset.theme==="dark"?"light":"dark"); }
 const roots = {
   alimentaire:{label:"Alimentaire",glyph:"▾",tone:"bg-emerald-100 text-emerald-500",children:["Alimentation générale","Boucherie","Restaurants"]},
   charges:{label:"Charges fixes",glyph:"⌂",tone:"bg-orange-100 text-orange-500",children:["Loyer","Internet","Électricité"]},
@@ -20,7 +31,7 @@ const stat = (name,value,color,glyph,delta="") => card(`<span class="icon h-12 w
 const categoryRow = (key,amount,percent,child="") => `<div class="row">${icon(key)}<div class="min-w-0 flex-1"><p class="font-bold text-slate-800">${child||roots[key].label}</p><p class="caption">${child?roots[key].label:"Catégorie racine"}</p></div>${percent!==undefined?`<strong class="text-blue-500">${percent} %</strong>`:""}${amount!==undefined?`<strong class="whitespace-nowrap text-sm">${format(amount)}</strong>`:""}</div>`;
 const donut = () => `<div class="relative mx-auto h-48 w-48 rounded-full income-pie"><div class="absolute inset-12 grid place-content-center rounded-full bg-white text-center"><strong class="text-2xl">260 000</strong><span class="caption">revenus</span></div></div>`;
 const monthBars = () => `<div class="chart-grid"><div class="chart-y"><span>300k</span><span>225k</span><span>150k</span><span>75k</span><span>0</span></div><div class="chart-bars">${[56,68,61,74,66,81,73,88,80,92,86,95].map((v,i)=>`<div class="bar-slot"><i class="bar previous" style="height:${v*.72}%"></i><i class="bar current" style="height:${v}%"></i><small>${["Sep","Oct","Nov","Déc","Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août"][i]}</small></div>`).join("")}</div></div>`;
-const topbar = current => `<header class="topbar"><div class="brand"><span class="logo"><i></i><i></i></span><b>Budget Tracker</b></div><label class="search">⌕ <input placeholder="Rechercher" aria-label="Rechercher"></label><nav class="desktop-nav">${screens.slice(1).map(s=>`<a class="${s[0]===current?"active":""}" href="#${s[0]}">${s[2]}</a>`).join("")}</nav><span class="bell">♧</span><span class="avatar">LT</span></header>`;
+const topbar = current => `<header class="topbar"><div class="brand"><span class="logo"><i></i><i></i></span><b>Budget Tracker</b></div><label class="search">⌕ <input placeholder="Rechercher" aria-label="Rechercher"></label><nav class="desktop-nav">${screens.slice(1).map(s=>`<a class="${s[0]===current?"active":""}" href="#${s[0]}">${s[2]}</a>`).join("")}</nav><button class="theme-toggle" onclick="toggleTheme()" aria-label="Activer le mode sombre">${document.documentElement.dataset.theme==="dark"?"☀":"☾"}</button><span class="bell">♧</span><span class="avatar">LT</span></header>`;
 const shell = (screen,main,aside) => `<div class="canvas"><div class="shell">${topbar(screen)}<main class="main">${main}</main><aside class="sidebar">${aside}</aside></div></div>`;
 const recent = [
   ["charges","Loyer","01 août","Appartement",82000], ["alimentaire","Alimentation générale","03 août","Supermarché",14850],
@@ -38,4 +49,5 @@ const pages={"design-system":designSystem,dashboard,general,categories,expense,i
 function showToast(message){let t=document.createElement("div");t.className="toast";t.textContent="✓ "+message;document.body.append(t);setTimeout(()=>t.remove(),2200);}
 function render(){const key=location.hash.slice(1);const id=pages[key]?key:"design-system";document.querySelector("#app").innerHTML=pages[id]();document.querySelectorAll(".preview-nav a,.mobile-switcher a").forEach(a=>a.classList.toggle("active",a.hash===`#${id}`));}
 document.querySelector(".mobile-switcher").innerHTML=screens.map(s=>`<a href="#${s[0]}">${s[2]}</a>`).join("");
+applyTheme(getPreferredTheme(),false);
 addEventListener("hashchange",render);render();
