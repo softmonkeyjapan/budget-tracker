@@ -4,11 +4,8 @@ import { login } from './helpers.js';
 const VERIFIED_USER = { email: 'e2e-verified@example.com', password: 'password' };
 const UNVERIFIED_USER = { email: 'e2e-unverified@example.com', password: 'password' };
 
-test('dashboard page matches baseline', async ({ page }) => {
-    await login(page, VERIFIED_USER.email, VERIFIED_USER.password);
-    await page.goto('/dashboard');
-    await expect(page).toHaveScreenshot('dashboard.png', { fullPage: true });
-});
+// The Dashboard page moved from a Story 1 placeholder to a full feature in
+// Story 5 — see tests/e2e/dashboard.spec.js for its (pinned-month) baseline.
 
 test('profile edit page matches baseline', async ({ page }) => {
     await login(page, VERIFIED_USER.email, VERIFIED_USER.password);
