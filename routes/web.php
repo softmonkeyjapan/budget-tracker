@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ExpensesController;
+use App\Http\Controllers\IncomesController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('expenses/create', [ExpensesController::class, 'create'])->name('expenses.create');
     Route::resource('expenses', ExpensesController::class)->only(['index', 'store', 'update', 'destroy']);
+
+    Route::get('incomes/create', [IncomesController::class, 'create'])->name('incomes.create');
+    Route::resource('incomes', IncomesController::class)->only(['index', 'store', 'update', 'destroy']);
 });
 
 require __DIR__.'/auth.php';
