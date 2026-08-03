@@ -161,8 +161,8 @@ const pieGradient = computed(() => {
             </div>
 
             <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                <div class="rounded-card bg-white p-6 shadow-soft lg:col-span-2">
-                    <div class="grid gap-6 xl:grid-cols-[.8fr_1.3fr]">
+                <div class="flex flex-col justify-center rounded-card bg-white p-6 shadow-soft lg:col-span-2">
+                    <div class="grid items-center gap-6 xl:grid-cols-[.8fr_1.3fr]">
                         <div>
                             <h3 class="font-semibold text-ink">Répartition des revenus</h3>
                             <p class="mt-1 text-sm text-muted">

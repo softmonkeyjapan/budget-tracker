@@ -6,6 +6,10 @@ const props = defineProps({
         type: String,
         default: 'right',
     },
+    direction: {
+        type: String,
+        default: 'down',
+    },
     width: {
         type: String,
         default: '48',
@@ -31,14 +35,22 @@ const widthClass = computed(() => {
     }[props.width.toString()];
 });
 
+const positionClasses = computed(() =>
+    props.direction === 'up' ? 'bottom-full mb-2' : 'top-full mt-2',
+);
+
 const alignmentClasses = computed(() => {
     if (props.align === 'left') {
-        return 'ltr:origin-top-left rtl:origin-top-right start-0';
+        return props.direction === 'up'
+            ? 'ltr:origin-bottom-left rtl:origin-bottom-right start-0'
+            : 'ltr:origin-top-left rtl:origin-top-right start-0';
     } else if (props.align === 'right') {
-        return 'ltr:origin-top-right rtl:origin-top-left end-0';
-    } else {
-        return 'origin-top';
+        return props.direction === 'up'
+            ? 'ltr:origin-bottom-right rtl:origin-bottom-left end-0'
+            : 'ltr:origin-top-right rtl:origin-top-left end-0';
     }
+
+    return props.direction === 'up' ? 'origin-bottom' : 'origin-top';
 });
 
 const open = ref(false);
@@ -67,8 +79,8 @@ const open = ref(false);
         >
             <div
                 v-show="open"
-                class="absolute z-50 mt-2 rounded-card shadow-soft"
-                :class="[widthClass, alignmentClasses]"
+                class="absolute z-50 rounded-card shadow-soft"
+                :class="[widthClass, positionClasses, alignmentClasses]"
                 style="display: none"
                 @click="open = false"
             >
