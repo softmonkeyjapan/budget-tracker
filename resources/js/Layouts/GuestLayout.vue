@@ -12,7 +12,7 @@ import { Link } from '@inertiajs/vue3';
             <ThemeToggle />
         </div>
 
-        <Link href="/" class="mb-6 flex items-center gap-2">
+        <Link :href="route('login')" class="mb-6 flex items-center gap-2">
             <ApplicationLogo class="h-10 w-10" />
             <span class="text-lg font-extrabold text-ink">Budget Tracker</span>
         </Link>

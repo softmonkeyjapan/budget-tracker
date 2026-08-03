@@ -7,6 +7,12 @@ const UNVERIFIED_USER = { email: 'e2e-unverified@example.com', password: 'passwo
 // The Dashboard page moved from a Story 1 placeholder to a full feature in
 // Story 5 — see tests/e2e/dashboard.spec.js for its (pinned-month) baseline.
 
+test('root redirects authenticated users to dashboard', async ({ page }) => {
+    await login(page, VERIFIED_USER.email, VERIFIED_USER.password);
+    await page.goto('/');
+    await expect(page).toHaveURL(/\/dashboard/);
+});
+
 test('profile edit page matches baseline', async ({ page }) => {
     await login(page, VERIFIED_USER.email, VERIFIED_USER.password);
     await page.goto('/profile');

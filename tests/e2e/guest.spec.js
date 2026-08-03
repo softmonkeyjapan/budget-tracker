@@ -1,5 +1,10 @@
 import { expect, test } from '@playwright/test';
 
+test('root redirects guests to login', async ({ page }) => {
+    await page.goto('/');
+    await expect(page).toHaveURL('/login');
+});
+
 test('login page matches baseline', async ({ page }) => {
     await page.goto('/login');
     await expect(page).toHaveScreenshot('login.png', { fullPage: true });
