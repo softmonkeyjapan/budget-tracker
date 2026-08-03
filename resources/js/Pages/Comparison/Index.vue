@@ -172,11 +172,11 @@ function changeMonths(event) {
                             </p>
                         </div>
 
-                        <div class="mt-4 flex h-48 items-end gap-3 overflow-x-auto">
+                        <div class="mt-4 flex h-48 items-end gap-2 overflow-x-auto">
                             <div
                                 v-for="row in rows"
                                 :key="row.month"
-                                class="flex min-w-[2.5rem] flex-1 flex-col items-center gap-1"
+                                class="flex min-w-[2rem] flex-1 flex-col items-center gap-1"
                             >
                                 <div class="flex h-40 w-full items-end justify-center gap-0.5">
                                     <div
@@ -198,11 +198,11 @@ function changeMonths(event) {
                     <div class="rounded-card bg-white p-5 shadow-soft">
                         <h3 class="font-semibold text-ink">Solde mensuel</h3>
 
-                        <div class="mt-4 flex h-32 items-end gap-3 overflow-x-auto">
+                        <div class="mt-4 flex h-32 items-end gap-2 overflow-x-auto">
                             <div
                                 v-for="row in rows"
                                 :key="row.month"
-                                class="flex min-w-[2.5rem] flex-1 flex-col items-center gap-1"
+                                class="flex min-w-[2rem] flex-1 flex-col items-center gap-1"
                             >
                                 <div class="flex h-24 w-full items-end justify-center">
                                     <div
