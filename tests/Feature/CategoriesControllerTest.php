@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Category;
+use App\Models\Expense;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -124,6 +125,18 @@ test('a category without children can be deleted', function () {
     $response->assertSessionHasNoErrors();
     $response->assertRedirect('/categories');
     $this->assertDatabaseMissing('categories', ['id' => $category->id]);
+});
+
+test('a category with expenses cannot be deleted', function () {
+    $user = User::factory()->create();
+    $root = Category::factory()->for($user)->create();
+    $child = Category::factory()->child($root)->create();
+    Expense::factory()->for($user)->for($child, 'category')->create();
+
+    $response = $this->actingAs($user)->delete("/categories/{$child->id}");
+
+    $response->assertSessionHasErrors('message');
+    $this->assertDatabaseHas('categories', ['id' => $child->id]);
 });
 
 test('a category with children cannot be deleted', function () {
