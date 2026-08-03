@@ -6,6 +6,7 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import SidebarLink from '@/Components/SidebarLink.vue';
+import PrivacyToggle from '@/Components/PrivacyToggle.vue';
 import ThemeToggle from '@/Components/ThemeToggle.vue';
 import { Link } from '@inertiajs/vue3';
 
@@ -95,6 +96,7 @@ const showingNavigationDropdown = ref(false);
                     </template>
                 </Dropdown>
 
+                <PrivacyToggle />
                 <ThemeToggle />
             </div>
         </aside>
@@ -199,6 +201,7 @@ const showingNavigationDropdown = ref(false);
                                     {{ $page.props.auth.user.email }}
                                 </div>
                             </div>
+                            <PrivacyToggle />
                             <ThemeToggle />
                         </div>
 

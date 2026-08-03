@@ -1,11 +1,11 @@
 <script setup>
 import { computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Amount from '@/Components/Amount.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
-import { amountLabel } from '@/utils/currency';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -148,7 +148,7 @@ function submit() {
                         </p>
                     </div>
                     <strong class="whitespace-nowrap text-sm text-income">
-                        +{{ amountLabel(income.amount) }}
+                        <Amount :value="income.amount" prefix="+" />
                     </strong>
                 </div>
             </div>
@@ -165,7 +165,7 @@ function submit() {
                 <div class="rounded-control bg-surface-secondary p-3">
                     <p class="text-xs text-muted">Revenus après saisie</p>
                     <p class="text-lg font-bold text-income">
-                        {{ amountLabel(projectedTotal) }}
+                        <Amount :value="projectedTotal" />
                     </p>
                 </div>
                 <p class="mt-3 text-xs text-muted">

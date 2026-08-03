@@ -1,10 +1,10 @@
 <script setup>
 import { computed, toRef } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Amount from '@/Components/Amount.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { useMonthNavigation } from '@/Composables/useMonthNavigation';
-import { amountLabel } from '@/utils/currency';
 import { Head, Link } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -119,7 +119,7 @@ const pieGradient = computed(() => {
                             Entrées d'argent
                         </p>
                         <p class="truncate text-xl font-extrabold text-income">
-                            {{ amountLabel(incomeTotal) }}
+                            <Amount :value="incomeTotal" />
                         </p>
                         <p class="text-xs text-muted">{{ incomeCount }} entrée(s) ce mois</p>
                     </div>
@@ -136,7 +136,7 @@ const pieGradient = computed(() => {
                             Dépenses
                         </p>
                         <p class="truncate text-xl font-extrabold text-expense">
-                            {{ amountLabel(expenseTotal) }}
+                            <Amount :value="expenseTotal" />
                         </p>
                         <p class="text-xs text-muted">{{ expensePercentage }} % des revenus</p>
                     </div>
@@ -153,7 +153,7 @@ const pieGradient = computed(() => {
                             Solde
                         </p>
                         <p class="truncate text-xl font-extrabold text-nav">
-                            {{ amountLabel(balance) }}
+                            <Amount :value="balance" />
                         </p>
                         <p class="text-xs text-muted">{{ unspentPercentage }} % disponible</p>
                     </div>
@@ -177,7 +177,7 @@ const pieGradient = computed(() => {
                                     class="absolute inset-8 grid place-content-center rounded-full bg-surface text-center"
                                 >
                                     <strong class="text-lg text-ink">
-                                        {{ new Intl.NumberFormat('fr-FR').format(incomeTotal) }}
+                                        <Amount :value="incomeTotal" raw />
                                     </strong>
                                     <span class="text-xs text-muted">revenus</span>
                                 </div>
@@ -208,7 +208,7 @@ const pieGradient = computed(() => {
                                         {{ category.percentage }} %
                                     </strong>
                                     <span class="whitespace-nowrap text-sm text-muted">
-                                        {{ amountLabel(category.amount) }}
+                                        <Amount :value="category.amount" />
                                     </span>
                                 </div>
                             </div>
@@ -229,7 +229,7 @@ const pieGradient = computed(() => {
                                 {{ new Date(income.date).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long' }) }}
                                 <template v-if="income.description"> · {{ income.description }}</template>
                             </p>
-                            <strong class="text-sm text-ink">{{ amountLabel(income.amount) }}</strong>
+                            <strong class="text-sm text-ink"><Amount :value="income.amount" /></strong>
                         </div>
                     </div>
 
@@ -289,7 +289,7 @@ const pieGradient = computed(() => {
                         {{ expense.description ?? '—' }}
                     </span>
                     <strong class="whitespace-nowrap text-right text-sm text-expense">
-                        −{{ amountLabel(expense.amount) }}
+                        <Amount :value="expense.amount" prefix="−" />
                     </strong>
                 </div>
             </div>

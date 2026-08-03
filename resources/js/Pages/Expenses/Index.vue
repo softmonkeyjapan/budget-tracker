@@ -1,6 +1,7 @@
 <script setup>
 import { ref, toRef } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import Amount from '@/Components/Amount.vue';
 import Modal from '@/Components/Modal.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
@@ -9,7 +10,6 @@ import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import { useMonthNavigation } from '@/Composables/useMonthNavigation';
-import { amountLabel } from '@/utils/currency';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -160,7 +160,7 @@ function destroy() {
                         {{ expense.description ?? '—' }}
                     </span>
                     <strong class="whitespace-nowrap text-right text-sm text-expense">
-                        −{{ amountLabel(expense.amount) }}
+                        <Amount :value="expense.amount" prefix="−" />
                     </strong>
                     <span class="flex justify-end gap-3 whitespace-nowrap text-sm">
                         <button
