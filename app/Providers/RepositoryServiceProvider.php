@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Repositories\CategoryRepository;
+use App\Repositories\Contracts\CategoryRepositoryContract;
 use App\Repositories\Contracts\UserRepositoryContract;
 use App\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
@@ -15,5 +17,6 @@ final class RepositoryServiceProvider extends ServiceProvider
      */
     public array $bindings = [
         UserRepositoryContract::class => UserRepository::class,
+        CategoryRepositoryContract::class => CategoryRepository::class,
     ];
 }
