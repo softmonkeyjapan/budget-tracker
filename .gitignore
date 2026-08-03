@@ -2,6 +2,7 @@
 .DS_Store
 .env
 .env.backup
+.env.e2e
 .env.production
 .phpactor.json
 .phpunit.result.cache
@@ -21,6 +22,11 @@
 /storage/*.key
 /storage/pail
 /vendor
+/database/e2e.sqlite
+/test-results
+/playwright-report
+/blob-report
+/playwright/.cache
 _ide_helper.php
 Homestead.json
 Homestead.yaml
