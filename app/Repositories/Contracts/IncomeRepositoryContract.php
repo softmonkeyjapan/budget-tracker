@@ -26,4 +26,9 @@ interface IncomeRepositoryContract
      * @return Collection<int, Income>
      */
     public function forUserAndMonth(User $user, string $month): Collection;
+
+    /**
+     * @return Collection<int, Income>
+     */
+    public function forUserAndDateRange(User $user, string $start, string $end): Collection;
 }

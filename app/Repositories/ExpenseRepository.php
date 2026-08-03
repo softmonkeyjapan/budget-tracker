@@ -53,6 +53,17 @@ final class ExpenseRepository implements ExpenseRepositoryContract
     /**
      * @return Collection<int, Expense>
      */
+    public function forUserAndDateRange(User $user, string $start, string $end): Collection
+    {
+        return Expense::query()
+            ->where('user_id', $user->id)
+            ->whereBetween('date', [$start, $end])
+            ->get();
+    }
+
+    /**
+     * @return Collection<int, Expense>
+     */
     public function latestForUser(User $user, int $limit): Collection
     {
         return Expense::query()
