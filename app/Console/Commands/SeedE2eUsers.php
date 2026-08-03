@@ -6,6 +6,7 @@ namespace App\Console\Commands;
 
 use App\Models\Category;
 use App\Models\Expense;
+use App\Models\Income;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
@@ -38,6 +39,7 @@ final class SeedE2eUsers extends Command
 
         $this->seedCategories($verified);
         $this->seedExpenses($verified);
+        $this->seedIncomes($verified);
 
         return self::SUCCESS;
     }
@@ -95,6 +97,24 @@ final class SeedE2eUsers extends Command
             Expense::query()->updateOrCreate(
                 ['user_id' => $user->id, 'category_id' => $child->id, 'date' => $date],
                 ['amount' => $amount, 'description' => $description],
+            );
+        }
+    }
+
+    /**
+     * Mirrors the sample income entries from docs/design/build/index.html#dashboard.
+     */
+    private function seedIncomes(User $user): void
+    {
+        $recent = [
+            ['2026-08-03', 'Salaire août 2026', 230000],
+            ['2026-08-21', 'Mission freelance', 30000],
+        ];
+
+        foreach ($recent as [$date, $description, $amount]) {
+            Income::query()->updateOrCreate(
+                ['user_id' => $user->id, 'date' => $date, 'description' => $description],
+                ['amount' => $amount],
             );
         }
     }
