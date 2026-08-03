@@ -1228,6 +1228,19 @@ h2 {
 .income-pie {
   background: conic-gradient(#ff8a66 0 40%,#23c48e 40% 56%,#2f80ed 56% 64%,#8a5cf6 64% 69%,#ff5b62 69% 72%,#eef0f5 72%);
 }
+.theme-toggle {
+  display: grid;
+  place-content: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #e3e7ef;
+  border-radius: 12px;
+  background: #fff;
+  color: #172033;
+  font-size: 1.15rem;
+  box-shadow: 0 4px 14px rgb(40 52 77 / 5%);
+}
 .usage-list .row {
   min-height: 54px;
 }
@@ -1450,6 +1463,75 @@ h2 {
   font-weight: 800;
   box-shadow: 0 12px 30px rgb(23 32 51 / 25%);
 }
+[data-theme="dark"] {
+  --app: #171b25;
+  --card: #202633;
+  --ink: #f6f3f4;
+  --muted: #aab0c0;
+  --line: #343c4d;
+  color-scheme: dark;
+}
+[data-theme="dark"] body {
+  background: linear-gradient(135deg,#241a1d,#171319);
+  color: #f6f3f4;
+}
+[data-theme="dark"] .shell,[data-theme="dark"] .main,[data-theme="dark"] .topbar {
+  background: #171b25;
+}
+[data-theme="dark"] .sidebar,[data-theme="dark"] .card,[data-theme="dark"] .choice,[data-theme="dark"] .summary-card,[data-theme="dark"] .search,[data-theme="dark"] .field,[data-theme="dark"] .pill,[data-theme="dark"] .secondary,[data-theme="dark"] .theme-toggle,[data-theme="dark"] .bg-white {
+  background: #202633;
+  color: #f6f3f4;
+  border-color: #343c4d;
+}
+[data-theme="dark"] .text-slate-800,[data-theme="dark"] h1,[data-theme="dark"] h2,[data-theme="dark"] b,[data-theme="dark"] strong {
+  color: #f6f3f4;
+}
+[data-theme="dark"] .row,[data-theme="dark"] .tree-child,[data-theme="dark"] .summary-card>strong,[data-theme="dark"] .table-head,[data-theme="dark"] .tr {
+  border-color: #343c4d;
+}
+[data-theme="dark"] .table-head,[data-theme="dark"] .mini-flow b {
+  background: #282f3e;
+  color: #aab0c0;
+}
+[data-theme="dark"] .choice.selected {
+  background: #202f45;
+  border-color: #62a4ff;
+}
+[data-theme="dark"] .inherit-note {
+  background: #392922;
+  color: #ffc3ae;
+}
+[data-theme="dark"] .income-hero {
+  background: #1d352f;
+}
+[data-theme="dark"] .income-pie>div {
+  background: #202633;
+}
+[data-theme="dark"] .chart-bars {
+  background: repeating-linear-gradient(to bottom,#343c4d 0 1px,transparent 1px 25%);
+}
+[data-theme="dark"] .bar.previous,[data-theme="dark"] .progress {
+  background: #343c4d;
+}
+[data-theme="dark"] .preview-nav {
+  background: rgb(32 38 51 / 92%);
+}
+[data-theme="dark"] .preview-nav a {
+  color: #aab0c0;
+}
+[data-theme="dark"] .preview-nav a.active {
+  background: #253c5c;
+  color: #62a4ff;
+}
+[data-theme="dark"] .desktop-nav a {
+  color: #aab0c0;
+}
+[data-theme="dark"] .desktop-nav a.active {
+  color: #fff;
+}
+[data-theme="dark"] .form-label .field {
+  color: #f6f3f4;
+}
 @media (max-width:760px) {
   .category-choice,.child-choice,.component-grid {
     grid-template-columns: 1fr;
@@ -1471,6 +1553,12 @@ h2 {
     right: 14px;
     bottom: 76px;
     text-align: center;
+  }
+  .theme-toggle {
+    margin-left: auto;
+  }
+  .bell {
+    display: none;
   }
 }
 @property --tw-space-y-reverse {
@@ -1597,6 +1685,17 @@ const screens = [
   ["general","Comparaison","Général"], ["categories","Catégories","Catégories"],
   ["expense","Saisie dépense","Dépense"], ["income","Entrée d’argent","Entrée"]
 ];
+function getPreferredTheme(){
+  try { const saved=localStorage.getItem("budget-tracker-theme"); if(saved) return saved; } catch {}
+  return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+function applyTheme(theme,persist=true){
+  document.documentElement.dataset.theme=theme;
+  if(persist){ try { localStorage.setItem("budget-tracker-theme",theme); } catch {} }
+  const button=document.querySelector(".theme-toggle");
+  if(button){ button.textContent=theme==="dark"?"☀":"☾"; button.setAttribute("aria-label",theme==="dark"?"Activer le mode clair":"Activer le mode sombre"); }
+}
+function toggleTheme(){ applyTheme(document.documentElement.dataset.theme==="dark"?"light":"dark"); }
 const roots = {
   alimentaire:{label:"Alimentaire",glyph:"▾",tone:"bg-emerald-100 text-emerald-500",children:["Alimentation générale","Boucherie","Restaurants"]},
   charges:{label:"Charges fixes",glyph:"⌂",tone:"bg-orange-100 text-orange-500",children:["Loyer","Internet","Électricité"]},
@@ -1613,7 +1712,7 @@ const stat = (name,value,color,glyph,delta="") => card(`<span class="icon h-12 w
 const categoryRow = (key,amount,percent,child="") => `<div class="row">${icon(key)}<div class="min-w-0 flex-1"><p class="font-bold text-slate-800">${child||roots[key].label}</p><p class="caption">${child?roots[key].label:"Catégorie racine"}</p></div>${percent!==undefined?`<strong class="text-blue-500">${percent} %</strong>`:""}${amount!==undefined?`<strong class="whitespace-nowrap text-sm">${format(amount)}</strong>`:""}</div>`;
 const donut = () => `<div class="relative mx-auto h-48 w-48 rounded-full income-pie"><div class="absolute inset-12 grid place-content-center rounded-full bg-white text-center"><strong class="text-2xl">260 000</strong><span class="caption">revenus</span></div></div>`;
 const monthBars = () => `<div class="chart-grid"><div class="chart-y"><span>300k</span><span>225k</span><span>150k</span><span>75k</span><span>0</span></div><div class="chart-bars">${[56,68,61,74,66,81,73,88,80,92,86,95].map((v,i)=>`<div class="bar-slot"><i class="bar previous" style="height:${v*.72}%"></i><i class="bar current" style="height:${v}%"></i><small>${["Sep","Oct","Nov","Déc","Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août"][i]}</small></div>`).join("")}</div></div>`;
-const topbar = current => `<header class="topbar"><div class="brand"><span class="logo"><i></i><i></i></span><b>Budget Tracker</b></div><label class="search">⌕ <input placeholder="Rechercher" aria-label="Rechercher"></label><nav class="desktop-nav">${screens.slice(1).map(s=>`<a class="${s[0]===current?"active":""}" href="#${s[0]}">${s[2]}</a>`).join("")}</nav><span class="bell">♧</span><span class="avatar">LT</span></header>`;
+const topbar = current => `<header class="topbar"><div class="brand"><span class="logo"><i></i><i></i></span><b>Budget Tracker</b></div><label class="search">⌕ <input placeholder="Rechercher" aria-label="Rechercher"></label><nav class="desktop-nav">${screens.slice(1).map(s=>`<a class="${s[0]===current?"active":""}" href="#${s[0]}">${s[2]}</a>`).join("")}</nav><button class="theme-toggle" onclick="toggleTheme()" aria-label="Activer le mode sombre">${document.documentElement.dataset.theme==="dark"?"☀":"☾"}</button><span class="bell">♧</span><span class="avatar">LT</span></header>`;
 const shell = (screen,main,aside) => `<div class="canvas"><div class="shell">${topbar(screen)}<main class="main">${main}</main><aside class="sidebar">${aside}</aside></div></div>`;
 const recent = [
   ["charges","Loyer","01 août","Appartement",82000], ["alimentaire","Alimentation générale","03 août","Supermarché",14850],
@@ -1631,6 +1730,7 @@ const pages={"design-system":designSystem,dashboard,general,categories,expense,i
 function showToast(message){let t=document.createElement("div");t.className="toast";t.textContent="✓ "+message;document.body.append(t);setTimeout(()=>t.remove(),2200);}
 function render(){const key=location.hash.slice(1);const id=pages[key]?key:"design-system";document.querySelector("#app").innerHTML=pages[id]();document.querySelectorAll(".preview-nav a,.mobile-switcher a").forEach(a=>a.classList.toggle("active",a.hash===`#${id}`));}
 document.querySelector(".mobile-switcher").innerHTML=screens.map(s=>`<a href="#${s[0]}">${s[2]}</a>`).join("");
+applyTheme(getPreferredTheme(),false);
 addEventListener("hashchange",render);render();
 
 </script>

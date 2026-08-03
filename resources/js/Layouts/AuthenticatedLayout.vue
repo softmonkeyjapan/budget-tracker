@@ -6,6 +6,7 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import SidebarLink from '@/Components/SidebarLink.vue';
+import ThemeToggle from '@/Components/ThemeToggle.vue';
 import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
@@ -15,7 +16,7 @@ const showingNavigationDropdown = ref(false);
     <div class="flex min-h-screen bg-app">
         <!-- Desktop Sidebar -->
         <aside
-            class="hidden w-64 shrink-0 flex-col justify-between border-r border-line bg-white sm:sticky sm:top-0 sm:flex sm:h-screen"
+            class="hidden w-64 shrink-0 flex-col justify-between border-r border-line bg-surface sm:sticky sm:top-0 sm:flex sm:h-screen"
         >
             <div>
                 <div class="flex items-center gap-3 px-6 py-6">
@@ -61,8 +62,8 @@ const showingNavigationDropdown = ref(false);
                 </nav>
             </div>
 
-            <div class="border-t border-line p-4">
-                <Dropdown align="left" direction="up" width="48">
+            <div class="flex items-center gap-2 border-t border-line p-4">
+                <Dropdown align="left" direction="up" width="48" class="min-w-0 flex-1">
                     <template #trigger>
                         <button
                             type="button"
@@ -93,12 +94,14 @@ const showingNavigationDropdown = ref(false);
                         </DropdownLink>
                     </template>
                 </Dropdown>
+
+                <ThemeToggle />
             </div>
         </aside>
 
         <div class="flex min-w-0 flex-1 flex-col">
             <!-- Mobile Top Bar -->
-            <nav class="bg-white sm:hidden">
+            <nav class="bg-surface sm:hidden">
                 <div class="flex h-16 items-center justify-between px-4">
                     <Link :href="route('dashboard')" class="flex items-center gap-2">
                         <ApplicationLogo class="h-8 w-8 shrink-0" />
@@ -188,7 +191,7 @@ const showingNavigationDropdown = ref(false);
                     <div class="border-t border-line pb-1 pt-4">
                         <div class="flex items-center gap-3 px-4">
                             <Avatar :name="$page.props.auth.user.name" />
-                            <div class="min-w-0">
+                            <div class="min-w-0 flex-1">
                                 <div class="truncate text-base font-medium text-ink">
                                     {{ $page.props.auth.user.name }}
                                 </div>
@@ -196,6 +199,7 @@ const showingNavigationDropdown = ref(false);
                                     {{ $page.props.auth.user.email }}
                                 </div>
                             </div>
+                            <ThemeToggle />
                         </div>
 
                         <div class="mt-3 space-y-1 px-2">
@@ -215,7 +219,7 @@ const showingNavigationDropdown = ref(false);
             </nav>
 
             <!-- Page Heading -->
-            <header class="bg-white" v-if="$slots.header">
+            <header class="bg-surface" v-if="$slots.header">
                 <div class="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
                     <slot name="header" />
                 </div>

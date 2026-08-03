@@ -116,7 +116,7 @@ function destroy() {
                 <div
                     v-for="root in categories"
                     :key="root.id"
-                    class="rounded-card bg-white p-5 shadow-soft"
+                    class="rounded-card bg-surface p-5 shadow-soft"
                 >
                     <div class="flex flex-wrap items-center gap-3">
                         <span
@@ -165,7 +165,7 @@ function destroy() {
                         <div
                             v-for="child in root.children"
                             :key="child.id"
-                            class="flex flex-wrap items-center justify-between gap-2 rounded-control bg-app px-4 py-3"
+                            class="flex flex-wrap items-center justify-between gap-2 rounded-control bg-surface-secondary px-4 py-3"
                         >
                             <div class="flex min-w-0 items-center gap-3">
                                 <span
@@ -212,7 +212,7 @@ function destroy() {
                 </div>
             </div>
 
-            <div class="h-fit rounded-card bg-white p-6 shadow-soft">
+            <div class="h-fit rounded-card bg-surface p-6 shadow-soft">
                 <h3 class="mb-4 text-sm font-semibold text-ink">
                     <template v-if="editingCategoryId">Modifier la catégorie</template>
                     <template v-else-if="parentForNewChild">

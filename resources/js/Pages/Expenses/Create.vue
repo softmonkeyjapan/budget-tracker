@@ -63,7 +63,7 @@ function submit() {
         </template>
 
         <div class="grid grid-cols-1 gap-6 p-6 lg:grid-cols-3">
-            <div class="rounded-card bg-white p-6 shadow-soft lg:col-span-2">
+            <div class="rounded-card bg-surface p-6 shadow-soft lg:col-span-2">
                 <form @submit.prevent="submit" class="space-y-6">
                     <div>
                         <div class="flex items-center gap-3">
@@ -194,7 +194,7 @@ function submit() {
                     <div class="flex justify-end gap-2">
                         <Link
                             :href="route('expenses.index', { month })"
-                            class="rounded-control border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink shadow-pill hover:bg-app"
+                            class="rounded-control border border-line bg-surface px-5 py-2.5 text-sm font-semibold text-ink shadow-pill hover:bg-app"
                         >
                             Annuler
                         </Link>
@@ -205,9 +205,9 @@ function submit() {
                 </form>
             </div>
 
-            <div class="h-fit rounded-card bg-white p-6 shadow-soft">
+            <div class="h-fit rounded-card bg-surface p-6 shadow-soft">
                 <h3 class="mb-3 text-sm font-semibold text-ink">Résumé</h3>
-                <div v-if="selectedChild" class="flex items-center gap-3 rounded-control bg-app p-3">
+                <div v-if="selectedChild" class="flex items-center gap-3 rounded-control bg-surface-secondary p-3">
                     <span
                         class="flex h-9 w-9 shrink-0 items-center justify-center rounded-control text-lg"
                         :style="{

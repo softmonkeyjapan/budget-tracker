@@ -115,7 +115,7 @@ function destroy() {
         </template>
 
         <div class="p-6">
-            <div class="overflow-hidden rounded-card bg-white shadow-soft">
+            <div class="overflow-hidden rounded-card bg-surface shadow-soft">
                 <div
                     class="grid grid-cols-[100px_1fr_140px_170px] gap-2 border-b border-line px-5 py-3 text-xs font-semibold uppercase tracking-wide text-muted"
                 >

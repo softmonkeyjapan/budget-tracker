@@ -3,6 +3,8 @@ import forms from '@tailwindcss/forms';
 
 /** @type {import('tailwindcss').Config} */
 export default {
+    darkMode: ['selector', '[data-theme="dark"]'],
+
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
@@ -16,16 +18,20 @@ export default {
                 sans: ['Nunito Sans', 'Poppins', ...defaultTheme.fontFamily.sans],
             },
             colors: {
+                // No documented dark-mode override — unchanged in both themes.
                 peach: '#FFD2C4',
-                coral: '#FF8A66',
-                app: '#F3F5FA',
-                ink: '#172033',
-                muted: '#8A90A2',
-                line: '#E6E9F0',
-                nav: '#2F80ED',
-                income: '#23C48E',
-                expense: '#FF5B62',
                 category: '#8A5CF6',
+                // Theme-aware tokens, driven by CSS variables (see resources/css/app.css).
+                coral: 'rgb(var(--color-coral) / <alpha-value>)',
+                app: 'rgb(var(--color-app) / <alpha-value>)',
+                surface: 'rgb(var(--color-surface) / <alpha-value>)',
+                'surface-secondary': 'rgb(var(--color-surface-secondary) / <alpha-value>)',
+                ink: 'rgb(var(--color-ink) / <alpha-value>)',
+                muted: 'rgb(var(--color-muted) / <alpha-value>)',
+                line: 'rgb(var(--color-line) / <alpha-value>)',
+                nav: 'rgb(var(--color-nav) / <alpha-value>)',
+                income: 'rgb(var(--color-income) / <alpha-value>)',
+                expense: 'rgb(var(--color-expense) / <alpha-value>)',
             },
             borderRadius: {
                 shell: '26px',

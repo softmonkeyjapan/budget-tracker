@@ -108,7 +108,7 @@ const pieGradient = computed(() => {
 
         <div class="space-y-6 p-6">
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                <div class="flex items-center gap-4 rounded-card bg-white p-5 shadow-soft">
+                <div class="flex items-center gap-4 rounded-card bg-surface p-5 shadow-soft">
                     <span
                         class="flex h-12 w-12 shrink-0 items-center justify-center rounded-control bg-income/10 text-xl text-income"
                     >
@@ -125,7 +125,7 @@ const pieGradient = computed(() => {
                     </div>
                 </div>
 
-                <div class="flex items-center gap-4 rounded-card bg-white p-5 shadow-soft">
+                <div class="flex items-center gap-4 rounded-card bg-surface p-5 shadow-soft">
                     <span
                         class="flex h-12 w-12 shrink-0 items-center justify-center rounded-control bg-expense/10 text-xl text-expense"
                     >
@@ -142,7 +142,7 @@ const pieGradient = computed(() => {
                     </div>
                 </div>
 
-                <div class="flex items-center gap-4 rounded-card bg-white p-5 shadow-soft">
+                <div class="flex items-center gap-4 rounded-card bg-surface p-5 shadow-soft">
                     <span
                         class="flex h-12 w-12 shrink-0 items-center justify-center rounded-control bg-nav/10 text-xl text-nav"
                     >
@@ -161,7 +161,7 @@ const pieGradient = computed(() => {
             </div>
 
             <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                <div class="flex flex-col justify-center rounded-card bg-white p-6 shadow-soft lg:col-span-2">
+                <div class="flex flex-col justify-center rounded-card bg-surface p-6 shadow-soft lg:col-span-2">
                     <div class="grid items-center gap-6 xl:grid-cols-[.8fr_1.3fr]">
                         <div>
                             <h3 class="font-semibold text-ink">Répartition des revenus</h3>
@@ -174,7 +174,7 @@ const pieGradient = computed(() => {
                                 :style="{ backgroundImage: pieGradient }"
                             >
                                 <div
-                                    class="absolute inset-8 grid place-content-center rounded-full bg-white text-center"
+                                    class="absolute inset-8 grid place-content-center rounded-full bg-surface text-center"
                                 >
                                     <strong class="text-lg text-ink">
                                         {{ new Intl.NumberFormat('fr-FR').format(incomeTotal) }}
@@ -216,14 +216,14 @@ const pieGradient = computed(() => {
                     </div>
                 </div>
 
-                <div class="h-fit rounded-card bg-white p-6 shadow-soft">
+                <div class="h-fit rounded-card bg-surface p-6 shadow-soft">
                     <h3 class="mb-3 text-sm font-semibold text-ink">Entrées du mois</h3>
 
                     <div class="mb-4 space-y-3">
                         <div
                             v-for="income in recentIncomes"
                             :key="income.id"
-                            class="rounded-control bg-app p-4"
+                            class="rounded-control bg-surface-secondary p-4"
                         >
                             <p class="text-xs text-muted">
                                 {{ new Date(income.date).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long' }) }}
@@ -248,12 +248,12 @@ const pieGradient = computed(() => {
                 </div>
             </div>
 
-            <div class="overflow-hidden rounded-card bg-white shadow-soft">
+            <div class="overflow-hidden rounded-card bg-surface shadow-soft">
                 <div class="flex items-center justify-between border-b border-line px-5 py-4">
                     <h3 class="font-semibold text-ink">5 dernières dépenses</h3>
                     <Link
                         :href="route('expenses.index', { month })"
-                        class="rounded-control border border-line bg-white px-4 py-1.5 text-sm font-semibold text-ink shadow-pill hover:bg-app"
+                        class="rounded-control border border-line bg-surface px-4 py-1.5 text-sm font-semibold text-ink shadow-pill hover:bg-app"
                     >
                         Tout voir
                     </Link>

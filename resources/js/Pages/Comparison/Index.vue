@@ -95,7 +95,7 @@ function changeMonths(event) {
                 </div>
 
                 <select
-                    class="rounded-control border border-line bg-white px-3 py-1.5 text-sm font-semibold text-ink shadow-pill"
+                    class="rounded-control border border-line bg-surface px-3 py-1.5 text-sm font-semibold text-ink shadow-pill"
                     :value="months"
                     @change="changeMonths"
                 >
@@ -109,7 +109,7 @@ function changeMonths(event) {
 
         <div class="space-y-6 p-6">
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                <div class="flex items-center gap-4 rounded-card bg-white p-5 shadow-soft">
+                <div class="flex items-center gap-4 rounded-card bg-surface p-5 shadow-soft">
                     <span
                         class="flex h-12 w-12 shrink-0 items-center justify-center rounded-control bg-income/10 text-xl text-income"
                     >
@@ -126,7 +126,7 @@ function changeMonths(event) {
                     </div>
                 </div>
 
-                <div class="flex items-center gap-4 rounded-card bg-white p-5 shadow-soft">
+                <div class="flex items-center gap-4 rounded-card bg-surface p-5 shadow-soft">
                     <span
                         class="flex h-12 w-12 shrink-0 items-center justify-center rounded-control bg-expense/10 text-xl text-expense"
                     >
@@ -143,7 +143,7 @@ function changeMonths(event) {
                     </div>
                 </div>
 
-                <div class="flex items-center gap-4 rounded-card bg-white p-5 shadow-soft">
+                <div class="flex items-center gap-4 rounded-card bg-surface p-5 shadow-soft">
                     <span
                         class="flex h-12 w-12 shrink-0 items-center justify-center rounded-control bg-nav/10 text-xl text-nav"
                     >
@@ -163,7 +163,7 @@ function changeMonths(event) {
 
             <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
                 <div class="space-y-6 lg:col-span-2">
-                    <div class="rounded-card bg-white p-5 shadow-soft">
+                    <div class="rounded-card bg-surface p-5 shadow-soft">
                         <div class="flex items-center justify-between">
                             <h3 class="font-semibold text-ink">Revenus et dépenses par mois</h3>
                             <p class="text-xs text-muted">
@@ -195,7 +195,7 @@ function changeMonths(event) {
                         </div>
                     </div>
 
-                    <div class="rounded-card bg-white p-5 shadow-soft">
+                    <div class="rounded-card bg-surface p-5 shadow-soft">
                         <h3 class="font-semibold text-ink">Solde mensuel</h3>
 
                         <div class="mt-4 flex h-32 items-end gap-2 overflow-x-auto">
@@ -219,22 +219,22 @@ function changeMonths(event) {
                     </div>
                 </div>
 
-                <div class="h-fit rounded-card bg-white p-6 shadow-soft">
+                <div class="h-fit rounded-card bg-surface p-6 shadow-soft">
                     <h3 class="mb-3 text-sm font-semibold text-ink">Points clés</h3>
 
-                    <div v-if="bestBalanceMonth" class="rounded-control bg-app p-4">
+                    <div v-if="bestBalanceMonth" class="rounded-control bg-surface-secondary p-4">
                         <p class="text-xs text-muted">Meilleur solde</p>
                         <strong class="text-sm text-ink">
                             {{ formatMonth(bestBalanceMonth.month) }} · {{ amountLabel(bestBalanceMonth.balance) }}
                         </strong>
                     </div>
 
-                    <div class="mt-3 rounded-control bg-app p-4">
+                    <div class="mt-3 rounded-control bg-surface-secondary p-4">
                         <p class="text-xs text-muted">Dépenses moyennes</p>
                         <strong class="text-sm text-ink">{{ amountLabel(averageExpense) }}</strong>
                     </div>
 
-                    <div class="mt-3 rounded-control bg-app p-4">
+                    <div class="mt-3 rounded-control bg-surface-secondary p-4">
                         <p class="text-xs text-muted">Revenus moyens</p>
                         <strong class="text-sm text-ink">{{ amountLabel(averageIncome) }}</strong>
                     </div>

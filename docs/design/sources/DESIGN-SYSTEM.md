@@ -28,6 +28,24 @@ Cockpit financier personnel, chaleureux et calme. La palette, la typographie, la
 | Rouge dépense | `#FF5B62` |
 | Violet catégorie | `#8A5CF6` |
 
+### Mode sombre
+
+| Rôle | Valeur |
+|---|---:|
+| Fond extérieur | `#241A1D` |
+| Surface application | `#171B25` |
+| Surface carte | `#202633` |
+| Surface secondaire | `#282F3E` |
+| Texte principal | `#F6F3F4` |
+| Texte discret | `#AAB0C0` |
+| Séparateur | `#343C4D` |
+| Bleu actif | `#62A4FF` |
+| Vert positif | `#46D6A4` |
+| Rouge dépense | `#FF747A` |
+| Corail | `#FF9A7A` |
+
+Le thème suit le système lors de la première ouverture, puis mémorise le choix utilisateur lorsque le navigateur autorise le stockage local.
+
 ## Typographie et géométrie
 
 - `Nunito Sans`, puis `Poppins`, puis `system-ui`.
