@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { ref, toRef } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Modal from '@/Components/Modal.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -8,6 +8,8 @@ import DangerButton from '@/Components/DangerButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
+import { useMonthNavigation } from '@/Composables/useMonthNavigation';
+import { amountLabel } from '@/utils/currency';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -21,26 +23,7 @@ const props = defineProps({
     },
 });
 
-const monthLabel = computed(() => {
-    const [year, month] = props.month.split('-').map(Number);
-
-    return new Date(year, month - 1, 1).toLocaleDateString('fr-FR', {
-        month: 'long',
-        year: 'numeric',
-    });
-});
-
-function shiftMonth(delta) {
-    const [year, month] = props.month.split('-').map(Number);
-    const date = new Date(year, month - 1 + delta, 1);
-    const target = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-
-    router.get(route('incomes.index', { month: target }));
-}
-
-function amountLabel(amount) {
-    return `${new Intl.NumberFormat('fr-FR').format(amount)} FCFP`;
-}
+const { monthLabel, shiftMonth } = useMonthNavigation(toRef(props, 'month'), 'incomes.index');
 
 const editingIncome = ref(null);
 

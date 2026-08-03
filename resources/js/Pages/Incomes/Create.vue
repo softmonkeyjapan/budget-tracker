@@ -5,6 +5,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
+import { amountLabel } from '@/utils/currency';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -22,10 +23,6 @@ function defaultDate() {
     const today = new Date().toISOString().slice(0, 10);
 
     return today.slice(0, 7) === props.month ? today : `${props.month}-01`;
-}
-
-function amountLabel(amount) {
-    return `${new Intl.NumberFormat('fr-FR').format(amount)} FCFP`;
 }
 
 const form = useForm({
