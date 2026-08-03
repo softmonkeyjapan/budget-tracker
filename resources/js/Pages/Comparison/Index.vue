@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { amountLabel } from '@/utils/currency';
+import Amount from '@/Components/Amount.vue';
 import { formatMonth } from '@/utils/month';
 import { Head, router } from '@inertiajs/vue3';
 
@@ -120,7 +120,7 @@ function changeMonths(event) {
                             Revenus cumulés
                         </p>
                         <p class="truncate text-xl font-extrabold text-income">
-                            {{ amountLabel(incomeTotal) }}
+                            <Amount :value="incomeTotal" />
                         </p>
                         <p class="text-xs text-muted">Sur {{ months }} mois</p>
                     </div>
@@ -137,7 +137,7 @@ function changeMonths(event) {
                             Dépenses cumulées
                         </p>
                         <p class="truncate text-xl font-extrabold text-expense">
-                            {{ amountLabel(expenseTotal) }}
+                            <Amount :value="expenseTotal" />
                         </p>
                         <p class="text-xs text-muted">Sur {{ months }} mois</p>
                     </div>
@@ -154,7 +154,7 @@ function changeMonths(event) {
                             Solde cumulé
                         </p>
                         <p class="truncate text-xl font-extrabold text-nav">
-                            {{ amountLabel(balanceTotal) }}
+                            <Amount :value="balanceTotal" />
                         </p>
                         <p class="text-xs text-muted">{{ conservedPercentage }} % conservé</p>
                     </div>
@@ -225,18 +225,18 @@ function changeMonths(event) {
                     <div v-if="bestBalanceMonth" class="rounded-control bg-surface-secondary p-4">
                         <p class="text-xs text-muted">Meilleur solde</p>
                         <strong class="text-sm text-ink">
-                            {{ formatMonth(bestBalanceMonth.month) }} · {{ amountLabel(bestBalanceMonth.balance) }}
+                            {{ formatMonth(bestBalanceMonth.month) }} · <Amount :value="bestBalanceMonth.balance" />
                         </strong>
                     </div>
 
                     <div class="mt-3 rounded-control bg-surface-secondary p-4">
                         <p class="text-xs text-muted">Dépenses moyennes</p>
-                        <strong class="text-sm text-ink">{{ amountLabel(averageExpense) }}</strong>
+                        <strong class="text-sm text-ink"><Amount :value="averageExpense" /></strong>
                     </div>
 
                     <div class="mt-3 rounded-control bg-surface-secondary p-4">
                         <p class="text-xs text-muted">Revenus moyens</p>
-                        <strong class="text-sm text-ink">{{ amountLabel(averageIncome) }}</strong>
+                        <strong class="text-sm text-ink"><Amount :value="averageIncome" /></strong>
                     </div>
 
                     <h3 class="mb-2 mt-8 text-sm font-semibold text-ink">Lecture</h3>

@@ -19,6 +19,20 @@
             })();
         </script>
 
+        <script>
+            (function () {
+                var privacy;
+                try {
+                    privacy = localStorage.getItem('budget-tracker-privacy');
+                } catch (e) {
+                    privacy = null;
+                }
+                if (privacy === 'hidden') {
+                    document.documentElement.dataset.privacy = 'hidden';
+                }
+            })();
+        </script>
+
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
