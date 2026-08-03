@@ -6,16 +6,19 @@ namespace App\Services;
 
 use App\Exceptions\CategoryDepthExceededException;
 use App\Exceptions\CategoryHasChildrenException;
+use App\Exceptions\CategoryHasExpensesException;
 use App\Exceptions\CategoryParentNotFoundException;
 use App\Models\Category;
 use App\Models\User;
 use App\Repositories\Contracts\CategoryRepositoryContract;
+use App\Repositories\Contracts\ExpenseRepositoryContract;
 use Illuminate\Database\Eloquent\Collection;
 
 final class CategoryService
 {
     public function __construct(
         private readonly CategoryRepositoryContract $categories,
+        private readonly ExpenseRepositoryContract $expenses,
     ) {}
 
     /**
@@ -62,6 +65,10 @@ final class CategoryService
     {
         if ($category->children()->exists()) {
             throw new CategoryHasChildrenException;
+        }
+
+        if ($this->expenses->existsForCategory($category)) {
+            throw new CategoryHasExpensesException;
         }
 
         $this->categories->delete($category);

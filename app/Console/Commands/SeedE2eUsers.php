@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Models\Category;
+use App\Models\Expense;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
@@ -36,6 +37,7 @@ final class SeedE2eUsers extends Command
         );
 
         $this->seedCategories($verified);
+        $this->seedExpenses($verified);
 
         return self::SUCCESS;
     }
@@ -64,6 +66,36 @@ final class SeedE2eUsers extends Command
                     ['user_id' => $user->id, 'name' => $childName, 'parent_id' => $root->id],
                 );
             }
+        }
+    }
+
+    /**
+     * Mirrors the sample "5 dernières dépenses" from docs/design/build/index.html#dashboard.
+     */
+    private function seedExpenses(User $user): void
+    {
+        $recent = [
+            ['Charges fixes', 'Loyer', '2026-08-01', 'Appartement', 82000],
+            ['Alimentaire', 'Alimentation générale', '2026-08-03', 'Supermarché', 14850],
+            ['Transport', 'Carburant', '2026-08-08', 'Station-service', 8200],
+            ['Loisirs', 'Sorties', '2026-08-12', 'Cinéma', 3400],
+            ['Santé', 'Pharmacie', '2026-08-15', 'Ordonnance', 5250],
+        ];
+
+        foreach ($recent as [$rootName, $childName, $date, $description, $amount]) {
+            $child = Category::query()
+                ->whereHas('parent', fn ($query) => $query->where('user_id', $user->id)->where('name', $rootName))
+                ->where('name', $childName)
+                ->first();
+
+            if ($child === null) {
+                continue;
+            }
+
+            Expense::query()->updateOrCreate(
+                ['user_id' => $user->id, 'category_id' => $child->id, 'date' => $date],
+                ['amount' => $amount, 'description' => $description],
+            );
         }
     }
 }
