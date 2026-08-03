@@ -47,4 +47,15 @@ final class IncomeRepository implements IncomeRepositoryContract
             ->orderByDesc('date')
             ->get();
     }
+
+    /**
+     * @return Collection<int, Income>
+     */
+    public function forUserAndDateRange(User $user, string $start, string $end): Collection
+    {
+        return Income::query()
+            ->where('user_id', $user->id)
+            ->whereBetween('date', [$start, $end])
+            ->get();
+    }
 }

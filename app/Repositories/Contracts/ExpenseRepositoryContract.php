@@ -31,6 +31,11 @@ interface ExpenseRepositoryContract
     /**
      * @return Collection<int, Expense>
      */
+    public function forUserAndDateRange(User $user, string $start, string $end): Collection;
+
+    /**
+     * @return Collection<int, Expense>
+     */
     public function latestForUser(User $user, int $limit): Collection;
 
     public function existsForCategory(Category $category): bool;

@@ -53,6 +53,12 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Entrées
                                 </NavLink>
+                                <NavLink
+                                    :href="route('comparison')"
+                                    :active="route().current('comparison')"
+                                >
+                                    Comparaison
+                                </NavLink>
                             </div>
                         </div>
 
@@ -177,6 +183,12 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('incomes.*')"
                         >
                             Entrées
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('comparison')"
+                            :active="route().current('comparison')"
+                        >
+                            Comparaison
                         </ResponsiveNavLink>
                     </div>
 

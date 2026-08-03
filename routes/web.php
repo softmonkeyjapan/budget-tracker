@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\ComparisonController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\IncomesController;
@@ -21,6 +22,10 @@ Route::get('/', function () {
 Route::get('/dashboard', [DashboardController::class, 'show'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+
+Route::get('/comparison', [ComparisonController::class, 'show'])
+    ->middleware(['auth', 'verified'])
+    ->name('comparison');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
