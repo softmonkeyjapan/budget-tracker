@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import CategoryIcon from '@/Components/CategoryIcon.vue';
 import Modal from '@/Components/Modal.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
@@ -8,6 +9,7 @@ import DangerButton from '@/Components/DangerButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
+import { CATEGORY_ICONS } from '@/utils/categoryIcons';
 import { Head, router, useForm } from '@inertiajs/vue3';
 
 defineProps({
@@ -18,10 +20,8 @@ defineProps({
 });
 
 const SWATCHES = ['#FF8A66', '#2F80ED', '#23C48E', '#FF5B62', '#8A5CF6'];
-const ICONS = ['▾', '⌂', '▣', '✦', '♥', '📁'];
 
 const editingCategoryId = ref(null);
-const parentForNewChild = ref(null);
 
 const form = useForm({
     name: '',
@@ -30,24 +30,15 @@ const form = useForm({
     parent_id: null,
 });
 
-function startCreateRoot() {
+function startCreate(parentId = null) {
     editingCategoryId.value = null;
-    parentForNewChild.value = null;
     form.reset();
     form.clearErrors();
+    form.parent_id = parentId;
 }
 
-function startCreateChild(root) {
-    editingCategoryId.value = null;
-    parentForNewChild.value = root;
-    form.reset();
-    form.clearErrors();
-    form.parent_id = root.id;
-}
-
-function startEdit(category, root = null) {
+function startEdit(category) {
     editingCategoryId.value = category.id;
-    parentForNewChild.value = root;
     form.clearErrors();
     form.name = category.name;
     form.color = category.color;
@@ -56,10 +47,7 @@ function startEdit(category, root = null) {
 }
 
 function cancel() {
-    editingCategoryId.value = null;
-    parentForNewChild.value = null;
-    form.reset();
-    form.clearErrors();
+    startCreate(null);
 }
 
 function submit() {
@@ -105,8 +93,8 @@ function destroy() {
                     </h2>
                     <p class="mt-0.5 text-sm text-muted">Hiérarchie racine → enfant</p>
                 </div>
-                <PrimaryButton type="button" @click="startCreateRoot">
-                    + Catégorie racine
+                <PrimaryButton type="button" @click="startCreate()">
+                    + Nouvelle catégorie
                 </PrimaryButton>
             </div>
         </template>
@@ -126,7 +114,7 @@ function destroy() {
                                 color: root.resolved_color ?? '#8A90A2',
                             }"
                         >
-                            {{ root.icon ?? '📁' }}
+                            <CategoryIcon :icon="root.icon" class="h-5 w-5" />
                         </span>
                         <div class="min-w-0 flex-1">
                             <p class="truncate font-semibold text-ink">{{ root.name }}</p>
@@ -137,7 +125,7 @@ function destroy() {
                             <button
                                 type="button"
                                 class="rounded-control px-3 py-1.5 text-sm font-semibold text-nav hover:bg-app"
-                                @click="startCreateChild(root)"
+                                @click="startCreate(root.id)"
                             >
                                 + Enfant
                             </button>
@@ -175,7 +163,7 @@ function destroy() {
                                         color: child.resolved_color ?? '#8A90A2',
                                     }"
                                 >
-                                    {{ child.resolved_icon ?? '📁' }}
+                                    <CategoryIcon :icon="child.resolved_icon" class="h-4 w-4" />
                                 </span>
                                 <div class="min-w-0">
                                     <p class="truncate text-sm font-medium text-ink">
@@ -195,7 +183,7 @@ function destroy() {
                                 <button
                                     type="button"
                                     class="text-sm text-muted hover:text-ink"
-                                    @click="startEdit(child, root)"
+                                    @click="startEdit(child)"
                                 >
                                     Modifier
                                 </button>
@@ -215,13 +203,25 @@ function destroy() {
             <div class="h-fit rounded-card bg-surface p-6 shadow-soft">
                 <h3 class="mb-4 text-sm font-semibold text-ink">
                     <template v-if="editingCategoryId">Modifier la catégorie</template>
-                    <template v-else-if="parentForNewChild">
-                        Nouvel enfant de {{ parentForNewChild.name }}
-                    </template>
-                    <template v-else>Nouvelle catégorie racine</template>
+                    <template v-else>Nouvelle catégorie</template>
                 </h3>
 
                 <form @submit.prevent="submit" class="space-y-4">
+                    <div v-if="!editingCategoryId">
+                        <InputLabel for="parent_id" value="Parent" />
+                        <select
+                            id="parent_id"
+                            v-model="form.parent_id"
+                            class="mt-1 block w-full rounded-control border-line bg-surface text-ink shadow-sm focus:border-nav focus:ring-nav"
+                        >
+                            <option :value="null">Aucun (nouvelle catégorie racine)</option>
+                            <option v-for="root in categories" :key="root.id" :value="root.id">
+                                {{ root.name }}
+                            </option>
+                        </select>
+                        <InputError class="mt-2" :message="form.errors.parent_id" />
+                    </div>
+
                     <div>
                         <InputLabel for="name" value="Nom" />
                         <TextInput
@@ -238,14 +238,14 @@ function destroy() {
                         <InputLabel value="Icône" />
                         <div class="mt-2 flex flex-wrap gap-2">
                             <button
-                                v-for="glyph in ICONS"
-                                :key="glyph"
+                                v-for="key in CATEGORY_ICONS"
+                                :key="key"
                                 type="button"
-                                class="flex h-9 w-9 items-center justify-center rounded-control border-2 bg-app text-lg"
-                                :class="form.icon === glyph ? 'border-nav' : 'border-transparent'"
-                                @click="form.icon = glyph"
+                                class="flex h-9 w-9 items-center justify-center rounded-control border-2 bg-app text-ink"
+                                :class="form.icon === key ? 'border-nav' : 'border-transparent'"
+                                @click="form.icon = key"
                             >
-                                {{ glyph }}
+                                <CategoryIcon :icon="key" class="h-5 w-5" />
                             </button>
                         </div>
                         <InputError class="mt-2" :message="form.errors.icon" />
@@ -275,7 +275,7 @@ function destroy() {
                     </div>
 
                     <p
-                        v-if="parentForNewChild || (editingCategoryId && form.parent_id)"
+                        v-if="form.parent_id"
                         class="rounded-control bg-peach/20 p-3 text-xs text-ink"
                     >
                         Sans couleur ni icône propres, cette catégorie hérite de celles de sa

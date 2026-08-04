@@ -2,6 +2,7 @@
 import { computed, toRef } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Amount from '@/Components/Amount.vue';
+import CategoryIcon from '@/Components/CategoryIcon.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { useMonthNavigation } from '@/Composables/useMonthNavigation';
@@ -199,7 +200,7 @@ const pieGradient = computed(() => {
                                             color: category.color ?? '#8A90A2',
                                         }"
                                     >
-                                        {{ category.icon ?? '📁' }}
+                                        <CategoryIcon :icon="category.icon" class="h-4 w-4" />
                                     </span>
                                     <p class="min-w-0 flex-1 truncate font-medium text-ink">
                                         {{ category.name }}
@@ -279,7 +280,7 @@ const pieGradient = computed(() => {
                                 color: expense.category.resolved_color ?? '#8A90A2',
                             }"
                         >
-                            {{ expense.category.resolved_icon ?? '📁' }}
+                            <CategoryIcon :icon="expense.category.resolved_icon" class="h-4 w-4" />
                         </span>
                         <span class="truncate text-sm font-medium text-ink">
                             {{ expense.category.name }}

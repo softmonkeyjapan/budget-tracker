@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import CategoryIcon from '@/Components/CategoryIcon.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
@@ -98,7 +99,7 @@ function submit() {
                                         color: root.resolved_color ?? '#8A90A2',
                                     }"
                                 >
-                                    {{ root.icon ?? '📁' }}
+                                    <CategoryIcon :icon="root.icon" class="h-4 w-4" />
                                 </span>
                                 <span class="truncate text-sm font-semibold text-ink">
                                     {{ root.name }}
@@ -143,7 +144,7 @@ function submit() {
                                         color: child.resolved_color ?? '#8A90A2',
                                     }"
                                 >
-                                    {{ child.resolved_icon ?? '📁' }}
+                                    <CategoryIcon :icon="child.resolved_icon" class="h-4 w-4" />
                                 </span>
                                 <span class="truncate text-sm font-semibold text-ink">
                                     {{ child.name }}
@@ -215,7 +216,7 @@ function submit() {
                             color: selectedChild.resolved_color ?? '#8A90A2',
                         }"
                     >
-                        {{ selectedChild.resolved_icon ?? '📁' }}
+                        <CategoryIcon :icon="selectedChild.resolved_icon" class="h-4 w-4" />
                     </span>
                     <div class="min-w-0">
                         <p class="text-xs text-muted">{{ selectedRoot.name }}</p>
