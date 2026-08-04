@@ -4,6 +4,7 @@ import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Avatar from '@/Components/Avatar.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
+import FeedbackBubble from '@/Components/FeedbackBubble.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import SidebarLink from '@/Components/SidebarLink.vue';
 import PrivacyToggle from '@/Components/PrivacyToggle.vue';
@@ -235,5 +236,7 @@ const showingNavigationDropdown = ref(false);
                 </div>
             </main>
         </div>
+
+        <FeedbackBubble />
     </div>
 </template>
