@@ -2,6 +2,7 @@
 import { ref, toRef } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Amount from '@/Components/Amount.vue';
+import CategoryIcon from '@/Components/CategoryIcon.vue';
 import Modal from '@/Components/Modal.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
@@ -150,7 +151,7 @@ function destroy() {
                                 color: expense.category.resolved_color ?? '#8A90A2',
                             }"
                         >
-                            {{ expense.category.resolved_icon ?? '📁' }}
+                            <CategoryIcon :icon="expense.category.resolved_icon" class="h-4 w-4" />
                         </span>
                         <span class="truncate text-sm font-medium text-ink">
                             {{ expense.category.name }}
