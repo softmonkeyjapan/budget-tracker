@@ -24,9 +24,16 @@ interface ExpenseRepositoryContract
     public function delete(Expense $expense): void;
 
     /**
+     * @param  array{category_id?: int|null, search?: string|null, date?: string|null}  $filters
      * @return Collection<int, Expense>
      */
-    public function forUserAndMonth(User $user, string $month): Collection;
+    public function forUserAndMonth(
+        User $user,
+        string $month,
+        array $filters = [],
+        string $sortBy = 'date',
+        string $sortDirection = 'desc',
+    ): Collection;
 
     /**
      * @return Collection<int, Expense>

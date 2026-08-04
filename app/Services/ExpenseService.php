@@ -57,11 +57,17 @@ final class ExpenseService
     }
 
     /**
+     * @param  array{category_id?: int|null, search?: string|null, date?: string|null}  $filters
      * @return Collection<int, Expense>
      */
-    public function forMonth(User $user, string $month): Collection
-    {
-        return $this->expenses->forUserAndMonth($user, $month);
+    public function forMonth(
+        User $user,
+        string $month,
+        array $filters = [],
+        string $sortBy = 'date',
+        string $sortDirection = 'desc',
+    ): Collection {
+        return $this->expenses->forUserAndMonth($user, $month, $filters, $sortBy, $sortDirection);
     }
 
     private function resolveChildCategory(User $user, int $categoryId): Category
