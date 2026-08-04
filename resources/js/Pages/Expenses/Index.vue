@@ -26,9 +26,56 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    filters: {
+        type: Object,
+        required: true,
+    },
 });
 
-const { monthLabel, shiftMonth } = useMonthNavigation(toRef(props, 'month'), 'expenses.index');
+const search = ref(props.filters.search ?? '');
+const categoryId = ref(props.filters.category_id ?? null);
+const date = ref(props.filters.date ?? '');
+
+function currentQuery(overrides = {}) {
+    return {
+        month: props.month,
+        category_id: categoryId.value || undefined,
+        search: search.value || undefined,
+        date: date.value || undefined,
+        sort: props.filters.sort,
+        direction: props.filters.direction,
+        ...overrides,
+    };
+}
+
+function navigate(overrides = {}) {
+    router.get(route('expenses.index', currentQuery(overrides)), {}, {
+        preserveState: true,
+        preserveScroll: true,
+        replace: true,
+    });
+}
+
+const { monthLabel, shiftMonth } = useMonthNavigation(toRef(props, 'month'), 'expenses.index', currentQuery);
+
+let searchDebounce = null;
+
+function onSearchInput() {
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(() => navigate(), 300);
+}
+
+function resetFilters() {
+    search.value = '';
+    categoryId.value = null;
+    date.value = '';
+    navigate({ category_id: undefined, search: undefined, date: undefined });
+}
+
+function toggleSort(column) {
+    const direction = props.filters.sort === column && props.filters.direction === 'asc' ? 'desc' : 'asc';
+    navigate({ sort: column, direction });
+}
 
 const editingExpense = ref(null);
 
@@ -120,19 +167,65 @@ function destroy() {
         </template>
 
         <div class="p-6">
+            <div class="mb-4 flex flex-wrap items-center gap-3 rounded-card bg-surface p-4 shadow-soft">
+                <select
+                    v-model="categoryId"
+                    class="rounded-control border-line bg-surface text-sm text-ink shadow-sm focus:border-nav focus:ring-nav"
+                    @change="navigate()"
+                >
+                    <option :value="null">Toutes les catégories</option>
+                    <optgroup v-for="root in categories" :key="root.id" :label="root.name">
+                        <option v-for="child in root.children" :key="child.id" :value="child.id">
+                            {{ child.name }}
+                        </option>
+                    </optgroup>
+                </select>
+
+                <TextInput
+                    type="text"
+                    v-model="search"
+                    placeholder="Rechercher dans la description"
+                    class="min-w-[220px]"
+                    @input="onSearchInput"
+                />
+
+                <TextInput
+                    type="date"
+                    v-model="date"
+                    class="w-auto"
+                    @change="navigate()"
+                />
+
+                <SecondaryButton type="button" @click="resetFilters">
+                    Réinitialiser
+                </SecondaryButton>
+            </div>
+
             <div class="overflow-hidden rounded-card bg-surface shadow-soft">
                 <div
                     class="grid grid-cols-[100px_1fr_1fr_140px_170px] gap-2 border-b border-line px-5 py-3 text-xs font-semibold uppercase tracking-wide text-muted"
                 >
-                    <span>Date</span>
-                    <span>Catégorie</span>
-                    <span>Description</span>
-                    <span class="text-right">Montant</span>
+                    <button type="button" class="flex items-center gap-1 text-left hover:text-ink" @click="toggleSort('date')">
+                        Date
+                        <span v-if="filters.sort === 'date'">{{ filters.direction === 'asc' ? '▲' : '▼' }}</span>
+                    </button>
+                    <button type="button" class="flex items-center gap-1 text-left hover:text-ink" @click="toggleSort('category')">
+                        Catégorie
+                        <span v-if="filters.sort === 'category'">{{ filters.direction === 'asc' ? '▲' : '▼' }}</span>
+                    </button>
+                    <button type="button" class="flex items-center gap-1 text-left hover:text-ink" @click="toggleSort('description')">
+                        Description
+                        <span v-if="filters.sort === 'description'">{{ filters.direction === 'asc' ? '▲' : '▼' }}</span>
+                    </button>
+                    <button type="button" class="flex items-center justify-end gap-1 text-right hover:text-ink" @click="toggleSort('amount')">
+                        Montant
+                        <span v-if="filters.sort === 'amount'">{{ filters.direction === 'asc' ? '▲' : '▼' }}</span>
+                    </button>
                     <span></span>
                 </div>
 
                 <p v-if="expenses.length === 0" class="p-5 text-sm text-muted">
-                    Aucune dépense pour ce mois.
+                    Aucune dépense pour ce mois ou ces filtres.
                 </p>
 
                 <div

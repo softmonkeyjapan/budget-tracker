@@ -22,6 +22,85 @@ test('expenses index page is displayed for the given month', function () {
     );
 });
 
+test('expenses can be filtered by category', function () {
+    $user = User::factory()->create();
+    $root = Category::factory()->for($user)->create();
+    $foodChild = Category::factory()->child($root)->create();
+    $transportChild = Category::factory()->child($root)->create();
+    Expense::factory()->for($user)->for($foodChild, 'category')->create(['date' => '2026-03-05']);
+    Expense::factory()->for($user)->for($transportChild, 'category')->create(['date' => '2026-03-10']);
+
+    $response = $this->actingAs($user)->get("/expenses?month=2026-03&category_id={$foodChild->id}");
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Expenses/Index')
+        ->has('expenses', 1)
+        ->where('expenses.0.category.id', $foodChild->id)
+    );
+});
+
+test('expenses can be filtered by a description search', function () {
+    $user = User::factory()->create();
+    $root = Category::factory()->for($user)->create();
+    $child = Category::factory()->child($root)->create();
+    Expense::factory()->for($user)->for($child, 'category')->create(['date' => '2026-03-05', 'description' => 'Supermarché']);
+    Expense::factory()->for($user)->for($child, 'category')->create(['date' => '2026-03-10', 'description' => 'Pharmacie']);
+
+    $response = $this->actingAs($user)->get('/expenses?month=2026-03&search=super');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Expenses/Index')
+        ->has('expenses', 1)
+        ->where('expenses.0.description', 'Supermarché')
+    );
+});
+
+test('expenses can be filtered by an exact date', function () {
+    $user = User::factory()->create();
+    $root = Category::factory()->for($user)->create();
+    $child = Category::factory()->child($root)->create();
+    Expense::factory()->for($user)->for($child, 'category')->create(['date' => '2026-03-05']);
+    Expense::factory()->for($user)->for($child, 'category')->create(['date' => '2026-03-10']);
+
+    $response = $this->actingAs($user)->get('/expenses?month=2026-03&date=2026-03-10');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Expenses/Index')
+        ->has('expenses', 1)
+        ->where('expenses.0.date', '2026-03-10')
+    );
+});
+
+test('expenses default to sorting by date descending', function () {
+    $user = User::factory()->create();
+    $root = Category::factory()->for($user)->create();
+    $child = Category::factory()->child($root)->create();
+    Expense::factory()->for($user)->for($child, 'category')->create(['date' => '2026-03-05']);
+    Expense::factory()->for($user)->for($child, 'category')->create(['date' => '2026-03-20']);
+
+    $response = $this->actingAs($user)->get('/expenses?month=2026-03');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->where('expenses.0.date', '2026-03-20')
+        ->where('expenses.1.date', '2026-03-05')
+    );
+});
+
+test('expenses can be sorted by amount ascending', function () {
+    $user = User::factory()->create();
+    $root = Category::factory()->for($user)->create();
+    $child = Category::factory()->child($root)->create();
+    Expense::factory()->for($user)->for($child, 'category')->create(['date' => '2026-03-05', 'amount' => 5000]);
+    Expense::factory()->for($user)->for($child, 'category')->create(['date' => '2026-03-10', 'amount' => 1000]);
+
+    $response = $this->actingAs($user)->get('/expenses?month=2026-03&sort=amount&direction=asc');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->where('expenses.0.amount', 1000)
+        ->where('expenses.1.amount', 5000)
+    );
+});
+
 test('an expense can be created under a child category', function () {
     $user = User::factory()->create();
     $root = Category::factory()->for($user)->create();

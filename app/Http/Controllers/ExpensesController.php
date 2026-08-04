@@ -28,10 +28,29 @@ final class ExpensesController extends Controller
     {
         $month = $request->query('month') ?? now()->format('Y-m');
 
+        $filters = [
+            'category_id' => $request->integer('category_id') ?: null,
+            'search' => $request->string('search')->trim()->value() ?: null,
+            'date' => $request->query('date') ?: null,
+        ];
+
+        $sortBy = in_array($request->query('sort'), ['date', 'category', 'description', 'amount'], true)
+            ? $request->query('sort')
+            : 'date';
+
+        $sortDirection = $request->query('direction') === 'asc' ? 'asc' : 'desc';
+
         return Inertia::render('Expenses/Index', [
-            'expenses' => ExpenseResource::collection($this->expenses->forMonth($request->user(), $month)),
+            'expenses' => ExpenseResource::collection(
+                $this->expenses->forMonth($request->user(), $month, $filters, $sortBy, $sortDirection),
+            ),
             'categories' => CategoryResource::collection($this->categories->treeForUser($request->user())),
             'month' => $month,
+            'filters' => [
+                ...$filters,
+                'sort' => $sortBy,
+                'direction' => $sortDirection,
+            ],
         ]);
     }
 

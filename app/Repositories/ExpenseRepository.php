@@ -37,17 +37,45 @@ final class ExpenseRepository implements ExpenseRepositoryContract
     }
 
     /**
+     * @param  array{category_id?: int|null, search?: string|null, date?: string|null}  $filters
      * @return Collection<int, Expense>
      */
-    public function forUserAndMonth(User $user, string $month): Collection
-    {
-        return Expense::query()
-            ->where('user_id', $user->id)
-            ->whereYear('date', substr($month, 0, 4))
-            ->whereMonth('date', substr($month, 5, 2))
-            ->with('category.parent')
-            ->orderByDesc('date')
-            ->get();
+    public function forUserAndMonth(
+        User $user,
+        string $month,
+        array $filters = [],
+        string $sortBy = 'date',
+        string $sortDirection = 'desc',
+    ): Collection {
+        $query = Expense::query()
+            ->where('expenses.user_id', $user->id)
+            ->whereYear('expenses.date', substr($month, 0, 4))
+            ->whereMonth('expenses.date', substr($month, 5, 2))
+            ->with('category.parent');
+
+        if (! empty($filters['category_id'])) {
+            $query->where('expenses.category_id', $filters['category_id']);
+        }
+
+        if (! empty($filters['search'])) {
+            $query->where('expenses.description', 'like', '%'.$filters['search'].'%');
+        }
+
+        if (! empty($filters['date'])) {
+            $query->whereDate('expenses.date', $filters['date']);
+        }
+
+        if ($sortBy === 'category') {
+            return $query
+                ->join('categories', 'categories.id', '=', 'expenses.category_id')
+                ->orderBy('categories.name', $sortDirection)
+                ->select('expenses.*')
+                ->get();
+        }
+
+        $column = in_array($sortBy, ['date', 'description', 'amount'], true) ? $sortBy : 'date';
+
+        return $query->orderBy('expenses.'.$column, $sortDirection)->get();
     }
 
     /**
