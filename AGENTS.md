@@ -4,7 +4,7 @@
 
 ### Issue tracker
 
-Issues and specs live as GitHub issues on `softmonkeyjapan/claude-demo` (via the `gh` CLI). See `docs/agents/issue-tracker.md`.
+Issues and specs live as GitHub issues on `softmonkeyjapan/budget-tracker` (via the `gh` CLI). See `docs/agents/issue-tracker.md`.
 
 ### Domain docs
 
