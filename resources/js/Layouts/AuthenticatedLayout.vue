@@ -237,6 +237,6 @@ const showingNavigationDropdown = ref(false);
             </main>
         </div>
 
-        <FeedbackBubble />
+        <FeedbackBubble v-if="$page.props.auth.user.is_admin" />
     </div>
 </template>
