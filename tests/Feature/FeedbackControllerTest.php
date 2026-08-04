@@ -23,7 +23,7 @@ test('feedback submission creates a github issue with metadata', function () {
         'api.anthropic.com/*' => Http::response(null, 500),
         'api.github.com/*' => Http::response(['number' => 1], 201),
     ]);
-    $user = User::factory()->create(['name' => 'Loic', 'email' => 'loic@example.com']);
+    $user = User::factory()->admin()->create(['name' => 'Loic', 'email' => 'loic@example.com']);
 
     $response = $this->actingAs($user)->post('/feedback', [
         'message' => 'Le total ne se met pas à jour',
@@ -47,7 +47,7 @@ test('feedback submission uses the ai-classified label and title', function () {
         'api.anthropic.com/*' => fakeAnthropicClassification('bug', 'Le total ne se met pas à jour'),
         'api.github.com/*' => Http::response(['number' => 1], 201),
     ]);
-    $user = User::factory()->create();
+    $user = User::factory()->admin()->create();
 
     $response = $this->actingAs($user)->post('/feedback', [
         'message' => 'le total ne se met pas à jour après ajout dépense',
@@ -71,7 +71,7 @@ test('feedback submission falls back gracefully when classification fails', func
         'api.anthropic.com/*' => Http::response(null, 500),
         'api.github.com/*' => Http::response(['number' => 1], 201),
     ]);
-    $user = User::factory()->create();
+    $user = User::factory()->admin()->create();
 
     $response = $this->actingAs($user)->post('/feedback', [
         'message' => 'Bug sur le dashboard',
@@ -94,7 +94,7 @@ test('feedback submission falls back gracefully when classification response is 
         'api.anthropic.com/*' => Http::response(['content' => [['type' => 'text', 'text' => 'not json']]], 200),
         'api.github.com/*' => Http::response(['number' => 1], 201),
     ]);
-    $user = User::factory()->create();
+    $user = User::factory()->admin()->create();
 
     $response = $this->actingAs($user)->post('/feedback', [
         'message' => 'Bug sur le dashboard',
@@ -139,7 +139,7 @@ test('feedback submission surfaces an error when github is unreachable', functio
         'api.anthropic.com/*' => Http::response(null, 500),
         'api.github.com/*' => Http::response(null, 500),
     ]);
-    $user = User::factory()->create();
+    $user = User::factory()->admin()->create();
 
     $response = $this->actingAs($user)->post('/feedback', [
         'message' => 'Bug sur le dashboard',
@@ -147,6 +147,19 @@ test('feedback submission surfaces an error when github is unreachable', functio
     ]);
 
     $response->assertSessionHasErrors('message');
+});
+
+test('a non-admin user cannot submit feedback', function () {
+    Http::fake();
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)->post('/feedback', [
+        'message' => 'Bug sur le dashboard',
+        'page_url' => '/dashboard',
+    ]);
+
+    $response->assertForbidden();
+    Http::assertNothingSent();
 });
 
 test('a guest cannot submit feedback', function () {
@@ -163,7 +176,7 @@ test('feedback submission is throttled after 5 requests per minute', function ()
         'api.anthropic.com/*' => Http::response(null, 500),
         'api.github.com/*' => Http::response(['number' => 1], 201),
     ]);
-    $user = User::factory()->create();
+    $user = User::factory()->admin()->create();
 
     for ($i = 0; $i < 5; $i++) {
         $this->actingAs($user)->post('/feedback', [

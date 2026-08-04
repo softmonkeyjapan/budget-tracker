@@ -17,6 +17,8 @@ final class FeedbackController extends Controller
 
     public function store(StoreFeedbackRequest $request): RedirectResponse
     {
+        $this->authorize('access-feedback');
+
         $this->feedback->submit($request->user(), $request->validated(), $request->userAgent());
 
         return Redirect::back();

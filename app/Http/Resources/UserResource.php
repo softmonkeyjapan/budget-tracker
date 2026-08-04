@@ -23,6 +23,7 @@ final class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'email_verified_at' => $this->email_verified_at,
+            'is_admin' => $this->isAdmin(),
         ];
     }
 }
