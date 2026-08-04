@@ -81,6 +81,10 @@ Montant entier, date libre, description facultative. Aucun contrôle de catégor
 
 Mois précédent, libellé `MMMM YYYY`, mois suivant. La date du formulaire peut cibler librement un mois passé.
 
+### `FeedbackBubble`
+
+Bulle flottante ancrée en bas à droite, visible sur tous les écrans authentifiés (jamais sur les écrans invités). Ouvre le `Modal` partagé avec un unique champ texte libre. Couleur `bg-nav` (bleu, cohérent avec les autres actions primaires de l'app), icône bulle de dialogue sobre. Confirmation de succès en vert (`text-income`), erreurs via le composant `InputError` existant.
+
 ## Écrans
 
 1. Dashboard mensuel : revenus, dépenses, solde, camembert, utilisation par catégorie, cinq dernières dépenses.
