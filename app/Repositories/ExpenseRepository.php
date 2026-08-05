@@ -75,7 +75,13 @@ final class ExpenseRepository implements ExpenseRepositoryContract
 
         $column = in_array($sortBy, ['date', 'description', 'amount'], true) ? $sortBy : 'date';
 
-        return $query->orderBy('expenses.'.$column, $sortDirection)->get();
+        $query->orderBy('expenses.'.$column, $sortDirection);
+
+        if ($column === 'date') {
+            $query->orderBy('expenses.created_at', $sortDirection);
+        }
+
+        return $query->get();
     }
 
     /**
