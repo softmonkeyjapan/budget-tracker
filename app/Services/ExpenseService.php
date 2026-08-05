@@ -71,11 +71,12 @@ final class ExpenseService
     }
 
     /**
-     * @return array<int, array{id: int, name: string, root_name: ?string, color: ?string, amount: int}>
+     * @param  array{category_id?: int|null, search?: string|null, date?: string|null}  $filters
+     * @return array<int, array{id: int, name: string, root_name: ?string, color: ?string, amount: int, percentage: float}>
      */
-    public function subcategoryTotalsForMonth(User $user, string $month): array
+    public function subcategoryTotalsForMonth(User $user, string $month, array $filters = []): array
     {
-        $expenses = $this->expenses->forUserAndMonth($user, $month);
+        $expenses = $this->expenses->forUserAndMonth($user, $month, $filters);
 
         $totals = [];
 
@@ -95,7 +96,50 @@ final class ExpenseService
             $totals[$category->id]['amount'] += $expense->amount;
         }
 
+        return $this->withPercentagesSortedByAmount($totals);
+    }
+
+    /**
+     * @param  array{category_id?: int|null, search?: string|null, date?: string|null}  $filters
+     * @return array<int, array{id: int, name: string, color: ?string, amount: int, percentage: float}>
+     */
+    public function categoryTotalsForMonth(User $user, string $month, array $filters = []): array
+    {
+        $expenses = $this->expenses->forUserAndMonth($user, $month, $filters);
+
+        $totals = [];
+
+        foreach ($expenses as $expense) {
+            $root = $expense->category->parent ?? $expense->category;
+
+            if (! isset($totals[$root->id])) {
+                $totals[$root->id] = [
+                    'id' => $root->id,
+                    'name' => $root->name,
+                    'color' => $root->color,
+                    'amount' => 0,
+                ];
+            }
+
+            $totals[$root->id]['amount'] += $expense->amount;
+        }
+
+        return $this->withPercentagesSortedByAmount($totals);
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $totals
+     * @return array<int, array<string, mixed>>
+     */
+    private function withPercentagesSortedByAmount(array $totals): array
+    {
         $totals = array_values($totals);
+        $sum = array_sum(array_column($totals, 'amount'));
+
+        foreach ($totals as &$total) {
+            $total['percentage'] = $sum > 0 ? round(($total['amount'] / $sum) * 100, 1) : 0.0;
+        }
+        unset($total);
 
         usort($totals, fn (array $a, array $b) => $b['amount'] <=> $a['amount']);
 
