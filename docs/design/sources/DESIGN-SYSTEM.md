@@ -67,7 +67,7 @@ Icône, catégorie racine ou enfant, montant dépensé et pourcentage `dépenses
 
 ### `CategoryTree`
 
-Deux niveaux maximum. Racine visuellement forte ; enfants indentés. Un badge enfant identique à la racine signifie un héritage. Une couleur différente indique une surcharge locale.
+Deux niveaux maximum. Racine visuellement forte ; enfants indentés. Un badge enfant identique à la racine signifie un héritage. Une couleur différente indique une surcharge locale. Racines et enfants triés par ordre alphabétique. Accordéon exclusif sur les racines : toutes repliées par défaut, ouvrir une racine referme celle qui était ouverte, un chevron indique l'état.
 
 ### `ExpenseForm`
 
