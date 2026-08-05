@@ -3,8 +3,7 @@ import { computed, toRef } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Amount from '@/Components/Amount.vue';
 import CategoryIcon from '@/Components/CategoryIcon.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
+import { Button } from '@/Components/ui/button';
 import { useMonthNavigation } from '@/Composables/useMonthNavigation';
 import { Head, Link } from '@inertiajs/vue3';
 
@@ -235,16 +234,16 @@ const pieGradient = computed(() => {
                     </div>
 
                     <Link :href="route('incomes.create', { month })">
-                        <PrimaryButton type="button" class="w-full justify-center">
+                        <Button variant="primary" type="button" class="w-full justify-center">
                             + Ajouter une entrée
-                        </PrimaryButton>
+                        </Button>
                     </Link>
 
                     <h3 class="mb-3 mt-6 text-sm font-semibold text-ink">Actions rapides</h3>
                     <Link :href="route('expenses.create', { month })">
-                        <SecondaryButton type="button" class="w-full justify-center">
+                        <Button variant="secondary" type="button" class="w-full justify-center">
                             + Nouvelle dépense
-                        </SecondaryButton>
+                        </Button>
                     </Link>
                 </div>
             </div>

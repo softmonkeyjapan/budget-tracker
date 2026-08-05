@@ -1,5 +1,7 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed } from 'vue';
+import { DropdownMenuContent, DropdownMenuPortal, DropdownMenuRoot, DropdownMenuTrigger } from 'reka-ui';
+import { cn } from '@/lib/utils';
 
 const props = defineProps({
     align: {
@@ -20,77 +22,48 @@ const props = defineProps({
     },
 });
 
-const closeOnEscape = (e) => {
-    if (open.value && e.key === 'Escape') {
-        open.value = false;
-    }
-};
-
-onMounted(() => document.addEventListener('keydown', closeOnEscape));
-onUnmounted(() => document.removeEventListener('keydown', closeOnEscape));
-
 const widthClass = computed(() => {
     return {
         48: 'w-48',
     }[props.width.toString()];
 });
 
-const positionClasses = computed(() =>
-    props.direction === 'up' ? 'bottom-full mb-2' : 'top-full mt-2',
-);
+const contentSide = computed(() => (props.direction === 'up' ? 'top' : 'bottom'));
 
-const alignmentClasses = computed(() => {
+const contentAlign = computed(() => {
     if (props.align === 'left') {
-        return props.direction === 'up'
-            ? 'ltr:origin-bottom-left rtl:origin-bottom-right start-0'
-            : 'ltr:origin-top-left rtl:origin-top-right start-0';
+        return 'start';
     } else if (props.align === 'right') {
-        return props.direction === 'up'
-            ? 'ltr:origin-bottom-right rtl:origin-bottom-left end-0'
-            : 'ltr:origin-top-right rtl:origin-top-left end-0';
+        return 'end';
     }
 
-    return props.direction === 'up' ? 'origin-bottom' : 'origin-top';
+    return 'center';
 });
-
-const open = ref(false);
 </script>
 
 <template>
     <div class="relative">
-        <div @click="open = !open">
-            <slot name="trigger" />
-        </div>
+        <DropdownMenuRoot>
+            <DropdownMenuTrigger as-child>
+                <slot name="trigger" />
+            </DropdownMenuTrigger>
 
-        <!-- Full Screen Dropdown Overlay -->
-        <div
-            v-show="open"
-            class="fixed inset-0 z-40"
-            @click="open = false"
-        ></div>
-
-        <Transition
-            enter-active-class="transition ease-out duration-200"
-            enter-from-class="opacity-0 scale-95"
-            enter-to-class="opacity-100 scale-100"
-            leave-active-class="transition ease-in duration-75"
-            leave-from-class="opacity-100 scale-100"
-            leave-to-class="opacity-0 scale-95"
-        >
-            <div
-                v-show="open"
-                class="absolute z-50 rounded-card shadow-soft"
-                :class="[widthClass, positionClasses, alignmentClasses]"
-                style="display: none"
-                @click="open = false"
-            >
-                <div
-                    class="rounded-card ring-1 ring-line"
-                    :class="contentClasses"
+            <DropdownMenuPortal>
+                <DropdownMenuContent
+                    :side="contentSide"
+                    :align="contentAlign"
+                    :side-offset="8"
+                    :class="
+                        cn(
+                            'z-50 rounded-card shadow-soft ring-1 ring-line',
+                            widthClass,
+                            contentClasses,
+                        )
+                    "
                 >
                     <slot name="content" />
-                </div>
-            </div>
-        </Transition>
+                </DropdownMenuContent>
+            </DropdownMenuPortal>
+        </DropdownMenuRoot>
     </div>
 </template>

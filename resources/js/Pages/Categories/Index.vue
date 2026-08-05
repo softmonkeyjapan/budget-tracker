@@ -3,9 +3,7 @@ import { ref } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import CategoryIcon from '@/Components/CategoryIcon.vue';
 import Modal from '@/Components/Modal.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
-import DangerButton from '@/Components/DangerButton.vue';
+import { Button } from '@/Components/ui/button';
 import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
@@ -98,9 +96,9 @@ function destroy() {
                     </h2>
                     <p class="mt-0.5 text-sm text-muted">Hiérarchie racine → enfant</p>
                 </div>
-                <PrimaryButton type="button" @click="startCreate()">
+                <Button variant="primary" type="button" @click="startCreate()">
                     + Nouvelle catégorie
-                </PrimaryButton>
+                </Button>
             </div>
         </template>
 
@@ -307,12 +305,12 @@ function destroy() {
                     </p>
 
                     <div class="flex justify-end gap-2">
-                        <SecondaryButton type="button" @click="cancel">
+                        <Button variant="secondary" type="button" @click="cancel">
                             Annuler
-                        </SecondaryButton>
-                        <PrimaryButton :disabled="form.processing">
+                        </Button>
+                        <Button variant="primary" :disabled="form.processing">
                             Enregistrer
-                        </PrimaryButton>
+                        </Button>
                     </div>
                 </form>
             </div>
@@ -328,8 +326,8 @@ function destroy() {
                 </p>
 
                 <div class="mt-6 flex justify-end gap-2">
-                    <SecondaryButton @click="cancelDestroy">Annuler</SecondaryButton>
-                    <DangerButton @click="destroy">Supprimer</DangerButton>
+                    <Button variant="secondary" @click="cancelDestroy">Annuler</Button>
+                    <Button variant="danger" @click="destroy">Supprimer</Button>
                 </div>
             </div>
         </Modal>
