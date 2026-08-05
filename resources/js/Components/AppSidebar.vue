@@ -13,6 +13,7 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    SidebarRail,
 } from '@/Components/ui/sidebar';
 import { Link } from '@inertiajs/vue3';
 
@@ -30,7 +31,7 @@ const navItems = [
         <SidebarHeader class="p-6">
             <Link :href="route('dashboard')" class="flex items-center gap-3">
                 <ApplicationLogo class="h-9 w-9 shrink-0" />
-                <span class="text-lg font-extrabold leading-tight text-ink group-data-[collapsible=icon]:hidden">
+                <span class="text-lg font-extrabold leading-tight text-ink">
                     Budget Tracker
                 </span>
             </Link>
@@ -62,7 +63,7 @@ const navItems = [
                             class="flex w-full items-center gap-3 rounded-control p-2 text-start transition duration-150 ease-in-out hover:bg-app"
                         >
                             <Avatar :name="$page.props.auth.user.name" />
-                            <span class="min-w-0 flex-1 group-data-[collapsible=icon]:hidden">
+                            <span class="min-w-0 flex-1">
                                 <span class="block truncate text-sm font-semibold text-ink">{{ $page.props.auth.user.name }}</span>
                                 <span class="block truncate text-xs text-muted">{{ $page.props.auth.user.email }}</span>
                             </span>
@@ -74,9 +75,11 @@ const navItems = [
                     </template>
                 </Dropdown>
 
-                <PrivacyToggle class="group-data-[collapsible=icon]:hidden" />
-                <ThemeToggle class="group-data-[collapsible=icon]:hidden" />
+                <PrivacyToggle />
+                <ThemeToggle />
             </div>
         </SidebarFooter>
+
+        <SidebarRail />
     </Sidebar>
 </template>
