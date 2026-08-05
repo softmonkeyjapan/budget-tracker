@@ -86,6 +86,27 @@ test('expenses default to sorting by date descending', function () {
     );
 });
 
+test('expenses created later on the same day sort above earlier ones', function () {
+    $user = User::factory()->create();
+    $root = Category::factory()->for($user)->create();
+    $child = Category::factory()->child($root)->create();
+    $earlier = Expense::factory()->for($user)->for($child, 'category')->create([
+        'date' => '2026-03-15',
+        'created_at' => '2026-03-15 09:00:00',
+    ]);
+    $later = Expense::factory()->for($user)->for($child, 'category')->create([
+        'date' => '2026-03-15',
+        'created_at' => '2026-03-15 12:00:00',
+    ]);
+
+    $response = $this->actingAs($user)->get('/expenses?month=2026-03');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->where('expenses.0.id', $later->id)
+        ->where('expenses.1.id', $earlier->id)
+    );
+});
+
 test('expenses can be sorted by amount ascending', function () {
     $user = User::factory()->create();
     $root = Category::factory()->for($user)->create();
