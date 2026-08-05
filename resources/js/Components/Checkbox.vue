@@ -1,8 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import { Check } from '@lucide/vue';
-import { CheckboxIndicator, CheckboxRoot } from 'reka-ui';
-import { cn } from '@/lib/utils';
+import { Checkbox as CheckboxPrimitive } from '@/Components/ui/checkbox';
 
 const emit = defineEmits(['update:checked']);
 
@@ -36,18 +34,9 @@ const onUpdate = (value) => {
 </script>
 
 <template>
-    <CheckboxRoot
+    <CheckboxPrimitive
         :model-value="isChecked"
         @update:model-value="onUpdate"
-        :class="
-            cn(
-                'peer size-4 shrink-0 rounded border border-line bg-surface shadow-sm outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-nav disabled:cursor-not-allowed disabled:opacity-50',
-                'data-[state=checked]:border-nav data-[state=checked]:bg-nav data-[state=checked]:text-white',
-            )
-        "
-    >
-        <CheckboxIndicator class="grid place-content-center text-current">
-            <Check class="size-3.5" />
-        </CheckboxIndicator>
-    </CheckboxRoot>
+        class="rounded border-line bg-surface shadow-sm focus-visible:ring-nav data-[state=checked]:border-nav data-[state=checked]:bg-nav"
+    />
 </template>
