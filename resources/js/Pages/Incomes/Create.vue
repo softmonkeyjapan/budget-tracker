@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Amount from '@/Components/Amount.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import { Button } from '@/Components/ui/button';
 import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
@@ -117,9 +117,9 @@ function submit() {
                         >
                             Annuler
                         </Link>
-                        <PrimaryButton :disabled="form.processing">
+                        <Button variant="primary" :disabled="form.processing">
                             Enregistrer l'entrée
-                        </PrimaryButton>
+                        </Button>
                     </div>
                 </form>
             </div>

@@ -2,8 +2,7 @@
 import { computed, ref } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import CategoryIcon from '@/Components/CategoryIcon.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
+import { Button } from '@/Components/ui/button';
 import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
@@ -199,9 +198,9 @@ function submit() {
                         >
                             Annuler
                         </Link>
-                        <PrimaryButton :disabled="form.processing || !form.category_id">
+                        <Button variant="primary" :disabled="form.processing || !form.category_id">
                             Enregistrer la dépense
-                        </PrimaryButton>
+                        </Button>
                     </div>
                 </form>
             </div>

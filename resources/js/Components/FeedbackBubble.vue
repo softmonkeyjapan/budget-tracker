@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import InputError from '@/Components/InputError.vue';
 import Modal from '@/Components/Modal.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import { Button } from '@/Components/ui/button';
 
 const open = ref(false);
 const sent = ref(false);
@@ -83,9 +83,9 @@ const submit = () => {
                     >
                         Annuler
                     </button>
-                    <PrimaryButton :disabled="form.processing || !form.message.trim()">
+                    <Button variant="primary" :disabled="form.processing || !form.message.trim()">
                         Envoyer
-                    </PrimaryButton>
+                    </Button>
                 </div>
             </form>
         </div>

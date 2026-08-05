@@ -3,9 +3,7 @@ import { ref, toRef } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Amount from '@/Components/Amount.vue';
 import Modal from '@/Components/Modal.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
-import DangerButton from '@/Components/DangerButton.vue';
+import { Button } from '@/Components/ui/button';
 import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
@@ -108,7 +106,7 @@ function destroy() {
                     </div>
 
                     <Link :href="route('incomes.create', { month })">
-                        <PrimaryButton type="button">+ Ajouter une entrée</PrimaryButton>
+                        <Button variant="primary" type="button">+ Ajouter une entrée</Button>
                     </Link>
                 </div>
             </div>
@@ -205,8 +203,8 @@ function destroy() {
                     </div>
 
                     <div class="flex justify-end gap-2">
-                        <SecondaryButton type="button" @click="cancelEdit">Annuler</SecondaryButton>
-                        <PrimaryButton :disabled="editForm.processing">Enregistrer</PrimaryButton>
+                        <Button variant="secondary" type="button" @click="cancelEdit">Annuler</Button>
+                        <Button variant="primary" :disabled="editForm.processing">Enregistrer</Button>
                     </div>
                 </form>
             </div>
@@ -218,8 +216,8 @@ function destroy() {
                 <p class="mt-1 text-sm text-muted">Cette action est irréversible.</p>
 
                 <div class="mt-6 flex justify-end gap-2">
-                    <SecondaryButton @click="cancelDestroy">Annuler</SecondaryButton>
-                    <DangerButton @click="destroy">Supprimer</DangerButton>
+                    <Button variant="secondary" @click="cancelDestroy">Annuler</Button>
+                    <Button variant="danger" @click="destroy">Supprimer</Button>
                 </div>
             </div>
         </Modal>

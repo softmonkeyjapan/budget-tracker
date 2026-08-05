@@ -1,5 +1,6 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import { DropdownMenuItem } from 'reka-ui';
 
 defineProps({
     href: {
@@ -10,10 +11,12 @@ defineProps({
 </script>
 
 <template>
-    <Link
-        :href="href"
-        class="block w-full px-4 py-2 text-start text-sm leading-5 text-ink transition duration-150 ease-in-out hover:bg-app focus:bg-app focus:outline-none"
-    >
-        <slot />
-    </Link>
+    <DropdownMenuItem as-child>
+        <Link
+            :href="href"
+            class="block w-full rounded-sm px-4 py-2 text-start text-sm leading-5 text-ink outline-none transition duration-150 ease-in-out hover:bg-app focus:bg-app"
+        >
+            <slot />
+        </Link>
+    </DropdownMenuItem>
 </template>
