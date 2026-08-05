@@ -23,6 +23,10 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    categoryTotals: {
+        type: Array,
+        required: true,
+    },
     subcategoryTotals: {
         type: Array,
         required: true,
@@ -206,7 +210,7 @@ function destroy() {
                 </SecondaryButton>
             </div>
 
-            <SubcategoryBarChart :data="subcategoryTotals" class="mb-4" />
+            <SubcategoryBarChart :general="categoryTotals" :detail="subcategoryTotals" class="mb-4" />
 
             <div class="overflow-hidden rounded-card bg-surface shadow-soft">
                 <div

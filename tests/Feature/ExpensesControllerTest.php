@@ -22,11 +22,35 @@ test('expenses index page is displayed for the given month', function () {
     );
 });
 
-test('expenses index exposes subcategory totals for the chart, independent of table filters', function () {
+test('expenses index exposes subcategory totals with percentages for the whole month', function () {
     $user = User::factory()->create();
     $root = Category::factory()->for($user)->create(['name' => 'Alimentaire', 'color' => '#FF0000']);
     $foodChild = Category::factory()->child($root)->create(['name' => 'Supermarché']);
     $transportRoot = Category::factory()->for($user)->create(['name' => 'Transport', 'color' => '#00FF00']);
+    $fuelChild = Category::factory()->child($transportRoot)->create(['name' => 'Essence']);
+    Expense::factory()->for($user)->for($foodChild, 'category')->create(['date' => '2026-03-05', 'amount' => 3000]);
+    Expense::factory()->for($user)->for($fuelChild, 'category')->create(['date' => '2026-03-10', 'amount' => 7000]);
+
+    $response = $this->actingAs($user)->get('/expenses?month=2026-03');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Expenses/Index')
+        ->has('subcategoryTotals', 2)
+        ->where('subcategoryTotals.0.name', 'Essence')
+        ->where('subcategoryTotals.0.amount', 7000)
+        ->where('subcategoryTotals.0.root_name', 'Transport')
+        ->where('subcategoryTotals.0.percentage', 70)
+        ->where('subcategoryTotals.1.name', 'Supermarché')
+        ->where('subcategoryTotals.1.amount', 3000)
+        ->where('subcategoryTotals.1.percentage', 30)
+    );
+});
+
+test('subcategory totals follow the table filters, and percentages are based on the filtered subset', function () {
+    $user = User::factory()->create();
+    $root = Category::factory()->for($user)->create(['name' => 'Alimentaire']);
+    $foodChild = Category::factory()->child($root)->create(['name' => 'Supermarché']);
+    $transportRoot = Category::factory()->for($user)->create(['name' => 'Transport']);
     $fuelChild = Category::factory()->child($transportRoot)->create(['name' => 'Essence']);
     Expense::factory()->for($user)->for($foodChild, 'category')->create(['date' => '2026-03-05', 'amount' => 3000]);
     Expense::factory()->for($user)->for($fuelChild, 'category')->create(['date' => '2026-03-10', 'amount' => 7000]);
@@ -36,12 +60,10 @@ test('expenses index exposes subcategory totals for the chart, independent of ta
     $response->assertInertia(fn (Assert $page) => $page
         ->component('Expenses/Index')
         ->has('expenses', 1)
-        ->has('subcategoryTotals', 2)
-        ->where('subcategoryTotals.0.name', 'Essence')
-        ->where('subcategoryTotals.0.amount', 7000)
-        ->where('subcategoryTotals.0.root_name', 'Transport')
-        ->where('subcategoryTotals.1.name', 'Supermarché')
-        ->where('subcategoryTotals.1.amount', 3000)
+        ->has('subcategoryTotals', 1)
+        ->where('subcategoryTotals.0.name', 'Supermarché')
+        ->where('subcategoryTotals.0.amount', 3000)
+        ->where('subcategoryTotals.0.percentage', 100)
     );
 });
 
@@ -53,6 +75,40 @@ test('expenses index exposes an empty subcategory totals array when there are no
     $response->assertInertia(fn (Assert $page) => $page
         ->component('Expenses/Index')
         ->where('subcategoryTotals', [])
+    );
+});
+
+test('expenses index exposes category totals grouped by root category with percentages for the whole month', function () {
+    $user = User::factory()->create();
+    $root = Category::factory()->for($user)->create(['name' => 'Alimentaire', 'color' => '#FF0000']);
+    $foodChild = Category::factory()->child($root)->create(['name' => 'Supermarché']);
+    $transportRoot = Category::factory()->for($user)->create(['name' => 'Transport', 'color' => '#00FF00']);
+    $fuelChild = Category::factory()->child($transportRoot)->create(['name' => 'Essence']);
+    Expense::factory()->for($user)->for($foodChild, 'category')->create(['date' => '2026-03-05', 'amount' => 3000]);
+    Expense::factory()->for($user)->for($fuelChild, 'category')->create(['date' => '2026-03-10', 'amount' => 7000]);
+
+    $response = $this->actingAs($user)->get('/expenses?month=2026-03');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Expenses/Index')
+        ->has('categoryTotals', 2)
+        ->where('categoryTotals.0.name', 'Transport')
+        ->where('categoryTotals.0.amount', 7000)
+        ->where('categoryTotals.0.percentage', 70)
+        ->where('categoryTotals.1.name', 'Alimentaire')
+        ->where('categoryTotals.1.amount', 3000)
+        ->where('categoryTotals.1.percentage', 30)
+    );
+});
+
+test('expenses index exposes an empty category totals array when there are no expenses', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)->get('/expenses?month=2026-03');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Expenses/Index')
+        ->where('categoryTotals', [])
     );
 });
 

@@ -45,7 +45,8 @@ final class ExpensesController extends Controller
                 $this->expenses->forMonth($request->user(), $month, $filters, $sortBy, $sortDirection),
             ),
             'categories' => CategoryResource::collection($this->categories->treeForUser($request->user())),
-            'subcategoryTotals' => $this->expenses->subcategoryTotalsForMonth($request->user(), $month),
+            'categoryTotals' => $this->expenses->categoryTotalsForMonth($request->user(), $month, $filters),
+            'subcategoryTotals' => $this->expenses->subcategoryTotalsForMonth($request->user(), $month, $filters),
             'month' => $month,
             'filters' => [
                 ...$filters,
