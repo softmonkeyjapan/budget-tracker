@@ -3,6 +3,7 @@ import { ref, toRef } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Amount from '@/Components/Amount.vue';
 import CategoryIcon from '@/Components/CategoryIcon.vue';
+import SubcategoryBarChart from '@/Components/SubcategoryBarChart.vue';
 import Modal from '@/Components/Modal.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
@@ -19,6 +20,10 @@ const props = defineProps({
         required: true,
     },
     categories: {
+        type: Array,
+        required: true,
+    },
+    subcategoryTotals: {
         type: Array,
         required: true,
     },
@@ -200,6 +205,8 @@ function destroy() {
                     Réinitialiser
                 </SecondaryButton>
             </div>
+
+            <SubcategoryBarChart :data="subcategoryTotals" class="mb-4" />
 
             <div class="overflow-hidden rounded-card bg-surface shadow-soft">
                 <div

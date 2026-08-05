@@ -70,6 +70,38 @@ final class ExpenseService
         return $this->expenses->forUserAndMonth($user, $month, $filters, $sortBy, $sortDirection);
     }
 
+    /**
+     * @return array<int, array{id: int, name: string, root_name: ?string, color: ?string, amount: int}>
+     */
+    public function subcategoryTotalsForMonth(User $user, string $month): array
+    {
+        $expenses = $this->expenses->forUserAndMonth($user, $month);
+
+        $totals = [];
+
+        foreach ($expenses as $expense) {
+            $category = $expense->category;
+
+            if (! isset($totals[$category->id])) {
+                $totals[$category->id] = [
+                    'id' => $category->id,
+                    'name' => $category->name,
+                    'root_name' => $category->parent?->name,
+                    'color' => $category->color ?? $category->parent?->color,
+                    'amount' => 0,
+                ];
+            }
+
+            $totals[$category->id]['amount'] += $expense->amount;
+        }
+
+        $totals = array_values($totals);
+
+        usort($totals, fn (array $a, array $b) => $b['amount'] <=> $a['amount']);
+
+        return $totals;
+    }
+
     private function resolveChildCategory(User $user, int $categoryId): Category
     {
         $category = $this->categories->findOwnedByUser($user, $categoryId);
