@@ -50,7 +50,10 @@ final class CategoryRepository implements CategoryRepositoryContract
         return Category::query()
             ->where('user_id', $user->id)
             ->whereNull('parent_id')
-            ->with('children.parent')
+            ->with([
+                'children' => fn ($query) => $query->orderBy('name'),
+                'children.parent',
+            ])
             ->orderBy('name')
             ->get();
     }

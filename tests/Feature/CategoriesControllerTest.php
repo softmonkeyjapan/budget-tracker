@@ -22,6 +22,22 @@ test('categories index page is displayed', function () {
     );
 });
 
+test('child categories are ordered alphabetically', function () {
+    $user = User::factory()->create();
+    $root = Category::factory()->for($user)->create(['name' => 'Alimentaire']);
+    Category::factory()->child($root)->create(['name' => 'Poissonnerie']);
+    Category::factory()->child($root)->create(['name' => 'Boucherie']);
+    Category::factory()->child($root)->create(['name' => 'Crèmerie']);
+
+    $response = $this->actingAs($user)->get('/categories');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->where('categories.0.children.0.name', 'Boucherie')
+        ->where('categories.0.children.1.name', 'Crèmerie')
+        ->where('categories.0.children.2.name', 'Poissonnerie')
+    );
+});
+
 test('a root category can be created', function () {
     $user = User::factory()->create();
 

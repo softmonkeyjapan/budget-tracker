@@ -22,6 +22,11 @@ defineProps({
 const SWATCHES = ['#FF8A66', '#2F80ED', '#23C48E', '#FF5B62', '#8A5CF6'];
 
 const editingCategoryId = ref(null);
+const openRootId = ref(null);
+
+function toggleRoot(rootId) {
+    openRootId.value = openRootId.value === rootId ? null : rootId;
+}
 
 const form = useForm({
     name: '',
@@ -107,19 +112,38 @@ function destroy() {
                     class="rounded-card bg-surface p-5 shadow-soft"
                 >
                     <div class="flex flex-wrap items-center gap-3">
-                        <span
-                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-control text-lg"
-                            :style="{
-                                backgroundColor: (root.resolved_color ?? '#8A90A2') + '22',
-                                color: root.resolved_color ?? '#8A90A2',
-                            }"
+                        <button
+                            type="button"
+                            class="flex min-w-0 flex-1 items-center gap-3 text-left"
+                            :aria-expanded="openRootId === root.id"
+                            @click="toggleRoot(root.id)"
                         >
-                            <CategoryIcon :icon="root.icon" class="h-5 w-5" />
-                        </span>
-                        <div class="min-w-0 flex-1">
-                            <p class="truncate font-semibold text-ink">{{ root.name }}</p>
-                            <p class="text-sm text-muted">{{ root.children_count }} enfant(s)</p>
-                        </div>
+                            <span
+                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-control text-lg"
+                                :style="{
+                                    backgroundColor: (root.resolved_color ?? '#8A90A2') + '22',
+                                    color: root.resolved_color ?? '#8A90A2',
+                                }"
+                            >
+                                <CategoryIcon :icon="root.icon" class="h-5 w-5" />
+                            </span>
+                            <div class="min-w-0 flex-1">
+                                <p class="truncate font-semibold text-ink">{{ root.name }}</p>
+                                <p class="text-sm text-muted">{{ root.children_count }} enfant(s)</p>
+                            </div>
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="h-4 w-4 shrink-0 text-muted transition-transform"
+                                :class="{ 'rotate-180': openRootId === root.id }"
+                            >
+                                <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                        </button>
 
                         <div class="flex shrink-0 items-center gap-1">
                             <button
@@ -147,7 +171,7 @@ function destroy() {
                     </div>
 
                     <div
-                        v-if="root.children.length"
+                        v-if="openRootId === root.id && root.children.length"
                         class="ms-5 mt-4 space-y-2 border-l border-line ps-5"
                     >
                         <div
