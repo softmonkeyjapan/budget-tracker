@@ -1,19 +1,20 @@
 <script setup>
 import { useTheme } from '@/Composables/useTheme';
+import { Toggle } from '@/Components/ui/toggle';
 
 const { theme, toggle } = useTheme();
 </script>
 
 <template>
-    <button
-        type="button"
-        @click="toggle"
-        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-control border border-line bg-surface text-ink transition duration-150 ease-in-out hover:bg-app"
+    <Toggle
+        :model-value="theme === 'dark'"
+        @update:model-value="toggle"
         :aria-label="theme === 'dark' ? 'Activer le mode clair' : 'Activer le mode sombre'"
+        class="h-9 w-9 shrink-0 rounded-control border border-line bg-surface p-0 text-ink hover:bg-app hover:text-ink data-[state=on]:bg-surface data-[state=on]:text-ink"
     >
         <svg
             v-if="theme === 'dark'"
-            class="h-[18px] w-[18px]"
+            class="size-[18px]"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -33,7 +34,7 @@ const { theme, toggle } = useTheme();
         </svg>
         <svg
             v-else
-            class="h-[18px] w-[18px]"
+            class="size-[18px]"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -43,5 +44,5 @@ const { theme, toggle } = useTheme();
         >
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
         </svg>
-    </button>
+    </Toggle>
 </template>
