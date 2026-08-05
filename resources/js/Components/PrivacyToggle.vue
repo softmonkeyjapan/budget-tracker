@@ -1,19 +1,20 @@
 <script setup>
 import { usePrivacy } from '@/Composables/usePrivacy';
+import { Toggle } from '@/Components/ui/toggle';
 
 const { hidden, toggle } = usePrivacy();
 </script>
 
 <template>
-    <button
-        type="button"
-        @click="toggle"
-        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-control border border-line bg-surface text-ink transition duration-150 ease-in-out hover:bg-app"
+    <Toggle
+        :model-value="hidden"
+        @update:model-value="toggle"
         :aria-label="hidden ? 'Afficher les montants' : 'Masquer les montants'"
+        class="h-9 w-9 shrink-0 rounded-control border border-line bg-surface p-0 text-ink hover:bg-app hover:text-ink data-[state=on]:bg-surface data-[state=on]:text-ink"
     >
         <svg
             v-if="hidden"
-            class="h-[18px] w-[18px]"
+            class="size-[18px]"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -26,7 +27,7 @@ const { hidden, toggle } = usePrivacy();
         </svg>
         <svg
             v-else
-            class="h-[18px] w-[18px]"
+            class="size-[18px]"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -37,5 +38,5 @@ const { hidden, toggle } = usePrivacy();
             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
             <circle cx="12" cy="12" r="3" />
         </svg>
-    </button>
+    </Toggle>
 </template>
