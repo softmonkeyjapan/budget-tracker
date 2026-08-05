@@ -1,6 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views';
+@plugin '@tailwindcss/forms';
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 :root {
     --color-app: 243 245 250;
@@ -31,4 +32,43 @@
 
 [data-theme='dark'] .bg-canvas {
     background-image: linear-gradient(135deg, #241a1d, #171319);
+}
+
+@theme inline {
+    --font-sans: 'Nunito Sans', 'Poppins', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* No documented dark-mode override — unchanged in both themes. */
+    --color-peach: #ffd2c4;
+    --color-category: #8a5cf6;
+
+    /*
+     * Theme-aware tokens, reusing the raw-channel var names declared above.
+     * Safe only because @import must precede all other rules, so the plain
+     * :root/[data-theme=dark] blocks above always compile after this @theme
+     * block and win the cascade — don't move them into a separately @import'd file.
+     */
+    --color-coral: rgb(var(--color-coral));
+    --color-app: rgb(var(--color-app));
+    --color-surface: rgb(var(--color-surface));
+    --color-surface-secondary: rgb(var(--color-surface-secondary));
+    --color-ink: rgb(var(--color-ink));
+    --color-muted: rgb(var(--color-muted));
+    --color-line: rgb(var(--color-line));
+    --color-nav: rgb(var(--color-nav));
+    --color-income: rgb(var(--color-income));
+    --color-expense: rgb(var(--color-expense));
+
+    --radius-shell: 26px;
+    --radius-card: 16px;
+    --radius-control: 12px;
+
+    --shadow-soft: 0 8px 24px rgb(40 52 77 / 0.07);
+    --shadow-shell: 0 28px 70px rgb(74 41 31 / 0.16);
+    --shadow-primary: 0 8px 18px rgb(47 128 237 / 0.22);
+    --shadow-pill: 0 4px 14px rgb(40 52 77 / 0.05);
+}
+
+@utility bg-canvas {
+    background-image: linear-gradient(135deg, #ffd7ca, #ffcabc);
 }
