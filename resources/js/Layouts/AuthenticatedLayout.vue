@@ -7,21 +7,21 @@ import { Link } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <SidebarProvider class="bg-app">
+    <SidebarProvider class="bg-background">
         <AppSidebar />
 
         <SidebarInset>
             <!-- Mobile Top Bar -->
-            <nav class="flex h-16 shrink-0 items-center gap-3 border-b border-line bg-surface px-4 md:hidden">
+            <nav class="flex h-16 shrink-0 items-center gap-3 border-b border-border bg-card px-4 md:hidden">
                 <SidebarTrigger />
                 <Link :href="route('dashboard')" class="flex items-center gap-2">
                     <ApplicationLogo class="h-8 w-8 shrink-0" />
-                    <span class="text-base font-extrabold text-ink">Budget Tracker</span>
+                    <span class="text-base font-heading font-extrabold text-foreground">Budget Tracker</span>
                 </Link>
             </nav>
 
             <!-- Page Heading -->
-            <header class="bg-surface" v-if="$slots.header">
+            <header class="bg-card" v-if="$slots.header">
                 <div class="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
                     <slot name="header" />
                 </div>

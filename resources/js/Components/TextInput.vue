@@ -22,6 +22,6 @@ defineExpose({ focus: () => input.value?.$el?.focus() });
     <Input
         v-model="model"
         ref="input"
-        class="h-10 rounded-control border-line bg-surface py-2 text-ink shadow-sm focus-visible:border-nav focus-visible:ring-nav"
+        class="h-10 rounded-lg border-border bg-card py-2 text-foreground shadow-sm focus-visible:border-ring focus-visible:ring-ring"
     />
 </template>

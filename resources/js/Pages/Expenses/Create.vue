@@ -58,23 +58,23 @@ function submit() {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-extrabold leading-tight text-ink">Nouvelle dépense</h2>
-            <p class="mt-0.5 text-sm text-muted">Enregistrer un mouvement réel</p>
+            <h2 class="text-xl font-heading font-extrabold leading-tight text-foreground">Nouvelle dépense</h2>
+            <p class="mt-0.5 text-sm text-muted-foreground">Enregistrer un mouvement réel</p>
         </template>
 
         <div class="grid grid-cols-1 gap-6 p-6 lg:grid-cols-3">
-            <div class="rounded-card bg-surface p-6 shadow-soft lg:col-span-2">
+            <div class="rounded-xl bg-card p-6 shadow-soft lg:col-span-2">
                 <form @submit.prevent="submit" class="space-y-6">
                     <div>
                         <div class="flex items-center gap-3">
                             <span
-                                class="flex h-7 w-7 items-center justify-center rounded-full bg-app text-sm font-bold text-nav"
+                                class="flex h-7 w-7 items-center justify-center rounded-full bg-background text-sm font-bold text-primary"
                             >
                                 1
                             </span>
                             <div>
-                                <h3 class="font-semibold text-ink">Catégorie racine</h3>
-                                <p class="text-sm text-muted">Choisissez d'abord une famille</p>
+                                <h3 class="font-semibold text-foreground">Catégorie racine</h3>
+                                <p class="text-sm text-muted-foreground">Choisissez d'abord une famille</p>
                             </div>
                         </div>
 
@@ -83,24 +83,24 @@ function submit() {
                                 v-for="root in categories"
                                 :key="root.id"
                                 type="button"
-                                class="flex items-center gap-2 rounded-control border-2 p-3 text-left"
+                                class="flex items-center gap-2 rounded-lg border-2 p-3 text-left"
                                 :class="
                                     selectedRootId === root.id
-                                        ? 'border-nav bg-app'
-                                        : 'border-line'
+                                        ? 'border-primary bg-background'
+                                        : 'border-border'
                                 "
                                 @click="selectRoot(root)"
                             >
                                 <span
-                                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-control text-base"
+                                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-base"
                                     :style="{
-                                        backgroundColor: (root.resolved_color ?? '#8A90A2') + '22',
-                                        color: root.resolved_color ?? '#8A90A2',
+                                        backgroundColor: (root.resolved_color ?? '#676E80') + '22',
+                                        color: root.resolved_color ?? '#676E80',
                                     }"
                                 >
                                     <CategoryIcon :icon="root.icon" class="h-4 w-4" />
                                 </span>
-                                <span class="truncate text-sm font-semibold text-ink">
+                                <span class="truncate text-sm font-semibold text-foreground">
                                     {{ root.name }}
                                 </span>
                             </button>
@@ -110,13 +110,13 @@ function submit() {
                     <div v-if="selectedRoot">
                         <div class="flex items-center gap-3">
                             <span
-                                class="flex h-7 w-7 items-center justify-center rounded-full bg-app text-sm font-bold text-nav"
+                                class="flex h-7 w-7 items-center justify-center rounded-full bg-background text-sm font-bold text-primary"
                             >
                                 2
                             </span>
                             <div>
-                                <h3 class="font-semibold text-ink">Catégorie enfant</h3>
-                                <p class="text-sm text-muted">
+                                <h3 class="font-semibold text-foreground">Catégorie enfant</h3>
+                                <p class="text-sm text-muted-foreground">
                                     La dépense est toujours rattachée à un enfant
                                 </p>
                             </div>
@@ -127,25 +127,25 @@ function submit() {
                                 v-for="child in selectedRoot.children"
                                 :key="child.id"
                                 type="button"
-                                class="flex items-center gap-2 rounded-control border-2 p-3 text-left"
+                                class="flex items-center gap-2 rounded-lg border-2 p-3 text-left"
                                 :class="
                                     form.category_id === child.id
-                                        ? 'border-nav bg-app'
-                                        : 'border-line'
+                                        ? 'border-primary bg-background'
+                                        : 'border-border'
                                 "
                                 @click="form.category_id = child.id"
                             >
                                 <span
-                                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-control text-base"
+                                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-base"
                                     :style="{
                                         backgroundColor:
-                                            (child.resolved_color ?? '#8A90A2') + '22',
-                                        color: child.resolved_color ?? '#8A90A2',
+                                            (child.resolved_color ?? '#676E80') + '22',
+                                        color: child.resolved_color ?? '#676E80',
                                     }"
                                 >
                                     <CategoryIcon :icon="child.resolved_icon" class="h-4 w-4" />
                                 </span>
-                                <span class="truncate text-sm font-semibold text-ink">
+                                <span class="truncate text-sm font-semibold text-foreground">
                                     {{ child.name }}
                                 </span>
                             </button>
@@ -194,40 +194,40 @@ function submit() {
                     <div class="flex justify-end gap-2">
                         <Link
                             :href="route('expenses.index', { month })"
-                            class="rounded-control border border-line bg-surface px-5 py-2.5 text-sm font-semibold text-ink shadow-pill hover:bg-app"
+                            class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-semibold text-foreground shadow-pill hover:bg-accent"
                         >
                             Annuler
                         </Link>
-                        <Button variant="primary" :disabled="form.processing || !form.category_id">
+                        <Button variant="default" :disabled="form.processing || !form.category_id">
                             Enregistrer la dépense
                         </Button>
                     </div>
                 </form>
             </div>
 
-            <div class="h-fit rounded-card bg-surface p-6 shadow-soft">
-                <h3 class="mb-3 text-sm font-semibold text-ink">Résumé</h3>
-                <div v-if="selectedChild" class="flex items-center gap-3 rounded-control bg-surface-secondary p-3">
+            <div class="h-fit rounded-xl bg-card p-6 shadow-soft">
+                <h3 class="mb-3 text-sm font-semibold text-foreground">Résumé</h3>
+                <div v-if="selectedChild" class="flex items-center gap-3 rounded-lg bg-muted p-3">
                     <span
-                        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-control text-lg"
+                        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-lg"
                         :style="{
-                            backgroundColor: (selectedChild.resolved_color ?? '#8A90A2') + '22',
-                            color: selectedChild.resolved_color ?? '#8A90A2',
+                            backgroundColor: (selectedChild.resolved_color ?? '#676E80') + '22',
+                            color: selectedChild.resolved_color ?? '#676E80',
                         }"
                     >
                         <CategoryIcon :icon="selectedChild.resolved_icon" class="h-4 w-4" />
                     </span>
                     <div class="min-w-0">
-                        <p class="text-xs text-muted">{{ selectedRoot.name }}</p>
-                        <p class="truncate text-sm font-semibold text-ink">
+                        <p class="text-xs text-muted-foreground">{{ selectedRoot.name }}</p>
+                        <p class="truncate text-sm font-semibold text-foreground">
                             {{ selectedChild.name }}
                         </p>
                     </div>
                 </div>
-                <p v-else class="text-sm text-muted">Sélectionnez une catégorie enfant.</p>
+                <p v-else class="text-sm text-muted-foreground">Sélectionnez une catégorie enfant.</p>
 
-                <h3 class="mb-2 mt-6 text-sm font-semibold text-ink">Saisie rétroactive</h3>
-                <p class="text-sm text-muted">
+                <h3 class="mb-2 mt-6 text-sm font-semibold text-foreground">Saisie rétroactive</h3>
+                <p class="text-sm text-muted-foreground">
                     La date peut appartenir à n'importe quel mois passé. Le mouvement apparaîtra
                     automatiquement dans ce mois.
                 </p>

@@ -25,11 +25,11 @@ const form = useForm({
 <template>
     <section>
         <header>
-            <h2 class="text-lg font-semibold text-ink">
+            <h2 class="text-lg font-semibold text-foreground">
                 Profile Information
             </h2>
 
-            <p class="mt-1 text-sm text-muted">
+            <p class="mt-1 text-sm text-muted-foreground">
                 Update your account's profile information and email address.
             </p>
         </header>
@@ -70,13 +70,13 @@ const form = useForm({
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
-                <p class="mt-2 text-sm text-ink">
+                <p class="mt-2 text-sm text-foreground">
                     Your email address is unverified.
                     <Link
                         :href="route('verification.send')"
                         method="post"
                         as="button"
-                        class="rounded-control text-sm text-muted underline hover:text-ink focus:outline-none focus:ring-2 focus:ring-nav focus:ring-offset-2"
+                        class="rounded-lg text-sm text-muted-foreground underline hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                     >
                         Click here to re-send the verification email.
                     </Link>
@@ -91,7 +91,7 @@ const form = useForm({
             </div>
 
             <div class="flex items-center gap-4">
-                <Button variant="primary" :disabled="form.processing">Save</Button>
+                <Button variant="default" :disabled="form.processing">Save</Button>
 
                 <Transition
                     enter-active-class="transition ease-in-out"
@@ -101,7 +101,7 @@ const form = useForm({
                 >
                     <p
                         v-if="form.recentlySuccessful"
-                        class="text-sm text-muted"
+                        class="text-sm text-muted-foreground"
                     >
                         Saved.
                     </p>

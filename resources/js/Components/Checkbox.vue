@@ -37,6 +37,6 @@ const onUpdate = (value) => {
     <CheckboxPrimitive
         :model-value="isChecked"
         @update:model-value="onUpdate"
-        class="rounded border-line bg-surface shadow-sm focus-visible:ring-nav data-[state=checked]:border-nav data-[state=checked]:bg-nav"
+        class="rounded border-border bg-card shadow-sm focus-visible:ring-ring data-[state=checked]:border-primary data-[state=checked]:bg-primary"
     />
 </template>

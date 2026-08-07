@@ -21,7 +21,7 @@ defineProps({
     <AuthenticatedLayout>
         <template #header>
             <h2
-                class="text-xl font-extrabold leading-tight text-ink"
+                class="text-xl font-heading font-extrabold leading-tight text-foreground"
             >
                 Profile
             </h2>
@@ -30,7 +30,7 @@ defineProps({
         <div class="py-12">
             <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                 <div
-                    class="rounded-card bg-surface p-4 shadow-soft sm:p-8"
+                    class="rounded-xl bg-card p-4 shadow-soft sm:p-8"
                 >
                     <UpdateProfileInformationForm
                         :must-verify-email="mustVerifyEmail"
@@ -40,13 +40,13 @@ defineProps({
                 </div>
 
                 <div
-                    class="rounded-card bg-surface p-4 shadow-soft sm:p-8"
+                    class="rounded-xl bg-card p-4 shadow-soft sm:p-8"
                 >
                     <UpdatePasswordForm class="max-w-xl" />
                 </div>
 
                 <div
-                    class="rounded-card bg-surface p-4 shadow-soft sm:p-8"
+                    class="rounded-xl bg-card p-4 shadow-soft sm:p-8"
                 >
                     <DeleteUserForm class="max-w-xl" />
                 </div>

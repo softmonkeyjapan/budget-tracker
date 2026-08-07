@@ -36,11 +36,11 @@ const updatePassword = () => {
 <template>
     <section>
         <header>
-            <h2 class="text-lg font-semibold text-ink">
+            <h2 class="text-lg font-semibold text-foreground">
                 Update Password
             </h2>
 
-            <p class="mt-1 text-sm text-muted">
+            <p class="mt-1 text-sm text-muted-foreground">
                 Ensure your account is using a long, random password to stay
                 secure.
             </p>
@@ -101,7 +101,7 @@ const updatePassword = () => {
             </div>
 
             <div class="flex items-center gap-4">
-                <Button variant="primary" :disabled="form.processing">Save</Button>
+                <Button variant="default" :disabled="form.processing">Save</Button>
 
                 <Transition
                     enter-active-class="transition ease-in-out"
@@ -111,7 +111,7 @@ const updatePassword = () => {
                 >
                     <p
                         v-if="form.recentlySuccessful"
-                        class="text-sm text-muted"
+                        class="text-sm text-muted-foreground"
                     >
                         Saved.
                     </p>

@@ -141,25 +141,25 @@ function destroy() {
         <template #header>
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div>
-                    <h2 class="text-xl font-extrabold leading-tight text-ink">Dépenses</h2>
-                    <p class="mt-0.5 text-sm capitalize text-muted">{{ monthLabel }}</p>
+                    <h2 class="text-xl font-heading font-extrabold leading-tight text-foreground">Dépenses</h2>
+                    <p class="mt-0.5 text-sm capitalize text-muted-foreground">{{ monthLabel }}</p>
                 </div>
 
                 <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-1 rounded-control border border-line px-2 py-1">
+                    <div class="flex items-center gap-1 rounded-lg border border-border px-2 py-1">
                         <button
                             type="button"
-                            class="rounded-control px-2 py-1 text-muted hover:bg-app hover:text-ink"
+                            class="rounded-lg px-2 py-1 text-muted-foreground hover:bg-accent hover:text-foreground"
                             @click="shiftMonth(-1)"
                         >
                             ‹
                         </button>
-                        <span class="px-2 text-sm font-semibold capitalize text-ink">
+                        <span class="px-2 text-sm font-semibold capitalize text-foreground">
                             {{ monthLabel }}
                         </span>
                         <button
                             type="button"
-                            class="rounded-control px-2 py-1 text-muted hover:bg-app hover:text-ink"
+                            class="rounded-lg px-2 py-1 text-muted-foreground hover:bg-accent hover:text-foreground"
                             @click="shiftMonth(1)"
                         >
                             ›
@@ -167,17 +167,17 @@ function destroy() {
                     </div>
 
                     <Link :href="route('expenses.create', { month })">
-                        <Button variant="primary" type="button">+ Nouvelle dépense</Button>
+                        <Button variant="default" type="button">+ Nouvelle dépense</Button>
                     </Link>
                 </div>
             </div>
         </template>
 
         <div class="p-6">
-            <div class="mb-4 flex flex-wrap items-center gap-3 rounded-card bg-surface p-4 shadow-soft">
+            <div class="mb-4 flex flex-wrap items-center gap-3 rounded-xl bg-card p-4 shadow-soft">
                 <select
                     v-model="categoryId"
-                    class="rounded-control border-line bg-surface text-sm text-ink shadow-sm focus:border-nav focus:ring-nav"
+                    class="rounded-lg border-border bg-card text-sm text-foreground shadow-sm focus:border-ring focus:ring-ring"
                     @change="navigate()"
                 >
                     <option :value="null">Toutes les catégories</option>
@@ -210,56 +210,56 @@ function destroy() {
 
             <SubcategoryBarChart :general="categoryTotals" :detail="subcategoryTotals" class="mb-4" />
 
-            <div class="overflow-hidden rounded-card bg-surface shadow-soft">
+            <div class="overflow-hidden rounded-xl bg-card shadow-soft">
                 <div
-                    class="grid grid-cols-[100px_1fr_1fr_140px_170px] gap-2 border-b border-line px-5 py-3 text-xs font-semibold uppercase tracking-wide text-muted"
+                    class="grid grid-cols-[100px_1fr_1fr_140px_170px] gap-2 border-b border-border px-5 py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
                 >
-                    <button type="button" class="flex items-center gap-1 text-left hover:text-ink" @click="toggleSort('date')">
+                    <button type="button" class="flex items-center gap-1 text-left hover:text-foreground" @click="toggleSort('date')">
                         Date
                         <span v-if="filters.sort === 'date'">{{ filters.direction === 'asc' ? '▲' : '▼' }}</span>
                     </button>
-                    <button type="button" class="flex items-center gap-1 text-left hover:text-ink" @click="toggleSort('category')">
+                    <button type="button" class="flex items-center gap-1 text-left hover:text-foreground" @click="toggleSort('category')">
                         Catégorie
                         <span v-if="filters.sort === 'category'">{{ filters.direction === 'asc' ? '▲' : '▼' }}</span>
                     </button>
-                    <button type="button" class="flex items-center gap-1 text-left hover:text-ink" @click="toggleSort('description')">
+                    <button type="button" class="flex items-center gap-1 text-left hover:text-foreground" @click="toggleSort('description')">
                         Description
                         <span v-if="filters.sort === 'description'">{{ filters.direction === 'asc' ? '▲' : '▼' }}</span>
                     </button>
-                    <button type="button" class="flex items-center justify-end gap-1 text-right hover:text-ink" @click="toggleSort('amount')">
+                    <button type="button" class="flex items-center justify-end gap-1 text-right hover:text-foreground" @click="toggleSort('amount')">
                         Montant
                         <span v-if="filters.sort === 'amount'">{{ filters.direction === 'asc' ? '▲' : '▼' }}</span>
                     </button>
                     <span></span>
                 </div>
 
-                <p v-if="expenses.length === 0" class="p-5 text-sm text-muted">
+                <p v-if="expenses.length === 0" class="p-5 text-sm text-muted-foreground">
                     Aucune dépense pour ce mois ou ces filtres.
                 </p>
 
                 <div
                     v-for="expense in expenses"
                     :key="expense.id"
-                    class="grid grid-cols-[100px_1fr_1fr_140px_170px] items-center gap-2 border-b border-line px-5 py-3 last:border-b-0"
+                    class="grid grid-cols-[100px_1fr_1fr_140px_170px] items-center gap-2 border-b border-border px-5 py-3 last:border-b-0"
                 >
-                    <span class="text-sm text-muted">
+                    <span class="text-sm text-muted-foreground">
                         {{ new Date(expense.date).toLocaleDateString('fr-FR') }}
                     </span>
                     <span class="flex min-w-0 items-center gap-2">
                         <span
-                            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-control text-sm"
+                            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-sm"
                             :style="{
-                                backgroundColor: (expense.category.resolved_color ?? '#8A90A2') + '22',
-                                color: expense.category.resolved_color ?? '#8A90A2',
+                                backgroundColor: (expense.category.resolved_color ?? '#676E80') + '22',
+                                color: expense.category.resolved_color ?? '#676E80',
                             }"
                         >
                             <CategoryIcon :icon="expense.category.resolved_icon" class="h-4 w-4" />
                         </span>
-                        <span class="truncate text-sm font-medium text-ink">
+                        <span class="truncate text-sm font-medium text-foreground">
                             {{ expense.category.name }}
                         </span>
                     </span>
-                    <span class="truncate text-sm text-muted">
+                    <span class="truncate text-sm text-muted-foreground">
                         {{ expense.description ?? '—' }}
                     </span>
                     <strong class="whitespace-nowrap text-right text-sm text-expense">
@@ -268,7 +268,7 @@ function destroy() {
                     <span class="flex justify-end gap-3 whitespace-nowrap text-sm">
                         <button
                             type="button"
-                            class="text-muted hover:text-ink"
+                            class="text-muted-foreground hover:text-foreground"
                             @click="startEdit(expense)"
                         >
                             Modifier
@@ -287,7 +287,7 @@ function destroy() {
 
         <Modal :show="editingExpense !== null" @close="cancelEdit">
             <div class="p-6" v-if="editingExpense">
-                <h2 class="text-lg font-semibold text-ink">Modifier la dépense</h2>
+                <h2 class="text-lg font-semibold text-foreground">Modifier la dépense</h2>
 
                 <form @submit.prevent="submitEdit" class="mt-4 space-y-4">
                     <div>
@@ -295,7 +295,7 @@ function destroy() {
                         <select
                             id="edit-category"
                             v-model.number="editForm.category_id"
-                            class="mt-1 block w-full rounded-control border-line bg-surface text-ink shadow-sm focus:border-nav focus:ring-nav"
+                            class="mt-1 block w-full rounded-lg border-border bg-card text-foreground shadow-sm focus:border-ring focus:ring-ring"
                         >
                             <optgroup v-for="root in categories" :key="root.id" :label="root.name">
                                 <option v-for="child in root.children" :key="child.id" :value="child.id">
@@ -344,7 +344,7 @@ function destroy() {
 
                     <div class="flex justify-end gap-2">
                         <Button variant="secondary" type="button" @click="cancelEdit">Annuler</Button>
-                        <Button variant="primary" :disabled="editForm.processing">Enregistrer</Button>
+                        <Button variant="default" :disabled="editForm.processing">Enregistrer</Button>
                     </div>
                 </form>
             </div>
@@ -352,12 +352,12 @@ function destroy() {
 
         <Modal :show="expensePendingDeletion !== null" @close="cancelDestroy">
             <div class="p-6" v-if="expensePendingDeletion">
-                <h2 class="text-lg font-semibold text-ink">Supprimer cette dépense ?</h2>
-                <p class="mt-1 text-sm text-muted">Cette action est irréversible.</p>
+                <h2 class="text-lg font-semibold text-foreground">Supprimer cette dépense ?</h2>
+                <p class="mt-1 text-sm text-muted-foreground">Cette action est irréversible.</p>
 
                 <div class="mt-6 flex justify-end gap-2">
                     <Button variant="secondary" @click="cancelDestroy">Annuler</Button>
-                    <Button variant="danger" @click="destroy">Supprimer</Button>
+                    <Button variant="destructive" @click="destroy">Supprimer</Button>
                 </div>
             </div>
         </Modal>

@@ -10,7 +10,7 @@ const { hidden, toggle } = usePrivacy();
         :model-value="hidden"
         @update:model-value="toggle"
         :aria-label="hidden ? 'Afficher les montants' : 'Masquer les montants'"
-        class="h-9 w-9 shrink-0 rounded-control border border-line bg-surface p-0 text-ink hover:bg-app hover:text-ink data-[state=on]:bg-surface data-[state=on]:text-ink"
+        class="h-9 w-9 shrink-0 rounded-lg border border-border bg-card p-0 text-foreground hover:bg-accent hover:text-foreground data-[state=on]:bg-card data-[state=on]:text-foreground"
     >
         <svg
             v-if="hidden"

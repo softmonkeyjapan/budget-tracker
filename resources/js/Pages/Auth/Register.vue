@@ -95,13 +95,13 @@ const submit = () => {
             <div class="mt-4 flex items-center justify-end">
                 <Link
                     :href="route('login')"
-                    class="rounded-control text-sm text-muted underline hover:text-ink focus:outline-none focus:ring-2 focus:ring-nav focus:ring-offset-2"
+                    class="rounded-lg text-sm text-muted-foreground underline hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 >
                     Already registered?
                 </Link>
 
                 <Button
-                    variant="primary"
+                    variant="default"
                     class="ms-4"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
