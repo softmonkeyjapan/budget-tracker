@@ -10,7 +10,7 @@ const { theme, toggle } = useTheme();
         :model-value="theme === 'dark'"
         @update:model-value="toggle"
         :aria-label="theme === 'dark' ? 'Activer le mode clair' : 'Activer le mode sombre'"
-        class="h-9 w-9 shrink-0 rounded-control border border-line bg-surface p-0 text-ink hover:bg-app hover:text-ink data-[state=on]:bg-surface data-[state=on]:text-ink"
+        class="h-9 w-9 shrink-0 rounded-lg border border-border bg-card p-0 text-foreground hover:bg-accent hover:text-foreground data-[state=on]:bg-card data-[state=on]:text-foreground"
     >
         <svg
             v-if="theme === 'dark'"

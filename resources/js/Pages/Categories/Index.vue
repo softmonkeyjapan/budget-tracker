@@ -91,12 +91,12 @@ function destroy() {
         <template #header>
             <div class="flex items-center justify-between gap-4">
                 <div>
-                    <h2 class="text-xl font-extrabold leading-tight text-ink">
+                    <h2 class="text-xl font-heading font-extrabold leading-tight text-foreground">
                         Catégories
                     </h2>
-                    <p class="mt-0.5 text-sm text-muted">Hiérarchie racine → enfant</p>
+                    <p class="mt-0.5 text-sm text-muted-foreground">Hiérarchie racine → enfant</p>
                 </div>
-                <Button variant="primary" type="button" @click="startCreate()">
+                <Button variant="default" type="button" @click="startCreate()">
                     + Nouvelle catégorie
                 </Button>
             </div>
@@ -107,7 +107,7 @@ function destroy() {
                 <div
                     v-for="root in categories"
                     :key="root.id"
-                    class="rounded-card bg-surface p-5 shadow-soft"
+                    class="rounded-xl bg-card p-5 shadow-soft"
                 >
                     <div class="flex flex-wrap items-center gap-3">
                         <button
@@ -117,17 +117,17 @@ function destroy() {
                             @click="toggleRoot(root.id)"
                         >
                             <span
-                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-control text-lg"
+                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-lg"
                                 :style="{
-                                    backgroundColor: (root.resolved_color ?? '#8A90A2') + '22',
-                                    color: root.resolved_color ?? '#8A90A2',
+                                    backgroundColor: (root.resolved_color ?? '#676E80') + '22',
+                                    color: root.resolved_color ?? '#676E80',
                                 }"
                             >
                                 <CategoryIcon :icon="root.icon" class="h-5 w-5" />
                             </span>
                             <div class="min-w-0 flex-1">
-                                <p class="truncate font-semibold text-ink">{{ root.name }}</p>
-                                <p class="text-sm text-muted">{{ root.children_count }} enfant(s)</p>
+                                <p class="truncate font-semibold text-foreground">{{ root.name }}</p>
+                                <p class="text-sm text-muted-foreground">{{ root.children_count }} enfant(s)</p>
                             </div>
                             <svg
                                 viewBox="0 0 24 24"
@@ -136,7 +136,7 @@ function destroy() {
                                 stroke-width="2"
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
-                                class="h-4 w-4 shrink-0 text-muted transition-transform"
+                                class="h-4 w-4 shrink-0 text-muted-foreground transition-transform"
                                 :class="{ 'rotate-180': openRootId === root.id }"
                             >
                                 <polyline points="6 9 12 15 18 9" />
@@ -146,21 +146,21 @@ function destroy() {
                         <div class="flex shrink-0 items-center gap-1">
                             <button
                                 type="button"
-                                class="rounded-control px-3 py-1.5 text-sm font-semibold text-nav hover:bg-app"
+                                class="rounded-lg px-3 py-1.5 text-sm font-semibold text-primary hover:bg-accent"
                                 @click="startCreate(root.id)"
                             >
                                 + Enfant
                             </button>
                             <button
                                 type="button"
-                                class="rounded-control px-3 py-1.5 text-sm text-muted hover:bg-app hover:text-ink"
+                                class="rounded-lg px-3 py-1.5 text-sm text-muted-foreground hover:bg-accent hover:text-foreground"
                                 @click="startEdit(root)"
                             >
                                 Modifier
                             </button>
                             <button
                                 type="button"
-                                class="rounded-control px-3 py-1.5 text-sm text-expense hover:bg-app"
+                                class="rounded-lg px-3 py-1.5 text-sm text-expense hover:bg-accent"
                                 @click="confirmDestroy(root)"
                             >
                                 Supprimer
@@ -170,28 +170,28 @@ function destroy() {
 
                     <div
                         v-if="openRootId === root.id && root.children.length"
-                        class="ms-5 mt-4 space-y-2 border-l border-line ps-5"
+                        class="ms-5 mt-4 space-y-2 border-l border-border ps-5"
                     >
                         <div
                             v-for="child in root.children"
                             :key="child.id"
-                            class="flex flex-wrap items-center justify-between gap-2 rounded-control bg-surface-secondary px-4 py-3"
+                            class="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-muted px-4 py-3"
                         >
                             <div class="flex min-w-0 items-center gap-3">
                                 <span
-                                    class="flex h-7 w-7 shrink-0 items-center justify-center rounded-control text-sm"
+                                    class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-sm"
                                     :style="{
-                                        backgroundColor: (child.resolved_color ?? '#8A90A2') + '22',
-                                        color: child.resolved_color ?? '#8A90A2',
+                                        backgroundColor: (child.resolved_color ?? '#676E80') + '22',
+                                        color: child.resolved_color ?? '#676E80',
                                     }"
                                 >
                                     <CategoryIcon :icon="child.resolved_icon" class="h-4 w-4" />
                                 </span>
                                 <div class="min-w-0">
-                                    <p class="truncate text-sm font-medium text-ink">
+                                    <p class="truncate text-sm font-medium text-foreground">
                                         {{ child.name }}
                                     </p>
-                                    <p class="text-xs text-muted">
+                                    <p class="text-xs text-muted-foreground">
                                         {{
                                             child.color_inherited
                                                 ? `Hérite de ${root.name}`
@@ -204,7 +204,7 @@ function destroy() {
                             <div class="flex shrink-0 items-center gap-3">
                                 <button
                                     type="button"
-                                    class="text-sm text-muted hover:text-ink"
+                                    class="text-sm text-muted-foreground hover:text-foreground"
                                     @click="startEdit(child)"
                                 >
                                     Modifier
@@ -222,8 +222,8 @@ function destroy() {
                 </div>
             </div>
 
-            <div class="h-fit rounded-card bg-surface p-6 shadow-soft">
-                <h3 class="mb-4 text-sm font-semibold text-ink">
+            <div class="h-fit rounded-xl bg-card p-6 shadow-soft">
+                <h3 class="mb-4 text-sm font-semibold text-foreground">
                     <template v-if="editingCategoryId">Modifier la catégorie</template>
                     <template v-else>Nouvelle catégorie</template>
                 </h3>
@@ -234,7 +234,7 @@ function destroy() {
                         <select
                             id="parent_id"
                             v-model="form.parent_id"
-                            class="mt-1 block w-full rounded-control border-line bg-surface text-ink shadow-sm focus:border-nav focus:ring-nav"
+                            class="mt-1 block w-full rounded-lg border-border bg-card text-foreground shadow-sm focus:border-ring focus:ring-ring"
                         >
                             <option :value="null">Aucun (nouvelle catégorie racine)</option>
                             <option v-for="root in categories" :key="root.id" :value="root.id">
@@ -263,8 +263,8 @@ function destroy() {
                                 v-for="key in CATEGORY_ICONS"
                                 :key="key"
                                 type="button"
-                                class="flex h-9 w-9 items-center justify-center rounded-control border-2 bg-app text-ink"
-                                :class="form.icon === key ? 'border-nav' : 'border-transparent'"
+                                class="flex h-9 w-9 items-center justify-center rounded-lg border-2 bg-background text-foreground"
+                                :class="form.icon === key ? 'border-primary' : 'border-transparent'"
                                 @click="form.icon = key"
                             >
                                 <CategoryIcon :icon="key" class="h-5 w-5" />
@@ -280,14 +280,14 @@ function destroy() {
                                 v-for="swatch in SWATCHES"
                                 :key="swatch"
                                 type="button"
-                                class="h-8 w-8 rounded-control border-2"
+                                class="h-8 w-8 rounded-lg border-2"
                                 :class="form.color === swatch ? 'border-ink' : 'border-transparent'"
                                 :style="{ backgroundColor: swatch }"
                                 @click="form.color = swatch"
                             />
                             <button
                                 type="button"
-                                class="rounded-control border border-line px-2 text-xs text-muted"
+                                class="rounded-lg border border-border px-2 text-xs text-muted-foreground"
                                 @click="form.color = null"
                             >
                                 Aucune
@@ -298,7 +298,7 @@ function destroy() {
 
                     <p
                         v-if="form.parent_id"
-                        class="rounded-control bg-peach/20 p-3 text-xs text-ink"
+                        class="rounded-lg bg-peach/20 p-3 text-xs text-foreground"
                     >
                         Sans couleur ni icône propres, cette catégorie hérite de celles de sa
                         catégorie racine.
@@ -308,7 +308,7 @@ function destroy() {
                         <Button variant="secondary" type="button" @click="cancel">
                             Annuler
                         </Button>
-                        <Button variant="primary" :disabled="form.processing">
+                        <Button variant="default" :disabled="form.processing">
                             Enregistrer
                         </Button>
                     </div>
@@ -318,16 +318,16 @@ function destroy() {
 
         <Modal :show="categoryPendingDeletion !== null" @close="cancelDestroy">
             <div class="p-6" v-if="categoryPendingDeletion">
-                <h2 class="text-lg font-semibold text-ink">
+                <h2 class="text-lg font-semibold text-foreground">
                     Supprimer "{{ categoryPendingDeletion.name }}" ?
                 </h2>
-                <p class="mt-1 text-sm text-muted">
+                <p class="mt-1 text-sm text-muted-foreground">
                     Cette action est irréversible.
                 </p>
 
                 <div class="mt-6 flex justify-end gap-2">
                     <Button variant="secondary" @click="cancelDestroy">Annuler</Button>
-                    <Button variant="danger" @click="destroy">Supprimer</Button>
+                    <Button variant="destructive" @click="destroy">Supprimer</Button>
                 </div>
             </div>
         </Modal>

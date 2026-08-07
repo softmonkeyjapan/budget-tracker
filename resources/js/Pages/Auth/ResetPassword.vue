@@ -90,7 +90,7 @@ const submit = () => {
 
             <div class="mt-4 flex items-center justify-end">
                 <Button
-                    variant="primary"
+                    variant="default"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >

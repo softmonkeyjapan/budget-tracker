@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import { colorForName, initials } from '@/utils/avatar';
+import { Avatar, AvatarFallback } from '@/Components/ui/avatar';
 
 const props = defineProps({
     name: {
@@ -18,11 +19,9 @@ const label = computed(() => initials(props.name));
 </script>
 
 <template>
-    <span
-        :class="size"
-        class="flex shrink-0 items-center justify-center rounded-control font-extrabold text-white"
-        :style="{ backgroundColor: background }"
-    >
-        {{ label }}
-    </span>
+    <Avatar :class="size">
+        <AvatarFallback class="font-extrabold text-white" :style="{ backgroundColor: background }">
+            {{ label }}
+        </AvatarFallback>
+    </Avatar>
 </template>

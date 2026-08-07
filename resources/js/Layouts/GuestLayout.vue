@@ -14,10 +14,10 @@ import { Link } from '@inertiajs/vue3';
 
         <Link :href="route('login')" class="mb-6 flex items-center gap-2">
             <ApplicationLogo class="h-10 w-10" />
-            <span class="text-lg font-extrabold text-ink">Budget Tracker</span>
+            <span class="text-lg font-heading font-extrabold text-foreground">Budget Tracker</span>
         </Link>
 
-        <div class="w-full overflow-hidden rounded-shell bg-surface p-8 shadow-shell sm:max-w-md">
+        <div class="w-full overflow-hidden rounded-3xl bg-card p-8 shadow-shell sm:max-w-md">
             <slot />
         </div>
     </div>

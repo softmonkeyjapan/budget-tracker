@@ -41,7 +41,7 @@ const submit = () => {
     <button
         type="button"
         @click="openModal"
-        class="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-nav text-white shadow-primary transition duration-150 ease-in-out hover:bg-nav/90"
+        class="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white shadow-primary transition duration-150 ease-in-out hover:bg-primary/90"
         aria-label="Donner un avis"
     >
         <svg
@@ -59,7 +59,7 @@ const submit = () => {
 
     <Modal :show="open" @close="closeModal">
         <div class="p-6">
-            <h2 class="text-lg font-semibold text-ink">Un avis, un bug ?</h2>
+            <h2 class="text-lg font-semibold text-foreground">Un avis, un bug ?</h2>
 
             <p v-if="sent" class="mt-4 text-sm text-income">
                 Merci, votre retour a bien été envoyé !
@@ -69,7 +69,7 @@ const submit = () => {
                 <textarea
                     v-model="form.message"
                     rows="4"
-                    class="mt-4 w-full rounded-control border-line bg-surface text-ink shadow-sm focus:border-nav focus:ring-nav"
+                    class="mt-4 w-full rounded-lg border-border bg-card text-foreground shadow-sm focus:border-ring focus:ring-ring"
                     placeholder="Dites-nous ce qui ne va pas ou ce que vous aimeriez voir…"
                     autofocus
                 />
@@ -79,11 +79,11 @@ const submit = () => {
                     <button
                         type="button"
                         @click="closeModal"
-                        class="rounded-control px-4 py-2 text-sm text-muted hover:text-ink"
+                        class="rounded-lg px-4 py-2 text-sm text-muted-foreground hover:text-foreground"
                     >
                         Annuler
                     </button>
-                    <Button variant="primary" :disabled="form.processing || !form.message.trim()">
+                    <Button variant="default" :disabled="form.processing || !form.message.trim()">
                         Envoyer
                     </Button>
                 </div>

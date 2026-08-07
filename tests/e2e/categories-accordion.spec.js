@@ -5,7 +5,7 @@ test('accordion is exclusive and toggles', async ({ page }) => {
     await login(page, 'e2e-verified@example.com', 'password');
     await page.goto('/categories');
 
-    const roots = page.locator('.rounded-card.bg-surface.p-5.shadow-soft');
+    const roots = page.locator('.rounded-xl.bg-card.p-5.shadow-soft');
     const firstRoot = roots.nth(0);
     const secondRoot = roots.nth(1);
 

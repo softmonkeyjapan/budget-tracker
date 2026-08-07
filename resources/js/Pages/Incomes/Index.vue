@@ -78,27 +78,27 @@ function destroy() {
         <template #header>
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div>
-                    <h2 class="text-xl font-extrabold leading-tight text-ink">
+                    <h2 class="text-xl font-heading font-extrabold leading-tight text-foreground">
                         Entrées d'argent
                     </h2>
-                    <p class="mt-0.5 text-sm capitalize text-muted">{{ monthLabel }}</p>
+                    <p class="mt-0.5 text-sm capitalize text-muted-foreground">{{ monthLabel }}</p>
                 </div>
 
                 <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-1 rounded-control border border-line px-2 py-1">
+                    <div class="flex items-center gap-1 rounded-lg border border-border px-2 py-1">
                         <button
                             type="button"
-                            class="rounded-control px-2 py-1 text-muted hover:bg-app hover:text-ink"
+                            class="rounded-lg px-2 py-1 text-muted-foreground hover:bg-accent hover:text-foreground"
                             @click="shiftMonth(-1)"
                         >
                             ‹
                         </button>
-                        <span class="px-2 text-sm font-semibold capitalize text-ink">
+                        <span class="px-2 text-sm font-semibold capitalize text-foreground">
                             {{ monthLabel }}
                         </span>
                         <button
                             type="button"
-                            class="rounded-control px-2 py-1 text-muted hover:bg-app hover:text-ink"
+                            class="rounded-lg px-2 py-1 text-muted-foreground hover:bg-accent hover:text-foreground"
                             @click="shiftMonth(1)"
                         >
                             ›
@@ -106,16 +106,16 @@ function destroy() {
                     </div>
 
                     <Link :href="route('incomes.create', { month })">
-                        <Button variant="primary" type="button">+ Ajouter une entrée</Button>
+                        <Button variant="default" type="button">+ Ajouter une entrée</Button>
                     </Link>
                 </div>
             </div>
         </template>
 
         <div class="p-6">
-            <div class="overflow-hidden rounded-card bg-surface shadow-soft">
+            <div class="overflow-hidden rounded-xl bg-card shadow-soft">
                 <div
-                    class="grid grid-cols-[100px_1fr_140px_170px] gap-2 border-b border-line px-5 py-3 text-xs font-semibold uppercase tracking-wide text-muted"
+                    class="grid grid-cols-[100px_1fr_140px_170px] gap-2 border-b border-border px-5 py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
                 >
                     <span>Date</span>
                     <span>Description</span>
@@ -123,19 +123,19 @@ function destroy() {
                     <span></span>
                 </div>
 
-                <p v-if="incomes.length === 0" class="p-5 text-sm text-muted">
+                <p v-if="incomes.length === 0" class="p-5 text-sm text-muted-foreground">
                     Aucune entrée pour ce mois.
                 </p>
 
                 <div
                     v-for="income in incomes"
                     :key="income.id"
-                    class="grid grid-cols-[100px_1fr_140px_170px] items-center gap-2 border-b border-line px-5 py-3 last:border-b-0"
+                    class="grid grid-cols-[100px_1fr_140px_170px] items-center gap-2 border-b border-border px-5 py-3 last:border-b-0"
                 >
-                    <span class="text-sm text-muted">
+                    <span class="text-sm text-muted-foreground">
                         {{ new Date(income.date).toLocaleDateString('fr-FR') }}
                     </span>
-                    <span class="truncate text-sm font-medium text-ink">
+                    <span class="truncate text-sm font-medium text-foreground">
                         {{ income.description ?? '—' }}
                     </span>
                     <strong class="whitespace-nowrap text-right text-sm text-income">
@@ -144,7 +144,7 @@ function destroy() {
                     <span class="flex justify-end gap-3 whitespace-nowrap text-sm">
                         <button
                             type="button"
-                            class="text-muted hover:text-ink"
+                            class="text-muted-foreground hover:text-foreground"
                             @click="startEdit(income)"
                         >
                             Modifier
@@ -163,7 +163,7 @@ function destroy() {
 
         <Modal :show="editingIncome !== null" @close="cancelEdit">
             <div class="p-6" v-if="editingIncome">
-                <h2 class="text-lg font-semibold text-ink">Modifier l'entrée</h2>
+                <h2 class="text-lg font-semibold text-foreground">Modifier l'entrée</h2>
 
                 <form @submit.prevent="submitEdit" class="mt-4 space-y-4">
                     <div>
@@ -204,7 +204,7 @@ function destroy() {
 
                     <div class="flex justify-end gap-2">
                         <Button variant="secondary" type="button" @click="cancelEdit">Annuler</Button>
-                        <Button variant="primary" :disabled="editForm.processing">Enregistrer</Button>
+                        <Button variant="default" :disabled="editForm.processing">Enregistrer</Button>
                     </div>
                 </form>
             </div>
@@ -212,12 +212,12 @@ function destroy() {
 
         <Modal :show="incomePendingDeletion !== null" @close="cancelDestroy">
             <div class="p-6" v-if="incomePendingDeletion">
-                <h2 class="text-lg font-semibold text-ink">Supprimer cette entrée ?</h2>
-                <p class="mt-1 text-sm text-muted">Cette action est irréversible.</p>
+                <h2 class="text-lg font-semibold text-foreground">Supprimer cette entrée ?</h2>
+                <p class="mt-1 text-sm text-muted-foreground">Cette action est irréversible.</p>
 
                 <div class="mt-6 flex justify-end gap-2">
                     <Button variant="secondary" @click="cancelDestroy">Annuler</Button>
-                    <Button variant="danger" @click="destroy">Supprimer</Button>
+                    <Button variant="destructive" @click="destroy">Supprimer</Button>
                 </div>
             </div>
         </Modal>

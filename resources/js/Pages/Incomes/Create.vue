@@ -48,24 +48,24 @@ function submit() {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-extrabold leading-tight text-ink">
+            <h2 class="text-xl font-heading font-extrabold leading-tight text-foreground">
                 Nouvelle entrée d'argent
             </h2>
-            <p class="mt-0.5 text-sm text-muted">Aucune catégorie nécessaire</p>
+            <p class="mt-0.5 text-sm text-muted-foreground">Aucune catégorie nécessaire</p>
         </template>
 
         <div class="grid grid-cols-1 gap-6 p-6 lg:grid-cols-3">
             <div class="space-y-6 lg:col-span-2">
-            <div class="rounded-card bg-surface p-6 shadow-soft">
-                <div class="flex items-center gap-4 rounded-control bg-income/10 p-4">
+            <div class="rounded-xl bg-card p-6 shadow-soft">
+                <div class="flex items-center gap-4 rounded-lg bg-income/10 p-4">
                     <span
-                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-control bg-income/20 text-2xl text-income"
+                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-income/20 text-2xl text-income"
                     >
                         ↗
                     </span>
                     <div>
-                        <h3 class="font-semibold text-ink">Entrée réelle</h3>
-                        <p class="text-sm text-muted">
+                        <h3 class="font-semibold text-foreground">Entrée réelle</h3>
+                        <p class="text-sm text-muted-foreground">
                             Salaire, freelance, remboursement ou autre revenu
                         </p>
                     </div>
@@ -113,37 +113,37 @@ function submit() {
                     <div class="flex justify-end gap-2">
                         <Link
                             :href="route('incomes.index', { month })"
-                            class="rounded-control border border-line bg-surface px-5 py-2.5 text-sm font-semibold text-ink shadow-pill hover:bg-app"
+                            class="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-semibold text-foreground shadow-pill hover:bg-accent"
                         >
                             Annuler
                         </Link>
-                        <Button variant="primary" :disabled="form.processing">
+                        <Button variant="default" :disabled="form.processing">
                             Enregistrer l'entrée
                         </Button>
                     </div>
                 </form>
             </div>
 
-            <div class="rounded-card bg-surface p-6 shadow-soft">
-                <h3 class="mb-3 text-sm font-semibold text-ink">Entrées récentes</h3>
-                <p v-if="recentIncomes.length === 0" class="text-sm text-muted">
+            <div class="rounded-xl bg-card p-6 shadow-soft">
+                <h3 class="mb-3 text-sm font-semibold text-foreground">Entrées récentes</h3>
+                <p v-if="recentIncomes.length === 0" class="text-sm text-muted-foreground">
                     Aucune entrée ce mois-ci pour l'instant.
                 </p>
                 <div
                     v-for="income in recentIncomes"
                     :key="income.id"
-                    class="flex items-center gap-3 border-b border-line py-3 last:border-b-0"
+                    class="flex items-center gap-3 border-b border-border py-3 last:border-b-0"
                 >
                     <span
-                        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-control bg-income/20 text-lg text-income"
+                        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-income/20 text-lg text-income"
                     >
                         ↗
                     </span>
                     <div class="min-w-0 flex-1">
-                        <p class="truncate text-sm font-semibold text-ink">
+                        <p class="truncate text-sm font-semibold text-foreground">
                             {{ income.description ?? 'Entrée sans description' }}
                         </p>
-                        <p class="text-xs text-muted">
+                        <p class="text-xs text-muted-foreground">
                             {{ new Date(income.date).toLocaleDateString('fr-FR') }}
                         </p>
                     </div>
@@ -154,21 +154,21 @@ function submit() {
             </div>
             </div>
 
-            <div class="h-fit rounded-card bg-surface p-6 shadow-soft">
-                <h3 class="mb-3 text-sm font-semibold text-ink">Règle métier</h3>
-                <p class="rounded-control bg-peach/20 p-3 text-xs text-ink">
+            <div class="h-fit rounded-xl bg-card p-6 shadow-soft">
+                <h3 class="mb-3 text-sm font-semibold text-foreground">Règle métier</h3>
+                <p class="rounded-lg bg-peach/20 p-3 text-xs text-foreground">
                     <strong>Pas de catégorie.</strong> Une entrée d'argent contient uniquement
                     un montant, une date et une description facultative.
                 </p>
 
-                <h3 class="mb-3 mt-6 text-sm font-semibold text-ink">Impact mensuel</h3>
-                <div class="rounded-control bg-surface-secondary p-3">
-                    <p class="text-xs text-muted">Revenus après saisie</p>
+                <h3 class="mb-3 mt-6 text-sm font-semibold text-foreground">Impact mensuel</h3>
+                <div class="rounded-lg bg-muted p-3">
+                    <p class="text-xs text-muted-foreground">Revenus après saisie</p>
                     <p class="text-lg font-bold text-income">
                         <Amount :value="projectedTotal" />
                     </p>
                 </div>
-                <p class="mt-3 text-xs text-muted">
+                <p class="mt-3 text-xs text-muted-foreground">
                     Les pourcentages d'utilisation seront recalculés sur ce nouveau total.
                 </p>
             </div>

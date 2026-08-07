@@ -2,7 +2,7 @@
 
 ## Direction visuelle
 
-Cockpit financier personnel, chaleureux et calme. La palette, la typographie, la grille, les rayons et les ombres restent identiques à la version précédente.
+Cockpit financier personnel, chaleureux et calme. Depuis l'adoption complète du thème shadcn-vue (lot 4), les composants d'interface (boutons, dialogues, menus, avatar) s'appuient sur les primitives shadcn/reka-ui ; l'identité (palette, typographie, ombres diffuses) reste la même, mais les rayons ont été harmonisés à l'échelle standard shadcn.
 
 ## Modèle mental
 
@@ -22,11 +22,13 @@ Cockpit financier personnel, chaleureux et calme. La palette, la typographie, la
 | Surface application | `#F3F5FA` |
 | Surface carte | `#FFFFFF` |
 | Texte principal | `#172033` |
-| Texte discret | `#8A90A2` |
+| Texte discret | `#676E80` |
 | Bleu navigation | `#2F80ED` |
 | Vert entrée/confirmation | `#23C48E` |
 | Rouge dépense | `#FF5B62` |
 | Violet catégorie | `#8A5CF6` |
+
+Texte discret retouché de `#8A90A2` à `#676E80` : le premier ne tenait que 3.2:1 sur fond blanc et 3:1 sur fond app, sous le seuil WCAG AA (4.5:1) pour du texte 14 px. `#676E80` tient 5.1:1 sur blanc et 4.7:1 sur `--color-app` (`#F3F5FA`, le fond le plus fréquent). Mode sombre non touché : `#AAB0C0` tenait déjà ~7:1 sur les fonds sombres, large marge AA.
 
 ### Mode sombre
 
@@ -48,14 +50,23 @@ Le thème suit le système lors de la première ouverture, puis mémorise le cho
 
 ## Typographie et géométrie
 
-- `Nunito Sans`, puis `Poppins`, puis `system-ui`.
+- Corps : `Nunito Sans`, puis `Poppins`, puis `system-ui`.
+- Titres (`font-heading`) : `Poppins`, puis `Nunito Sans`, puis `system-ui` — les deux familles étaient déjà chargées mais la distinction titres/corps n'était pas exploitée.
 - Titres : 22–32 px, graisse 800.
 - Corps : 14 px / 22 px.
 - Grille : 8 px.
-- Coque : rayon 24 px ; cartes : 16 px ; contrôles : 12 px.
+- Rayons harmonisés à l'échelle shadcn (`--radius: 0.75rem`) : contrôles `rounded-lg` (12 px), cartes `rounded-xl` (16 px), coque `rounded-3xl` (24 px, classe Tailwind standard — plus de tokens `--radius-shell/card/control` custom).
 - Ombres diffuses, aucune bordure dure.
 
 ## Composants
+
+Primitives shadcn-vue en place : `Button`, `Checkbox`, `Input`, `Label`, `Dialog` (derrière `Modal.vue`), `DropdownMenu` (menu utilisateur de la sidebar, pattern `NavUser` : avatar + nom + chevron, ouvre sur le côté en desktop / en bas en mobile), `Avatar`, `Sheet`, `Separator`, `Skeleton`, `Tooltip`, `Toggle`, `Sidebar`, `Chart` (donut `IncomeDistributionPie` du Dashboard, `SubcategoryBarChart`, et les deux graphiques de l'écran Comparaison — revenus/dépenses par mois en barres groupées, solde mensuel en barres signées — tous rendus via Unovis avec une couleur par catégorie/série issue de la base plutôt que la palette `--chart-1..5` par défaut, non utilisée ici).
+
+Sidebar : bascules confidentialité/thème au-dessus du menu utilisateur dans le footer (pas l'inverse).
+
+Tooltips de chart : bulle sombre fixe (`#172033`, texte blanc) quel que soit le thème — un fond réactif au thème casserait la lisibilité en dark mode. `VisTooltip` ne se câble pas correctement sur `VisSingleContainer` (le Donut ne reçoit jamais ses triggers) ; le survol du donut est géré à la main via l'attribut `__data__` posé par D3 sur chaque segment.
+
+`Modal.vue` hérite du chrome par défaut de `DialogContent` shadcn : bouton de fermeture (X) en haut à droite (masqué si `closeable=false`) et overlay `bg-black/80`, remplaçant l'ancien overlay `bg-gray-500/75` custom.
 
 ### `IncomeDistributionPie`
 
