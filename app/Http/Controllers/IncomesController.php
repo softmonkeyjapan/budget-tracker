@@ -25,8 +25,23 @@ final class IncomesController extends Controller
     {
         $month = $request->query('month') ?? now()->format('Y-m');
 
+        $incomes = $this->incomes->paginateForMonth(
+            $request->user(),
+            $month,
+            $request->integer('per_page', 20),
+            max(1, $request->integer('page', 1)),
+        );
+
         return Inertia::render('Incomes/Index', [
-            'incomes' => IncomeResource::collection($this->incomes->forMonth($request->user(), $month)),
+            'incomes' => [
+                'data' => IncomeResource::collection($incomes->getCollection()),
+                'meta' => [
+                    'current_page' => $incomes->currentPage(),
+                    'last_page' => $incomes->lastPage(),
+                    'per_page' => $incomes->perPage(),
+                    'total' => $incomes->total(),
+                ],
+            ],
             'month' => $month,
         ]);
     }

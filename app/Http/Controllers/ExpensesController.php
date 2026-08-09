@@ -40,10 +40,26 @@ final class ExpensesController extends Controller
 
         $sortDirection = $request->query('direction') === 'asc' ? 'asc' : 'desc';
 
+        $expenses = $this->expenses->paginateForMonth(
+            $request->user(),
+            $month,
+            $filters,
+            $sortBy,
+            $sortDirection,
+            $request->integer('per_page', 20),
+            max(1, $request->integer('page', 1)),
+        );
+
         return Inertia::render('Expenses/Index', [
-            'expenses' => ExpenseResource::collection(
-                $this->expenses->forMonth($request->user(), $month, $filters, $sortBy, $sortDirection),
-            ),
+            'expenses' => [
+                'data' => ExpenseResource::collection($expenses->getCollection()),
+                'meta' => [
+                    'current_page' => $expenses->currentPage(),
+                    'last_page' => $expenses->lastPage(),
+                    'per_page' => $expenses->perPage(),
+                    'total' => $expenses->total(),
+                ],
+            ],
             'categories' => CategoryResource::collection($this->categories->treeForUser($request->user())),
             'categoryTotals' => $this->expenses->categoryTotalsForMonth($request->user(), $month, $filters),
             'subcategoryTotals' => $this->expenses->subcategoryTotalsForMonth($request->user(), $month, $filters),

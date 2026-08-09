@@ -14,8 +14,65 @@ test('incomes index page is displayed for the given month', function () {
     $response->assertOk();
     $response->assertInertia(fn (Assert $page) => $page
         ->component('Incomes/Index')
-        ->has('incomes', 1)
+        ->has('incomes.data', 1)
         ->where('month', '2026-03')
+    );
+});
+
+test('incomes index paginates results with 20 items per page by default', function () {
+    $user = User::factory()->create();
+    Income::factory()->for($user)->count(25)->sequence(
+        fn ($sequence) => ['date' => sprintf('2026-03-%02d', $sequence->index + 1)],
+    )->create();
+
+    $response = $this->actingAs($user)->get('/incomes?month=2026-03');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Incomes/Index')
+        ->has('incomes.data', 20)
+        ->where('incomes.meta.current_page', 1)
+        ->where('incomes.meta.last_page', 2)
+        ->where('incomes.meta.per_page', 20)
+        ->where('incomes.meta.total', 25)
+    );
+});
+
+test('incomes index returns the remaining items on page 2', function () {
+    $user = User::factory()->create();
+    Income::factory()->for($user)->count(25)->sequence(
+        fn ($sequence) => ['date' => sprintf('2026-03-%02d', $sequence->index + 1)],
+    )->create();
+
+    $response = $this->actingAs($user)->get('/incomes?month=2026-03&page=2');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->has('incomes.data', 5)
+        ->where('incomes.meta.current_page', 2)
+    );
+});
+
+test('incomes index accepts a per_page of 50 or 100', function () {
+    $user = User::factory()->create();
+    Income::factory()->for($user)->count(25)->sequence(
+        fn ($sequence) => ['date' => sprintf('2026-03-%02d', $sequence->index + 1)],
+    )->create();
+
+    $response = $this->actingAs($user)->get('/incomes?month=2026-03&per_page=50');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->has('incomes.data', 25)
+        ->where('incomes.meta.per_page', 50)
+        ->where('incomes.meta.last_page', 1)
+    );
+});
+
+test('incomes index falls back to a per_page of 20 when the value is not allowed', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)->get('/incomes?month=2026-03&per_page=13');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->where('incomes.meta.per_page', 20)
     );
 });
 
@@ -45,7 +102,7 @@ test('multiple income entries can exist in the same month', function () {
 
     $response = $this->actingAs($user)->get('/incomes?month=2026-08');
 
-    $response->assertInertia(fn (Assert $page) => $page->has('incomes', 2));
+    $response->assertInertia(fn (Assert $page) => $page->has('incomes.data', 2));
 });
 
 test('an income entry can be updated by its owner', function () {

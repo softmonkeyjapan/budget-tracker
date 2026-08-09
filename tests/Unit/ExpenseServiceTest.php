@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Repositories\Contracts\CategoryRepositoryContract;
 use App\Repositories\Contracts\ExpenseRepositoryContract;
 use App\Services\ExpenseService;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 test('creating an expense under a child category succeeds', function () {
@@ -85,6 +86,42 @@ test('updating an expense re-validates the category is a child', function () {
 
     expect(fn () => $service->update($user, $expense, ['category_id' => 5, 'amount' => 1000, 'date' => '2026-08-05']))
         ->toThrow(ExpenseCategoryMustBeChildException::class);
+});
+
+test('paginateForMonth passes an allowed per_page through to the repository', function () {
+    $user = User::factory()->make(['id' => 1]);
+
+    $categories = Mockery::mock(CategoryRepositoryContract::class);
+
+    $paginator = Mockery::mock(LengthAwarePaginator::class);
+
+    $expenses = Mockery::mock(ExpenseRepositoryContract::class);
+    $expenses->shouldReceive('paginateForUserAndMonth')
+        ->once()
+        ->with($user, '2026-08', [], 'date', 'desc', 50, 2)
+        ->andReturn($paginator);
+
+    $service = new ExpenseService($expenses, $categories);
+
+    expect($service->paginateForMonth($user, '2026-08', [], 'date', 'desc', 50, 2))->toBe($paginator);
+});
+
+test('paginateForMonth clamps a per_page that is not 20, 50 or 100 down to 20', function () {
+    $user = User::factory()->make(['id' => 1]);
+
+    $categories = Mockery::mock(CategoryRepositoryContract::class);
+
+    $paginator = Mockery::mock(LengthAwarePaginator::class);
+
+    $expenses = Mockery::mock(ExpenseRepositoryContract::class);
+    $expenses->shouldReceive('paginateForUserAndMonth')
+        ->once()
+        ->with($user, '2026-08', [], 'date', 'desc', 20, 1)
+        ->andReturn($paginator);
+
+    $service = new ExpenseService($expenses, $categories);
+
+    $service->paginateForMonth($user, '2026-08', [], 'date', 'desc', 13, 1);
 });
 
 test('subcategory totals are grouped by leaf category, summed, and sorted by amount descending', function () {

@@ -3,6 +3,7 @@ import { ref, toRef } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Amount from '@/Components/Amount.vue';
 import Modal from '@/Components/Modal.vue';
+import Pagination from '@/Components/Pagination.vue';
 import { Button } from '@/Components/ui/button';
 import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
@@ -12,7 +13,7 @@ import { Head, Link, router, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
     incomes: {
-        type: Array,
+        type: Object,
         required: true,
     },
     month: {
@@ -21,7 +22,23 @@ const props = defineProps({
     },
 });
 
-const { monthLabel, shiftMonth } = useMonthNavigation(toRef(props, 'month'), 'incomes.index');
+function currentQuery(overrides = {}) {
+    return {
+        month: props.month,
+        per_page: props.incomes.meta.per_page !== 20 ? props.incomes.meta.per_page : undefined,
+        ...overrides,
+    };
+}
+
+function navigate(overrides = {}) {
+    router.get(route('incomes.index', currentQuery(overrides)), {}, {
+        preserveState: true,
+        preserveScroll: true,
+        replace: true,
+    });
+}
+
+const { monthLabel, shiftMonth } = useMonthNavigation(toRef(props, 'month'), 'incomes.index', currentQuery);
 
 const editingIncome = ref(null);
 
@@ -123,12 +140,12 @@ function destroy() {
                     <span></span>
                 </div>
 
-                <p v-if="incomes.length === 0" class="p-5 text-sm text-muted-foreground">
+                <p v-if="incomes.data.length === 0" class="p-5 text-sm text-muted-foreground">
                     Aucune entrée pour ce mois.
                 </p>
 
                 <div
-                    v-for="income in incomes"
+                    v-for="income in incomes.data"
                     :key="income.id"
                     class="grid grid-cols-[100px_1fr_140px_170px] items-center gap-2 border-b border-border px-5 py-3 last:border-b-0"
                 >
@@ -158,6 +175,12 @@ function destroy() {
                         </button>
                     </span>
                 </div>
+
+                <Pagination
+                    :meta="incomes.meta"
+                    @update:page="(page) => navigate({ page })"
+                    @update:per-page="(perPage) => navigate({ per_page: perPage })"
+                />
             </div>
         </div>
 
