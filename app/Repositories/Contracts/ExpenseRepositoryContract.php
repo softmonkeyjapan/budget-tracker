@@ -7,6 +7,7 @@ namespace App\Repositories\Contracts;
 use App\Models\Category;
 use App\Models\Expense;
 use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 interface ExpenseRepositoryContract
@@ -34,6 +35,20 @@ interface ExpenseRepositoryContract
         string $sortBy = 'date',
         string $sortDirection = 'desc',
     ): Collection;
+
+    /**
+     * @param  array{category_id?: int|null, search?: string|null, date?: string|null}  $filters
+     * @return LengthAwarePaginator<int, Expense>
+     */
+    public function paginateForUserAndMonth(
+        User $user,
+        string $month,
+        array $filters = [],
+        string $sortBy = 'date',
+        string $sortDirection = 'desc',
+        int $perPage = 20,
+        int $page = 1,
+    ): LengthAwarePaginator;
 
     /**
      * @return Collection<int, Expense>

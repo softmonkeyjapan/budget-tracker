@@ -11,10 +11,16 @@ use App\Models\Expense;
 use App\Models\User;
 use App\Repositories\Contracts\CategoryRepositoryContract;
 use App\Repositories\Contracts\ExpenseRepositoryContract;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 final class ExpenseService
 {
+    /**
+     * @var array<int, int>
+     */
+    private const ALLOWED_PER_PAGE = [20, 50, 100];
+
     public function __construct(
         private readonly ExpenseRepositoryContract $expenses,
         private readonly CategoryRepositoryContract $categories,
@@ -68,6 +74,24 @@ final class ExpenseService
         string $sortDirection = 'desc',
     ): Collection {
         return $this->expenses->forUserAndMonth($user, $month, $filters, $sortBy, $sortDirection);
+    }
+
+    /**
+     * @param  array{category_id?: int|null, search?: string|null, date?: string|null}  $filters
+     * @return LengthAwarePaginator<int, Expense>
+     */
+    public function paginateForMonth(
+        User $user,
+        string $month,
+        array $filters = [],
+        string $sortBy = 'date',
+        string $sortDirection = 'desc',
+        int $perPage = 20,
+        int $page = 1,
+    ): LengthAwarePaginator {
+        $perPage = in_array($perPage, self::ALLOWED_PER_PAGE, true) ? $perPage : 20;
+
+        return $this->expenses->paginateForUserAndMonth($user, $month, $filters, $sortBy, $sortDirection, $perPage, $page);
     }
 
     /**

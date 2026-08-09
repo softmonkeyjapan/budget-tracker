@@ -5,6 +5,7 @@ import Amount from '@/Components/Amount.vue';
 import CategoryIcon from '@/Components/CategoryIcon.vue';
 import SubcategoryBarChart from '@/Components/SubcategoryBarChart.vue';
 import Modal from '@/Components/Modal.vue';
+import Pagination from '@/Components/Pagination.vue';
 import { Button } from '@/Components/ui/button';
 import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
@@ -14,7 +15,7 @@ import { Head, Link, router, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
     expenses: {
-        type: Array,
+        type: Object,
         required: true,
     },
     categories: {
@@ -51,6 +52,7 @@ function currentQuery(overrides = {}) {
         date: date.value || undefined,
         sort: props.filters.sort,
         direction: props.filters.direction,
+        per_page: props.expenses.meta.per_page !== 20 ? props.expenses.meta.per_page : undefined,
         ...overrides,
     };
 }
@@ -233,12 +235,12 @@ function destroy() {
                     <span></span>
                 </div>
 
-                <p v-if="expenses.length === 0" class="p-5 text-sm text-muted-foreground">
+                <p v-if="expenses.data.length === 0" class="p-5 text-sm text-muted-foreground">
                     Aucune dépense pour ce mois ou ces filtres.
                 </p>
 
                 <div
-                    v-for="expense in expenses"
+                    v-for="expense in expenses.data"
                     :key="expense.id"
                     class="grid grid-cols-[100px_1fr_1fr_140px_170px] items-center gap-2 border-b border-border px-5 py-3 last:border-b-0"
                 >
@@ -282,6 +284,12 @@ function destroy() {
                         </button>
                     </span>
                 </div>
+
+                <Pagination
+                    :meta="expenses.meta"
+                    @update:page="(page) => navigate({ page })"
+                    @update:per-page="(perPage) => navigate({ per_page: perPage, page: undefined })"
+                />
             </div>
         </div>
 

@@ -6,6 +6,7 @@ namespace App\Repositories\Contracts;
 
 use App\Models\Income;
 use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 interface IncomeRepositoryContract
@@ -26,6 +27,11 @@ interface IncomeRepositoryContract
      * @return Collection<int, Income>
      */
     public function forUserAndMonth(User $user, string $month): Collection;
+
+    /**
+     * @return LengthAwarePaginator<int, Income>
+     */
+    public function paginateForUserAndMonth(User $user, string $month, int $perPage = 20, int $page = 1): LengthAwarePaginator;
 
     /**
      * @return Collection<int, Income>

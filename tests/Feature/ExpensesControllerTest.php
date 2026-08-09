@@ -17,8 +17,87 @@ test('expenses index page is displayed for the given month', function () {
     $response->assertOk();
     $response->assertInertia(fn (Assert $page) => $page
         ->component('Expenses/Index')
-        ->has('expenses', 1)
+        ->has('expenses.data', 1)
         ->where('month', '2026-03')
+    );
+});
+
+test('expenses index paginates results with 20 items per page by default', function () {
+    $user = User::factory()->create();
+    $root = Category::factory()->for($user)->create();
+    $child = Category::factory()->child($root)->create();
+    Expense::factory()->for($user)->for($child, 'category')->count(25)->sequence(
+        fn ($sequence) => ['date' => sprintf('2026-03-%02d', $sequence->index + 1)],
+    )->create();
+
+    $response = $this->actingAs($user)->get('/expenses?month=2026-03');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Expenses/Index')
+        ->has('expenses.data', 20)
+        ->where('expenses.meta.current_page', 1)
+        ->where('expenses.meta.last_page', 2)
+        ->where('expenses.meta.per_page', 20)
+        ->where('expenses.meta.total', 25)
+    );
+});
+
+test('expenses index returns the remaining items on page 2', function () {
+    $user = User::factory()->create();
+    $root = Category::factory()->for($user)->create();
+    $child = Category::factory()->child($root)->create();
+    Expense::factory()->for($user)->for($child, 'category')->count(25)->sequence(
+        fn ($sequence) => ['date' => sprintf('2026-03-%02d', $sequence->index + 1)],
+    )->create();
+
+    $response = $this->actingAs($user)->get('/expenses?month=2026-03&page=2');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->has('expenses.data', 5)
+        ->where('expenses.meta.current_page', 2)
+    );
+});
+
+test('expenses index accepts a per_page of 50 or 100', function () {
+    $user = User::factory()->create();
+    $root = Category::factory()->for($user)->create();
+    $child = Category::factory()->child($root)->create();
+    Expense::factory()->for($user)->for($child, 'category')->count(25)->sequence(
+        fn ($sequence) => ['date' => sprintf('2026-03-%02d', $sequence->index + 1)],
+    )->create();
+
+    $response = $this->actingAs($user)->get('/expenses?month=2026-03&per_page=50');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->has('expenses.data', 25)
+        ->where('expenses.meta.per_page', 50)
+        ->where('expenses.meta.last_page', 1)
+    );
+});
+
+test('expenses index falls back to a per_page of 20 when the value is not allowed', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)->get('/expenses?month=2026-03&per_page=13');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->where('expenses.meta.per_page', 20)
+    );
+});
+
+test('expenses index totals stay computed on the full filtered month, not just the current page', function () {
+    $user = User::factory()->create();
+    $root = Category::factory()->for($user)->create(['name' => 'Alimentaire']);
+    $child = Category::factory()->child($root)->create();
+    Expense::factory()->for($user)->for($child, 'category')->count(25)->sequence(
+        fn ($sequence) => ['date' => sprintf('2026-03-%02d', $sequence->index + 1), 'amount' => 100],
+    )->create();
+
+    $response = $this->actingAs($user)->get('/expenses?month=2026-03');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->has('expenses.data', 20)
+        ->where('categoryTotals.0.amount', 2500)
     );
 });
 
@@ -59,7 +138,7 @@ test('subcategory totals follow the table filters, and percentages are based on 
 
     $response->assertInertia(fn (Assert $page) => $page
         ->component('Expenses/Index')
-        ->has('expenses', 1)
+        ->has('expenses.data', 1)
         ->has('subcategoryTotals', 1)
         ->where('subcategoryTotals.0.name', 'Supermarché')
         ->where('subcategoryTotals.0.amount', 3000)
@@ -124,8 +203,8 @@ test('expenses can be filtered by category', function () {
 
     $response->assertInertia(fn (Assert $page) => $page
         ->component('Expenses/Index')
-        ->has('expenses', 1)
-        ->where('expenses.0.category.id', $foodChild->id)
+        ->has('expenses.data', 1)
+        ->where('expenses.data.0.category.id', $foodChild->id)
     );
 });
 
@@ -140,8 +219,8 @@ test('expenses can be filtered by a description search', function () {
 
     $response->assertInertia(fn (Assert $page) => $page
         ->component('Expenses/Index')
-        ->has('expenses', 1)
-        ->where('expenses.0.description', 'Supermarché')
+        ->has('expenses.data', 1)
+        ->where('expenses.data.0.description', 'Supermarché')
     );
 });
 
@@ -156,8 +235,8 @@ test('expenses can be filtered by an exact date', function () {
 
     $response->assertInertia(fn (Assert $page) => $page
         ->component('Expenses/Index')
-        ->has('expenses', 1)
-        ->where('expenses.0.date', '2026-03-10')
+        ->has('expenses.data', 1)
+        ->where('expenses.data.0.date', '2026-03-10')
     );
 });
 
@@ -171,8 +250,8 @@ test('expenses default to sorting by date descending', function () {
     $response = $this->actingAs($user)->get('/expenses?month=2026-03');
 
     $response->assertInertia(fn (Assert $page) => $page
-        ->where('expenses.0.date', '2026-03-20')
-        ->where('expenses.1.date', '2026-03-05')
+        ->where('expenses.data.0.date', '2026-03-20')
+        ->where('expenses.data.1.date', '2026-03-05')
     );
 });
 
@@ -192,8 +271,8 @@ test('expenses created later on the same day sort above earlier ones', function 
     $response = $this->actingAs($user)->get('/expenses?month=2026-03');
 
     $response->assertInertia(fn (Assert $page) => $page
-        ->where('expenses.0.id', $later->id)
-        ->where('expenses.1.id', $earlier->id)
+        ->where('expenses.data.0.id', $later->id)
+        ->where('expenses.data.1.id', $earlier->id)
     );
 });
 
@@ -207,8 +286,8 @@ test('expenses can be sorted by amount ascending', function () {
     $response = $this->actingAs($user)->get('/expenses?month=2026-03&sort=amount&direction=asc');
 
     $response->assertInertia(fn (Assert $page) => $page
-        ->where('expenses.0.amount', 1000)
-        ->where('expenses.1.amount', 5000)
+        ->where('expenses.data.0.amount', 1000)
+        ->where('expenses.data.1.amount', 5000)
     );
 });
 

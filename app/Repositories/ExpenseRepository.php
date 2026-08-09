@@ -8,6 +8,8 @@ use App\Models\Category;
 use App\Models\Expense;
 use App\Models\User;
 use App\Repositories\Contracts\ExpenseRepositoryContract;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 final class ExpenseRepository implements ExpenseRepositoryContract
@@ -47,6 +49,36 @@ final class ExpenseRepository implements ExpenseRepositoryContract
         string $sortBy = 'date',
         string $sortDirection = 'desc',
     ): Collection {
+        return $this->queryForUserAndMonth($user, $month, $filters, $sortBy, $sortDirection)->get();
+    }
+
+    /**
+     * @param  array{category_id?: int|null, search?: string|null, date?: string|null}  $filters
+     * @return LengthAwarePaginator<int, Expense>
+     */
+    public function paginateForUserAndMonth(
+        User $user,
+        string $month,
+        array $filters = [],
+        string $sortBy = 'date',
+        string $sortDirection = 'desc',
+        int $perPage = 20,
+        int $page = 1,
+    ): LengthAwarePaginator {
+        return $this->queryForUserAndMonth($user, $month, $filters, $sortBy, $sortDirection)
+            ->paginate(perPage: $perPage, page: $page);
+    }
+
+    /**
+     * @param  array{category_id?: int|null, search?: string|null, date?: string|null}  $filters
+     */
+    private function queryForUserAndMonth(
+        User $user,
+        string $month,
+        array $filters,
+        string $sortBy,
+        string $sortDirection,
+    ): Builder {
         $query = Expense::query()
             ->where('expenses.user_id', $user->id)
             ->whereYear('expenses.date', substr($month, 0, 4))
@@ -69,8 +101,7 @@ final class ExpenseRepository implements ExpenseRepositoryContract
             return $query
                 ->join('categories', 'categories.id', '=', 'expenses.category_id')
                 ->orderBy('categories.name', $sortDirection)
-                ->select('expenses.*')
-                ->get();
+                ->select('expenses.*');
         }
 
         $column = in_array($sortBy, ['date', 'description', 'amount'], true) ? $sortBy : 'date';
@@ -81,7 +112,7 @@ final class ExpenseRepository implements ExpenseRepositoryContract
             $query->orderBy('expenses.created_at', $sortDirection);
         }
 
-        return $query->get();
+        return $query;
     }
 
     /**
