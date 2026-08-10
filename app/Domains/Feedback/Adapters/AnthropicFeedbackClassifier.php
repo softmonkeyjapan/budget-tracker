@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Domains\Feedback\Adapters;
 
+use App\Domains\Feedback\Contracts\FeedbackClassifierInterface;
 use Illuminate\Support\Facades\Http;
 use Throwable;
 
-final class FeedbackClassificationService
+final class AnthropicFeedbackClassifier implements FeedbackClassifierInterface
 {
     private const TYPES = ['bug', 'enhancement', 'question'];
 
