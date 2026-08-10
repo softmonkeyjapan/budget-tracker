@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Exceptions;
+namespace App\Domains\Feedback\Exceptions;
 
 use App\Support\Exceptions\DomainException;
 

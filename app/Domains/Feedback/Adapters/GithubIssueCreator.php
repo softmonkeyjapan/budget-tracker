@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Domains\Feedback\Adapters;
 
-use App\Exceptions\GithubIssueCreationFailedException;
+use App\Domains\Feedback\Contracts\GithubIssueCreatorInterface;
+use App\Domains\Feedback\Exceptions\GithubIssueCreationFailedException;
 use Illuminate\Support\Facades\Http;
 use Throwable;
 
-final class GithubIssueService
+final class GithubIssueCreator implements GithubIssueCreatorInterface
 {
     /**
      * @param  array<int, string>  $labels

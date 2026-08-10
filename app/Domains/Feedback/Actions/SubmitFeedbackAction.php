@@ -2,28 +2,28 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Domains\Feedback\Actions;
 
+use App\Domains\Feedback\Contracts\FeedbackClassifierInterface;
+use App\Domains\Feedback\Contracts\GithubIssueCreatorInterface;
+use App\Domains\Feedback\DataTransferObjects\SubmitFeedbackData;
 use App\Models\User;
 use Illuminate\Support\Str;
 
-final class FeedbackService
+final class SubmitFeedbackAction
 {
     public function __construct(
-        private readonly GithubIssueService $github,
-        private readonly FeedbackClassificationService $classifier,
+        private readonly GithubIssueCreatorInterface $github,
+        private readonly FeedbackClassifierInterface $classifier,
     ) {}
 
-    /**
-     * @param  array{message: string, page_url: string}  $data
-     */
-    public function submit(User $user, array $data, ?string $userAgent): void
+    public function execute(User $user, SubmitFeedbackData $data, ?string $userAgent): void
     {
-        $classification = $this->classifier->classify($data['message']);
+        $classification = $this->classifier->classify($data->message);
 
-        $title = $classification['title'] ?? $this->fallbackTitle($data['message']);
+        $title = $classification['title'] ?? $this->fallbackTitle($data->message);
         $labels = $classification !== null ? [$classification['type']] : [];
-        $body = $this->buildBody($data['message'], $data['page_url'], $user, $userAgent);
+        $body = $this->buildBody($data->message, $data->pageUrl, $user, $userAgent);
 
         $this->github->create($title, $body, $labels);
     }
