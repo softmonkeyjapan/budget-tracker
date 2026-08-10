@@ -34,4 +34,20 @@ class Category extends Model
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
+
+    /**
+     * The color this category displays: its own if set, otherwise its parent's.
+     */
+    public function resolvedColor(): ?string
+    {
+        return $this->color ?? $this->parent?->color;
+    }
+
+    /**
+     * The icon this category displays: its own if set, otherwise its parent's.
+     */
+    public function resolvedIcon(): ?string
+    {
+        return $this->icon ?? $this->parent?->icon;
+    }
 }
