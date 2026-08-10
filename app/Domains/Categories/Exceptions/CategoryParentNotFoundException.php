@@ -1,0 +1,15 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Domains\Categories\Exceptions;
+
+use App\Support\Exceptions\DomainException;
+
+final class CategoryParentNotFoundException extends DomainException
+{
+    public function __construct()
+    {
+        parent::__construct("La catégorie racine sélectionnée n'existe pas ou ne vous appartient pas.");
+    }
+}

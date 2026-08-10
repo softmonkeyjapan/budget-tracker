@@ -1,0 +1,31 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Domains\Expenses\Policies;
+
+use App\Models\Expense;
+use App\Models\User;
+
+final class ExpensePolicy
+{
+    public function create(User $user): bool
+    {
+        return true;
+    }
+
+    public function view(User $user, Expense $expense): bool
+    {
+        return $user->id === $expense->user_id;
+    }
+
+    public function update(User $user, Expense $expense): bool
+    {
+        return $user->id === $expense->user_id;
+    }
+
+    public function delete(User $user, Expense $expense): bool
+    {
+        return $user->id === $expense->user_id;
+    }
+}

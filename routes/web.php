@@ -1,11 +1,11 @@
 <?php
 
+use App\Domains\Categories\Http\Controllers\CategoriesController;
+use App\Domains\Expenses\Http\Controllers\ExpensesController;
 use App\Domains\Incomes\Http\Controllers\IncomesController;
 use App\Domains\Users\Http\Controllers\ProfileController;
-use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ComparisonController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\FeedbackController;
 use Illuminate\Support\Facades\Route;
 
