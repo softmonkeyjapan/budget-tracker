@@ -2,13 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Domains\Incomes\Http\Controllers;
 
-use App\Http\Requests\StoreIncomeRequest;
-use App\Http\Requests\UpdateIncomeRequest;
-use App\Http\Resources\IncomeResource;
+use App\Domains\Incomes\Actions\CreateIncomeAction;
+use App\Domains\Incomes\Actions\DeleteIncomeAction;
+use App\Domains\Incomes\Actions\UpdateIncomeAction;
+use App\Domains\Incomes\DataTransferObjects\CreateIncomeData;
+use App\Domains\Incomes\DataTransferObjects\UpdateIncomeData;
+use App\Domains\Incomes\Http\Requests\StoreIncomeRequest;
+use App\Domains\Incomes\Http\Requests\UpdateIncomeRequest;
+use App\Domains\Incomes\Http\Resources\IncomeResource;
+use App\Domains\Incomes\Repositories\Contracts\IncomeRepositoryInterface;
+use App\Http\Controllers\Controller;
 use App\Models\Income;
-use App\Services\IncomeService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -17,18 +23,25 @@ use Inertia\Response;
 
 final class IncomesController extends Controller
 {
+    /**
+     * @var array<int, int>
+     */
+    private const ALLOWED_PER_PAGE = [20, 50, 100];
+
     public function __construct(
-        private readonly IncomeService $incomes,
+        private readonly IncomeRepositoryInterface $incomes,
     ) {}
 
     public function index(Request $request): Response
     {
         $month = $request->query('month') ?? now()->format('Y-m');
+        $perPage = $request->integer('per_page', 20);
+        $perPage = in_array($perPage, self::ALLOWED_PER_PAGE, true) ? $perPage : 20;
 
-        $incomes = $this->incomes->paginateForMonth(
+        $incomes = $this->incomes->paginateForUserAndMonth(
             $request->user(),
             $month,
-            $request->integer('per_page', 20),
+            $perPage,
             max(1, $request->integer('page', 1)),
         );
 
@@ -54,33 +67,33 @@ final class IncomesController extends Controller
 
         return Inertia::render('Incomes/Create', [
             'month' => $month,
-            'recentIncomes' => IncomeResource::collection($this->incomes->forMonth($request->user(), $month)),
+            'recentIncomes' => IncomeResource::collection($this->incomes->forUserAndMonth($request->user(), $month)),
         ]);
     }
 
-    public function store(StoreIncomeRequest $request): RedirectResponse
+    public function store(StoreIncomeRequest $request, CreateIncomeAction $action): RedirectResponse
     {
         $this->authorize('create', Income::class);
 
-        $income = $this->incomes->create($request->user(), $request->validated());
+        $income = $action->execute($request->user(), CreateIncomeData::fromRequest($request));
 
         return Redirect::route('incomes.index', ['month' => $income->date->format('Y-m')]);
     }
 
-    public function update(UpdateIncomeRequest $request, Income $income): RedirectResponse
+    public function update(UpdateIncomeRequest $request, Income $income, UpdateIncomeAction $action): RedirectResponse
     {
         $this->authorize('update', $income);
 
-        $this->incomes->update($income, $request->validated());
+        $action->execute($income, UpdateIncomeData::fromRequest($request));
 
         return Redirect::back();
     }
 
-    public function destroy(Income $income): RedirectResponse
+    public function destroy(Income $income, DeleteIncomeAction $action): RedirectResponse
     {
         $this->authorize('delete', $income);
 
-        $this->incomes->delete($income);
+        $action->execute($income);
 
         return Redirect::back();
     }

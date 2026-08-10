@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Domains\Incomes\Http\Resources\IncomeResource;
 use App\Http\Resources\ExpenseResource;
-use App\Http\Resources\IncomeResource;
 use App\Services\DashboardService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
