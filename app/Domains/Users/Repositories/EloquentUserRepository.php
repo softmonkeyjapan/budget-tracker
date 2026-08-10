@@ -22,7 +22,7 @@ final class EloquentUserRepository implements UserRepositoryInterface
      */
     public function update(User $user, array $data): User
     {
-        $user->forceFill($data);
+        $user->fill($data);
         $user->save();
 
         return $user;
