@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Domains\Reporting\Http\Controllers;
 
+use App\Domains\Expenses\Http\Resources\ExpenseResource;
 use App\Domains\Incomes\Http\Resources\IncomeResource;
-use App\Http\Resources\ExpenseResource;
-use App\Services\DashboardService;
+use App\Domains\Reporting\Queries\GetDashboardSummaryQuery;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -14,14 +15,14 @@ use Inertia\Response;
 final class DashboardController extends Controller
 {
     public function __construct(
-        private readonly DashboardService $dashboard,
+        private readonly GetDashboardSummaryQuery $dashboard,
     ) {}
 
     public function show(Request $request): Response
     {
         $month = $request->query('month') ?? now()->format('Y-m');
 
-        $data = $this->dashboard->forMonth($request->user(), $month);
+        $data = $this->dashboard->execute($request->user(), $month);
 
         return Inertia::render('Dashboard', [
             'month' => $month,

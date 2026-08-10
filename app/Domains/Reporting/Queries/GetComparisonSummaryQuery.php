@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Domains\Reporting\Queries;
 
+use App\Domains\Expenses\Repositories\Contracts\ExpenseRepositoryInterface;
 use App\Domains\Incomes\Repositories\Contracts\IncomeRepositoryInterface;
 use App\Models\User;
-use App\Repositories\Contracts\ExpenseRepositoryContract;
 use Illuminate\Support\Carbon;
 
-final class ComparisonService
+final class GetComparisonSummaryQuery
 {
     private const MIN_MONTHS = 1;
 
     private const MAX_MONTHS = 24;
 
     public function __construct(
-        private readonly ExpenseRepositoryContract $expenses,
+        private readonly ExpenseRepositoryInterface $expenses,
         private readonly IncomeRepositoryInterface $incomes,
     ) {}
 
@@ -31,7 +31,7 @@ final class ComparisonService
      *     best_balance_month: array{month: string, income: int, expense: int, balance: int}|null,
      * }
      */
-    public function forRange(User $user, int $months): array
+    public function execute(User $user, int $months): array
     {
         $months = max(self::MIN_MONTHS, min(self::MAX_MONTHS, $months));
         $start = Carbon::now()->startOfMonth()->subMonths($months - 1);

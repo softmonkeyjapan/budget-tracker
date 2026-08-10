@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Domains\Reporting\Http\Controllers;
 
-use App\Services\ComparisonService;
+use App\Domains\Reporting\Queries\GetComparisonSummaryQuery;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -12,13 +13,13 @@ use Inertia\Response;
 final class ComparisonController extends Controller
 {
     public function __construct(
-        private readonly ComparisonService $comparison,
+        private readonly GetComparisonSummaryQuery $comparison,
     ) {}
 
     public function show(Request $request): Response
     {
         $months = (int) ($request->query('months') ?? 12);
-        $data = $this->comparison->forRange($request->user(), $months);
+        $data = $this->comparison->execute($request->user(), $months);
 
         return Inertia::render('Comparison/Index', [
             'months' => $months,

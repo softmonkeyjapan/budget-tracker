@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Domains\Reporting\Queries;
 
+use App\Domains\Categories\Repositories\Contracts\CategoryRepositoryInterface;
+use App\Domains\Expenses\Repositories\Contracts\ExpenseRepositoryInterface;
 use App\Domains\Incomes\Repositories\Contracts\IncomeRepositoryInterface;
 use App\Models\Expense;
 use App\Models\Income;
 use App\Models\User;
-use App\Repositories\Contracts\CategoryRepositoryContract;
-use App\Repositories\Contracts\ExpenseRepositoryContract;
 use Illuminate\Database\Eloquent\Collection;
 
-final class DashboardService
+final class GetDashboardSummaryQuery
 {
     public function __construct(
-        private readonly ExpenseRepositoryContract $expenses,
+        private readonly ExpenseRepositoryInterface $expenses,
         private readonly IncomeRepositoryInterface $incomes,
-        private readonly CategoryRepositoryContract $categories,
+        private readonly CategoryRepositoryInterface $categories,
     ) {}
 
     /**
@@ -33,7 +33,7 @@ final class DashboardService
      *     recent_incomes: Collection<int, Income>,
      * }
      */
-    public function forMonth(User $user, string $month): array
+    public function execute(User $user, string $month): array
     {
         $monthIncomes = $this->incomes->forUserAndMonth($user, $month);
         $incomeTotal = (int) $monthIncomes->sum('amount');
