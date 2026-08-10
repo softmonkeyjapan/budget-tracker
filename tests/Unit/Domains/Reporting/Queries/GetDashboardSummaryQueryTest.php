@@ -1,13 +1,13 @@
 <?php
 
+use App\Domains\Categories\Repositories\Contracts\CategoryRepositoryInterface;
+use App\Domains\Expenses\Repositories\Contracts\ExpenseRepositoryInterface;
 use App\Domains\Incomes\Repositories\Contracts\IncomeRepositoryInterface;
+use App\Domains\Reporting\Queries\GetDashboardSummaryQuery;
 use App\Models\Category;
 use App\Models\Expense;
 use App\Models\Income;
 use App\Models\User;
-use App\Repositories\Contracts\CategoryRepositoryContract;
-use App\Repositories\Contracts\ExpenseRepositoryContract;
-use App\Services\DashboardService;
 use Illuminate\Database\Eloquent\Collection;
 
 test('usage percentage is calculated against the month income total', function () {
@@ -23,15 +23,15 @@ test('usage percentage is calculated against the month income total', function (
         new Collection([Income::factory()->make(['user_id' => 1, 'amount' => 100000])]),
     );
 
-    $expenses = Mockery::mock(ExpenseRepositoryContract::class);
+    $expenses = Mockery::mock(ExpenseRepositoryInterface::class);
     $expenses->shouldReceive('forUserAndMonth')->once()->andReturn(new Collection([$expense]));
 
-    $categories = Mockery::mock(CategoryRepositoryContract::class);
+    $categories = Mockery::mock(CategoryRepositoryInterface::class);
     $categories->shouldReceive('rootsForUser')->once()->andReturn(new Collection([$root]));
 
-    $service = new DashboardService($expenses, $incomes, $categories);
+    $query = new GetDashboardSummaryQuery($expenses, $incomes, $categories);
 
-    $result = $service->forMonth($user, '2026-08');
+    $result = $query->execute($user, '2026-08');
 
     expect($result['income_total'])->toBe(100000);
     expect($result['expense_total'])->toBe(25000);
@@ -56,15 +56,15 @@ test('unspent percentage is clamped to zero when expenses exceed income', functi
         new Collection([Income::factory()->make(['user_id' => 1, 'amount' => 100000])]),
     );
 
-    $expenses = Mockery::mock(ExpenseRepositoryContract::class);
+    $expenses = Mockery::mock(ExpenseRepositoryInterface::class);
     $expenses->shouldReceive('forUserAndMonth')->once()->andReturn(new Collection([$expense]));
 
-    $categories = Mockery::mock(CategoryRepositoryContract::class);
+    $categories = Mockery::mock(CategoryRepositoryInterface::class);
     $categories->shouldReceive('rootsForUser')->once()->andReturn(new Collection([$root]));
 
-    $service = new DashboardService($expenses, $incomes, $categories);
+    $query = new GetDashboardSummaryQuery($expenses, $incomes, $categories);
 
-    $result = $service->forMonth($user, '2026-08');
+    $result = $query->execute($user, '2026-08');
 
     expect($result['unspent_percentage'])->toBe(0.0);
 });
@@ -80,15 +80,15 @@ test('zero income month does not divide by zero', function () {
     $incomes = Mockery::mock(IncomeRepositoryInterface::class);
     $incomes->shouldReceive('forUserAndMonth')->once()->andReturn(new Collection([]));
 
-    $expenses = Mockery::mock(ExpenseRepositoryContract::class);
+    $expenses = Mockery::mock(ExpenseRepositoryInterface::class);
     $expenses->shouldReceive('forUserAndMonth')->once()->andReturn(new Collection([$expense]));
 
-    $categories = Mockery::mock(CategoryRepositoryContract::class);
+    $categories = Mockery::mock(CategoryRepositoryInterface::class);
     $categories->shouldReceive('rootsForUser')->once()->andReturn(new Collection([$root]));
 
-    $service = new DashboardService($expenses, $incomes, $categories);
+    $query = new GetDashboardSummaryQuery($expenses, $incomes, $categories);
 
-    $result = $service->forMonth($user, '2026-08');
+    $result = $query->execute($user, '2026-08');
 
     expect($result['income_total'])->toBe(0);
     expect($result['categories'][0]['percentage'])->toBe(0.0);
@@ -108,15 +108,15 @@ test('only the 5 most recent expenses are kept', function () {
     $incomes = Mockery::mock(IncomeRepositoryInterface::class);
     $incomes->shouldReceive('forUserAndMonth')->once()->andReturn(new Collection([]));
 
-    $expenses = Mockery::mock(ExpenseRepositoryContract::class);
+    $expenses = Mockery::mock(ExpenseRepositoryInterface::class);
     $expenses->shouldReceive('forUserAndMonth')->once()->andReturn(new Collection($expenseModels->all()));
 
-    $categories = Mockery::mock(CategoryRepositoryContract::class);
+    $categories = Mockery::mock(CategoryRepositoryInterface::class);
     $categories->shouldReceive('rootsForUser')->once()->andReturn(new Collection([]));
 
-    $service = new DashboardService($expenses, $incomes, $categories);
+    $query = new GetDashboardSummaryQuery($expenses, $incomes, $categories);
 
-    $result = $service->forMonth($user, '2026-08');
+    $result = $query->execute($user, '2026-08');
 
     expect($result['last_expenses'])->toHaveCount(5);
 });

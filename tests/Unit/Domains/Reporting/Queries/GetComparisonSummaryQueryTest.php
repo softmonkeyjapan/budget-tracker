@@ -1,11 +1,11 @@
 <?php
 
+use App\Domains\Expenses\Repositories\Contracts\ExpenseRepositoryInterface;
 use App\Domains\Incomes\Repositories\Contracts\IncomeRepositoryInterface;
+use App\Domains\Reporting\Queries\GetComparisonSummaryQuery;
 use App\Models\Expense;
 use App\Models\Income;
 use App\Models\User;
-use App\Repositories\Contracts\ExpenseRepositoryContract;
-use App\Services\ComparisonService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 
@@ -21,14 +21,14 @@ test('forRange aggregates totals and zero-fills months without data', function (
         Income::factory()->make(['user_id' => 1, 'amount' => 100000, 'date' => $now->copy()->addDays(4)]),
     ]));
 
-    $expenses = Mockery::mock(ExpenseRepositoryContract::class);
+    $expenses = Mockery::mock(ExpenseRepositoryInterface::class);
     $expenses->shouldReceive('forUserAndDateRange')->once()->andReturn(new Collection([
         Expense::factory()->make(['user_id' => 1, 'category_id' => 1, 'amount' => 40000, 'date' => $now->copy()->addDays(2)]),
     ]));
 
-    $service = new ComparisonService($expenses, $incomes);
+    $query = new GetComparisonSummaryQuery($expenses, $incomes);
 
-    $result = $service->forRange($user, 2);
+    $result = $query->execute($user, 2);
 
     expect($result['months'])->toHaveCount(2);
     expect($result['months'][0]['month'])->toBe($previousMonth);
@@ -50,11 +50,11 @@ test('months is clamped between 1 and 24', function () {
     $incomes = Mockery::mock(IncomeRepositoryInterface::class);
     $incomes->shouldReceive('forUserAndDateRange')->andReturn(new Collection([]));
 
-    $expenses = Mockery::mock(ExpenseRepositoryContract::class);
+    $expenses = Mockery::mock(ExpenseRepositoryInterface::class);
     $expenses->shouldReceive('forUserAndDateRange')->andReturn(new Collection([]));
 
-    $service = new ComparisonService($expenses, $incomes);
+    $query = new GetComparisonSummaryQuery($expenses, $incomes);
 
-    expect($service->forRange($user, 0)['months'])->toHaveCount(1);
-    expect($service->forRange($user, 999)['months'])->toHaveCount(24);
+    expect($query->execute($user, 0)['months'])->toHaveCount(1);
+    expect($query->execute($user, 999)['months'])->toHaveCount(24);
 });

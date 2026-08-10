@@ -3,9 +3,9 @@
 use App\Domains\Categories\Http\Controllers\CategoriesController;
 use App\Domains\Expenses\Http\Controllers\ExpensesController;
 use App\Domains\Incomes\Http\Controllers\IncomesController;
+use App\Domains\Reporting\Http\Controllers\ComparisonController;
+use App\Domains\Reporting\Http\Controllers\DashboardController;
 use App\Domains\Users\Http\Controllers\ProfileController;
-use App\Http\Controllers\ComparisonController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FeedbackController;
 use Illuminate\Support\Facades\Route;
 
