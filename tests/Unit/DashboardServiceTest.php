@@ -1,12 +1,12 @@
 <?php
 
+use App\Domains\Incomes\Repositories\Contracts\IncomeRepositoryInterface;
 use App\Models\Category;
 use App\Models\Expense;
 use App\Models\Income;
 use App\Models\User;
 use App\Repositories\Contracts\CategoryRepositoryContract;
 use App\Repositories\Contracts\ExpenseRepositoryContract;
-use App\Repositories\Contracts\IncomeRepositoryContract;
 use App\Services\DashboardService;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -18,7 +18,7 @@ test('usage percentage is calculated against the month income total', function (
     $expense = Expense::factory()->make(['user_id' => 1, 'category_id' => 11, 'amount' => 25000]);
     $expense->setRelation('category', $child);
 
-    $incomes = Mockery::mock(IncomeRepositoryContract::class);
+    $incomes = Mockery::mock(IncomeRepositoryInterface::class);
     $incomes->shouldReceive('forUserAndMonth')->once()->andReturn(
         new Collection([Income::factory()->make(['user_id' => 1, 'amount' => 100000])]),
     );
@@ -51,7 +51,7 @@ test('unspent percentage is clamped to zero when expenses exceed income', functi
     $expense = Expense::factory()->make(['user_id' => 1, 'category_id' => 11, 'amount' => 150000]);
     $expense->setRelation('category', $child);
 
-    $incomes = Mockery::mock(IncomeRepositoryContract::class);
+    $incomes = Mockery::mock(IncomeRepositoryInterface::class);
     $incomes->shouldReceive('forUserAndMonth')->once()->andReturn(
         new Collection([Income::factory()->make(['user_id' => 1, 'amount' => 100000])]),
     );
@@ -77,7 +77,7 @@ test('zero income month does not divide by zero', function () {
     $expense = Expense::factory()->make(['user_id' => 1, 'category_id' => 11, 'amount' => 5000]);
     $expense->setRelation('category', $child);
 
-    $incomes = Mockery::mock(IncomeRepositoryContract::class);
+    $incomes = Mockery::mock(IncomeRepositoryInterface::class);
     $incomes->shouldReceive('forUserAndMonth')->once()->andReturn(new Collection([]));
 
     $expenses = Mockery::mock(ExpenseRepositoryContract::class);
@@ -105,7 +105,7 @@ test('only the 5 most recent expenses are kept', function () {
         return $expense;
     });
 
-    $incomes = Mockery::mock(IncomeRepositoryContract::class);
+    $incomes = Mockery::mock(IncomeRepositoryInterface::class);
     $incomes->shouldReceive('forUserAndMonth')->once()->andReturn(new Collection([]));
 
     $expenses = Mockery::mock(ExpenseRepositoryContract::class);

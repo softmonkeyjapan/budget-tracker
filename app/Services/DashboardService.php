@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Domains\Incomes\Repositories\Contracts\IncomeRepositoryInterface;
 use App\Models\Expense;
 use App\Models\Income;
 use App\Models\User;
 use App\Repositories\Contracts\CategoryRepositoryContract;
 use App\Repositories\Contracts\ExpenseRepositoryContract;
-use App\Repositories\Contracts\IncomeRepositoryContract;
 use Illuminate\Database\Eloquent\Collection;
 
 final class DashboardService
 {
     public function __construct(
         private readonly ExpenseRepositoryContract $expenses,
-        private readonly IncomeRepositoryContract $incomes,
+        private readonly IncomeRepositoryInterface $incomes,
         private readonly CategoryRepositoryContract $categories,
     ) {}
 

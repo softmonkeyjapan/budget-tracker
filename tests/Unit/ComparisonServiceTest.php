@@ -1,10 +1,10 @@
 <?php
 
+use App\Domains\Incomes\Repositories\Contracts\IncomeRepositoryInterface;
 use App\Models\Expense;
 use App\Models\Income;
 use App\Models\User;
 use App\Repositories\Contracts\ExpenseRepositoryContract;
-use App\Repositories\Contracts\IncomeRepositoryContract;
 use App\Services\ComparisonService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
@@ -16,7 +16,7 @@ test('forRange aggregates totals and zero-fills months without data', function (
     $currentMonth = $now->format('Y-m');
     $previousMonth = $now->copy()->subMonth()->format('Y-m');
 
-    $incomes = Mockery::mock(IncomeRepositoryContract::class);
+    $incomes = Mockery::mock(IncomeRepositoryInterface::class);
     $incomes->shouldReceive('forUserAndDateRange')->once()->andReturn(new Collection([
         Income::factory()->make(['user_id' => 1, 'amount' => 100000, 'date' => $now->copy()->addDays(4)]),
     ]));
@@ -47,7 +47,7 @@ test('forRange aggregates totals and zero-fills months without data', function (
 test('months is clamped between 1 and 24', function () {
     $user = User::factory()->make(['id' => 1]);
 
-    $incomes = Mockery::mock(IncomeRepositoryContract::class);
+    $incomes = Mockery::mock(IncomeRepositoryInterface::class);
     $incomes->shouldReceive('forUserAndDateRange')->andReturn(new Collection([]));
 
     $expenses = Mockery::mock(ExpenseRepositoryContract::class);

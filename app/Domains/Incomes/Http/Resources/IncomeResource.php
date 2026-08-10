@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources;
+namespace App\Domains\Incomes\Http\Resources;
 
 use App\Models\Income;
 use Illuminate\Http\Request;

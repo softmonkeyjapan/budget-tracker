@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Policies;
+namespace App\Domains\Incomes\Policies;
 
 use App\Models\Income;
 use App\Models\User;

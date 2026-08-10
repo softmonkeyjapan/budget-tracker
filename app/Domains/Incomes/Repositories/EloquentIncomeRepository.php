@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Repositories;
+namespace App\Domains\Incomes\Repositories;
 
+use App\Domains\Incomes\Repositories\Contracts\IncomeRepositoryInterface;
 use App\Models\Income;
 use App\Models\User;
-use App\Repositories\Contracts\IncomeRepositoryContract;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
-final class IncomeRepository implements IncomeRepositoryContract
+final class EloquentIncomeRepository implements IncomeRepositoryInterface
 {
     /**
      * @param  array<string, mixed>  $data

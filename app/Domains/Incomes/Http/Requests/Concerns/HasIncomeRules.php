@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\Concerns;
+namespace App\Domains\Incomes\Http\Requests\Concerns;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 
