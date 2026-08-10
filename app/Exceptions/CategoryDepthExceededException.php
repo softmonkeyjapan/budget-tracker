@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
+use App\Support\Exceptions\DomainException;
+
 final class CategoryDepthExceededException extends DomainException
 {
     public function __construct()

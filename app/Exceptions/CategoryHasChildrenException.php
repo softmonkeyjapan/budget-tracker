@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
+use App\Support\Exceptions\DomainException;
+
 final class CategoryHasChildrenException extends DomainException
 {
     public function __construct()

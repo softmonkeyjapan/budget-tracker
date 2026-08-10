@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Exceptions;
+namespace App\Support\Exceptions;
 
 use Exception;
 use Illuminate\Http\RedirectResponse;
