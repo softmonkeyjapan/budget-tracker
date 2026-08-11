@@ -41,7 +41,12 @@
 
         <!-- Scripts -->
         @routes
-        @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
+        @php
+            $componentSegments = explode('/', $page['component']);
+            $componentDomain = array_shift($componentSegments);
+            $componentPath = implode('/', $componentSegments);
+        @endphp
+        @vite(['resources/js/app.js', "resources/js/Domains/{$componentDomain}/Pages/{$componentPath}.vue"])
         @inertiaHead
     </head>
     <body class="font-sans antialiased">

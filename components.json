@@ -13,11 +13,11 @@
     "rtl": false,
     "pointer": false,
     "aliases": {
-        "components": "@/Components",
-        "utils": "@/lib/utils",
-        "ui": "@/Components/ui",
-        "lib": "@/lib",
-        "composables": "@/Composables"
+        "components": "@/Shared/Components",
+        "utils": "@/Shared/lib/utils",
+        "ui": "@/Shared/Components/ui",
+        "lib": "@/Shared/lib",
+        "composables": "@/Shared/Composables"
     },
     "registries": {}
 }
