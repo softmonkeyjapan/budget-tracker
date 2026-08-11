@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { StackedBar } from '@unovis/ts';
 import { VisAxis, VisStackedBar, VisTooltip, VisXYContainer } from '@unovis/vue';
 import { ChartContainer } from '@/Shared/Components/ui/chart';
@@ -15,14 +15,37 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    // A selection scoped to a single main category makes the "Générale" tab
+    // show a single, uninformative bar — hide it in that case.
+    showGeneralTab: {
+        type: Boolean,
+        default: true,
+    },
+    defaultTab: {
+        type: String,
+        default: 'general',
+    },
 });
 
-const tabs = [
+const allTabs = [
     { key: 'general', label: 'Générale' },
     { key: 'detail', label: 'Détail' },
 ];
 
-const activeTab = ref('general');
+const tabs = computed(() => (props.showGeneralTab ? allTabs : allTabs.filter((tab) => tab.key === 'detail')));
+
+const manualTab = ref(null);
+
+const activeTab = computed({
+    get: () => (props.showGeneralTab ? manualTab.value ?? props.defaultTab : 'detail'),
+    set: (value) => {
+        manualTab.value = value;
+    },
+});
+
+watch(() => [props.defaultTab, props.showGeneralTab], () => {
+    manualTab.value = null;
+});
 
 const data = computed(() => (activeTab.value === 'general' ? props.general : props.detail));
 
@@ -75,7 +98,7 @@ const legend = computed(() => {
                 </p>
             </div>
 
-            <div class="flex shrink-0 gap-1 rounded-lg bg-muted p-1">
+            <div v-if="tabs.length > 1" class="flex shrink-0 gap-1 rounded-lg bg-muted p-1">
                 <button
                     v-for="tab in tabs"
                     :key="tab.key"

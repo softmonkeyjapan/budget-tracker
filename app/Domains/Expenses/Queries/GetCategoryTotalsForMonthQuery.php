@@ -17,7 +17,7 @@ final class GetCategoryTotalsForMonthQuery
     ) {}
 
     /**
-     * @param  array{category_id?: int|null, search?: string|null, date?: string|null}  $filters
+     * @param  array{category_id?: array<int>|null, search?: string|null, date?: string|null}  $filters
      * @return array<int, array{id: int, name: string, color: ?string, amount: int, percentage: float}>
      */
     public function execute(User $user, string $month, array $filters = []): array

@@ -1,8 +1,9 @@
 <script setup>
-import { ref, toRef } from 'vue';
+import { computed, ref, toRef } from 'vue';
 import AuthenticatedLayout from '@/Shared/Layouts/AuthenticatedLayout.vue';
 import Amount from '@/Shared/Components/Amount.vue';
 import CategoryIcon from '@/Shared/Components/CategoryIcon.vue';
+import CategoryMultiSelect from '@/Domains/Expenses/Components/CategoryMultiSelect.vue';
 import SubcategoryBarChart from '@/Domains/Expenses/Components/SubcategoryBarChart.vue';
 import Modal from '@/Shared/Components/Modal.vue';
 import Pagination from '@/Shared/Components/Pagination.vue';
@@ -40,14 +41,22 @@ const props = defineProps({
     },
 });
 
+function normalizeCategoryIds(value) {
+    if (Array.isArray(value)) {
+        return value.map(Number);
+    }
+
+    return value === null || value === undefined || value === '' ? [] : [Number(value)];
+}
+
 const search = ref(props.filters.search ?? '');
-const categoryId = ref(props.filters.category_id ?? null);
+const categoryIds = ref(normalizeCategoryIds(props.filters.category_id));
 const date = ref(props.filters.date ?? '');
 
 function currentQuery(overrides = {}) {
     return {
         month: props.month,
-        category_id: categoryId.value || undefined,
+        category_id: categoryIds.value.length > 0 ? categoryIds.value : undefined,
         search: search.value || undefined,
         date: date.value || undefined,
         sort: props.filters.sort,
@@ -56,6 +65,27 @@ function currentQuery(overrides = {}) {
         ...overrides,
     };
 }
+
+function onCategoryIdsChange(ids) {
+    categoryIds.value = ids;
+    navigate();
+}
+
+const distinctSelectedRootCount = computed(() => {
+    if (categoryIds.value.length === 0) {
+        return 0;
+    }
+
+    const rootIds = new Set();
+
+    for (const root of props.categories) {
+        if (root.children.some((child) => categoryIds.value.includes(child.id))) {
+            rootIds.add(root.id);
+        }
+    }
+
+    return rootIds.size;
+});
 
 function navigate(overrides = {}) {
     router.get(route('expenses.index', currentQuery(overrides)), {}, {
@@ -76,7 +106,7 @@ function onSearchInput() {
 
 function resetFilters() {
     search.value = '';
-    categoryId.value = null;
+    categoryIds.value = [];
     date.value = '';
     navigate({ category_id: undefined, search: undefined, date: undefined });
 }
@@ -177,18 +207,11 @@ function destroy() {
 
         <div class="p-6">
             <div class="mb-4 flex flex-wrap items-center gap-3 rounded-xl bg-card p-4 shadow-soft">
-                <select
-                    v-model="categoryId"
-                    class="rounded-lg border-border bg-card text-sm text-foreground shadow-sm focus:border-ring focus:ring-ring"
-                    @change="navigate()"
-                >
-                    <option :value="null">Toutes les catégories</option>
-                    <optgroup v-for="root in categories" :key="root.id" :label="root.name">
-                        <option v-for="child in root.children" :key="child.id" :value="child.id">
-                            {{ child.name }}
-                        </option>
-                    </optgroup>
-                </select>
+                <CategoryMultiSelect
+                    :categories="categories"
+                    :model-value="categoryIds"
+                    @update:model-value="onCategoryIdsChange"
+                />
 
                 <TextInput
                     type="text"
@@ -210,7 +233,13 @@ function destroy() {
                 </Button>
             </div>
 
-            <SubcategoryBarChart :general="categoryTotals" :detail="subcategoryTotals" class="mb-4" />
+            <SubcategoryBarChart
+                :general="categoryTotals"
+                :detail="subcategoryTotals"
+                :show-general-tab="distinctSelectedRootCount !== 1"
+                default-tab="general"
+                class="mb-4"
+            />
 
             <div class="overflow-hidden rounded-xl bg-card shadow-soft">
                 <div

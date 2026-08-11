@@ -25,7 +25,7 @@ interface ExpenseRepositoryInterface
     public function delete(Expense $expense): void;
 
     /**
-     * @param  array{category_id?: int|null, search?: string|null, date?: string|null}  $filters
+     * @param  array{category_id?: array<int>|null, search?: string|null, date?: string|null}  $filters
      * @return Collection<int, Expense>
      */
     public function forUserAndMonth(
@@ -37,7 +37,7 @@ interface ExpenseRepositoryInterface
     ): Collection;
 
     /**
-     * @param  array{category_id?: int|null, search?: string|null, date?: string|null}  $filters
+     * @param  array{category_id?: array<int>|null, search?: string|null, date?: string|null}  $filters
      * @return LengthAwarePaginator<int, Expense>
      */
     public function paginateForUserAndMonth(
