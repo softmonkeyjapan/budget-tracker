@@ -21,7 +21,7 @@ final class ComparisonController extends Controller
         $months = (int) ($request->query('months') ?? 12);
         $data = $this->comparison->execute($request->user(), $months);
 
-        return Inertia::render('Comparison/Index', [
+        return Inertia::render('Reporting/Comparison/Index', [
             'months' => $months,
             'rows' => $data['months'],
             'incomeTotal' => $data['income_total'],

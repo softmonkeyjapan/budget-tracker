@@ -24,7 +24,7 @@ final class DashboardController extends Controller
 
         $data = $this->dashboard->execute($request->user(), $month);
 
-        return Inertia::render('Dashboard', [
+        return Inertia::render('Reporting/Dashboard', [
             'month' => $month,
             'incomeTotal' => $data['income_total'],
             'expenseTotal' => $data['expense_total'],

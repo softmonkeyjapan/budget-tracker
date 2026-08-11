@@ -18,7 +18,7 @@ test('dashboard page is displayed for the given month', function () {
 
     $response->assertOk();
     $response->assertInertia(fn (Assert $page) => $page
-        ->component('Dashboard')
+        ->component('Reporting/Dashboard')
         ->where('month', '2026-08')
         ->where('incomeTotal', 200000)
         ->where('expenseTotal', 50000)

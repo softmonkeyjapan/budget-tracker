@@ -23,7 +23,7 @@ test('comparison page aggregates income and expense per month', function () {
 
     $response->assertOk();
     $response->assertInertia(fn (Assert $page) => $page
-        ->component('Comparison/Index')
+        ->component('Reporting/Comparison/Index')
         ->where('months', 2)
         ->has('rows', 2)
         ->where('rows.1.month', $currentMonth->format('Y-m'))

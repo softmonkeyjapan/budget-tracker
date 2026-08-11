@@ -1,0 +1,69 @@
+<script setup>
+import GuestLayout from '@/Shared/Layouts/GuestLayout.vue';
+import InputError from '@/Shared/Components/InputError.vue';
+import InputLabel from '@/Shared/Components/InputLabel.vue';
+import TextInput from '@/Shared/Components/TextInput.vue';
+import { Button } from '@/Shared/Components/ui/button';
+import { Head, useForm } from '@inertiajs/vue3';
+
+defineProps({
+    status: {
+        type: String,
+    },
+});
+
+const form = useForm({
+    email: '',
+});
+
+const submit = () => {
+    form.post(route('password.email'));
+};
+</script>
+
+<template>
+    <GuestLayout>
+        <Head title="Forgot Password" />
+
+        <div class="mb-4 text-sm text-muted-foreground">
+            Forgot your password? No problem. Just let us know your email
+            address and we will email you a password reset link that will allow
+            you to choose a new one.
+        </div>
+
+        <div
+            v-if="status"
+            class="mb-4 text-sm font-medium text-income"
+        >
+            {{ status }}
+        </div>
+
+        <form @submit.prevent="submit">
+            <div>
+                <InputLabel for="email" value="Email" />
+
+                <TextInput
+                    id="email"
+                    type="email"
+                    class="mt-1 block w-full"
+                    v-model="form.email"
+                    required
+                    autofocus
+                    autocomplete="username"
+                />
+
+                <InputError class="mt-2" :message="form.errors.email" />
+            </div>
+
+            <div class="mt-4 flex items-center justify-end">
+                <Button
+                    variant="default"
+                    :class="{ 'opacity-25': form.processing }"
+                    :disabled="form.processing"
+                >
+                    Email Password Reset Link
+                </Button>
+            </div>
+        </form>
+    </GuestLayout>
+</template>
