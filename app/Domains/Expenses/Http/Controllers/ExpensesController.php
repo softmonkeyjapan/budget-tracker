@@ -44,8 +44,19 @@ final class ExpensesController extends Controller
     ): Response {
         $month = $request->query('month') ?? now()->format('Y-m');
 
+        $categoryIdInput = $request->query('category_id');
+
+        $categoryIds = match (true) {
+            is_array($categoryIdInput) => array_values(array_unique(array_map(
+                fn ($id): int => (int) $id,
+                array_filter($categoryIdInput, fn ($id): bool => is_scalar($id) && $id !== ''),
+            ))),
+            $categoryIdInput !== null && $categoryIdInput !== '' => [(int) $categoryIdInput],
+            default => [],
+        };
+
         $filters = [
-            'category_id' => $request->integer('category_id') ?: null,
+            'category_id' => $categoryIds !== [] ? $categoryIds : null,
             'search' => $request->string('search')->trim()->value() ?: null,
             'date' => $request->query('date') ?: null,
         ];

@@ -208,6 +208,88 @@ test('expenses can be filtered by category', function () {
     );
 });
 
+test('expenses can be filtered by several category ids across different roots', function () {
+    $user = User::factory()->create();
+    $foodRoot = Category::factory()->for($user)->create(['name' => 'Alimentaire']);
+    $foodChild = Category::factory()->child($foodRoot)->create();
+    $transportRoot = Category::factory()->for($user)->create(['name' => 'Transport']);
+    $fuelChild = Category::factory()->child($transportRoot)->create();
+    $otherRoot = Category::factory()->for($user)->create(['name' => 'Loisirs']);
+    $otherChild = Category::factory()->child($otherRoot)->create();
+    Expense::factory()->for($user)->for($foodChild, 'category')->create(['date' => '2026-03-05']);
+    Expense::factory()->for($user)->for($fuelChild, 'category')->create(['date' => '2026-03-10']);
+    Expense::factory()->for($user)->for($otherChild, 'category')->create(['date' => '2026-03-15']);
+
+    $response = $this->actingAs($user)->get("/expenses?month=2026-03&category_id[]={$foodChild->id}&category_id[]={$fuelChild->id}");
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Expenses/Index')
+        ->has('expenses.data', 2)
+    );
+});
+
+test('category and subcategory totals reflect a multi-id filtered selection, including an isolated child under its own root', function () {
+    $user = User::factory()->create();
+    $foodRoot = Category::factory()->for($user)->create(['name' => 'Alimentaire']);
+    $foodChild = Category::factory()->child($foodRoot)->create(['name' => 'Supermarché']);
+    $foodOtherChild = Category::factory()->child($foodRoot)->create(['name' => 'Boucherie']);
+    $transportRoot = Category::factory()->for($user)->create(['name' => 'Transport']);
+    $fuelChild = Category::factory()->child($transportRoot)->create(['name' => 'Essence']);
+    $transportOtherChild = Category::factory()->child($transportRoot)->create(['name' => 'Métro']);
+    Expense::factory()->for($user)->for($foodChild, 'category')->create(['date' => '2026-03-05', 'amount' => 3000]);
+    Expense::factory()->for($user)->for($fuelChild, 'category')->create(['date' => '2026-03-10', 'amount' => 7000]);
+    // Not selected: must not appear in the filtered totals.
+    Expense::factory()->for($user)->for($foodOtherChild, 'category')->create(['date' => '2026-03-12', 'amount' => 5000]);
+    Expense::factory()->for($user)->for($transportOtherChild, 'category')->create(['date' => '2026-03-14', 'amount' => 9000]);
+
+    $response = $this->actingAs($user)->get("/expenses?month=2026-03&category_id[]={$foodChild->id}&category_id[]={$fuelChild->id}");
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Expenses/Index')
+        ->has('expenses.data', 2)
+        ->has('categoryTotals', 2)
+        ->where('categoryTotals.0.name', 'Transport')
+        ->where('categoryTotals.0.amount', 7000)
+        ->where('categoryTotals.1.name', 'Alimentaire')
+        ->where('categoryTotals.1.amount', 3000)
+        ->has('subcategoryTotals', 2)
+        ->where('subcategoryTotals.0.name', 'Essence')
+        ->where('subcategoryTotals.1.name', 'Supermarché')
+    );
+});
+
+test('filtering by another user\'s category id yields no matches for that id without erroring', function () {
+    $user = User::factory()->create();
+    $root = Category::factory()->for($user)->create();
+    $ownChild = Category::factory()->child($root)->create();
+    $otherRoot = Category::factory()->create();
+    $otherChild = Category::factory()->child($otherRoot)->create();
+    Expense::factory()->for($user)->for($ownChild, 'category')->create(['date' => '2026-03-05']);
+
+    $response = $this->actingAs($user)->get("/expenses?month=2026-03&category_id[]={$ownChild->id}&category_id[]={$otherChild->id}");
+
+    $response->assertOk();
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Expenses/Index')
+        ->has('expenses.data', 1)
+        ->where('expenses.data.0.category.id', $ownChild->id)
+    );
+});
+
+test('a malformed nested category_id array value is dropped instead of being cast to id 1', function () {
+    $user = User::factory()->create();
+    $root = Category::factory()->for($user)->create();
+    $child = Category::factory()->child($root)->create();
+    Expense::factory()->for($user)->for($child, 'category')->create(['date' => '2026-03-05']);
+
+    $response = $this->actingAs($user)->get('/expenses?month=2026-03&category_id[0][]=5');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Expenses/Index')
+        ->has('expenses.data', 1)
+    );
+});
+
 test('expenses can be filtered by a description search', function () {
     $user = User::factory()->create();
     $root = Category::factory()->for($user)->create();

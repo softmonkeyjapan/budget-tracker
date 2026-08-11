@@ -40,7 +40,7 @@ final class EloquentExpenseRepository implements ExpenseExistenceInterface, Expe
     }
 
     /**
-     * @param  array{category_id?: int|null, search?: string|null, date?: string|null}  $filters
+     * @param  array{category_id?: array<int>|null, search?: string|null, date?: string|null}  $filters
      * @return Collection<int, Expense>
      */
     public function forUserAndMonth(
@@ -54,7 +54,7 @@ final class EloquentExpenseRepository implements ExpenseExistenceInterface, Expe
     }
 
     /**
-     * @param  array{category_id?: int|null, search?: string|null, date?: string|null}  $filters
+     * @param  array{category_id?: array<int>|null, search?: string|null, date?: string|null}  $filters
      * @return LengthAwarePaginator<int, Expense>
      */
     public function paginateForUserAndMonth(
@@ -71,7 +71,7 @@ final class EloquentExpenseRepository implements ExpenseExistenceInterface, Expe
     }
 
     /**
-     * @param  array{category_id?: int|null, search?: string|null, date?: string|null}  $filters
+     * @param  array{category_id?: array<int>|null, search?: string|null, date?: string|null}  $filters
      */
     private function queryForUserAndMonth(
         User $user,
@@ -87,7 +87,7 @@ final class EloquentExpenseRepository implements ExpenseExistenceInterface, Expe
             ->with('category.parent');
 
         if (! empty($filters['category_id'])) {
-            $query->where('expenses.category_id', $filters['category_id']);
+            $query->whereIn('expenses.category_id', $filters['category_id']);
         }
 
         if (! empty($filters['search'])) {
