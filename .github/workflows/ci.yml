@@ -102,7 +102,7 @@ jobs:
 
       - name: Migrate and refresh Laravel caches
         run: |
-          ssh -i ~/.ssh/deploy_key "$DEPLOY_USER@$DEPLOY_HOST" "cd $DEPLOY_PATH && php artisan migrate --force && php artisan config:clear && php artisan config:cache && php artisan route:cache && php artisan view:cache"
+          ssh -i ~/.ssh/deploy_key "$DEPLOY_USER@$DEPLOY_HOST" "cd $DEPLOY_PATH && rm -f bootstrap/cache/*.php && php artisan package:discover --ansi && php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan view:cache"
 
       - name: Reload PHP-FPM
         run: ssh -i ~/.ssh/deploy_key "$DEPLOY_USER@$DEPLOY_HOST" "sudo systemctl reload $PHP_FPM_SERVICE"
