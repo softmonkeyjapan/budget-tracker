@@ -92,10 +92,7 @@ final class EloquentExpenseRepository implements ExpenseExistenceInterface, Expe
         }
 
         if (! empty($filters['search'])) {
-            $query->whereRaw(
-                SearchNormalizer::sqlExpression('expenses.description').' like ?',
-                ['%'.SearchNormalizer::normalize($filters['search']).'%'],
-            );
+            $query->where('expenses.search_text', 'like', '%'.SearchNormalizer::normalize($filters['search']).'%');
         }
 
         if (! empty($filters['date'])) {
