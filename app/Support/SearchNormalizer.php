@@ -5,8 +5,13 @@ declare(strict_types=1);
 namespace App\Support;
 
 /**
- * Normalizes text for case- and accent-insensitive search, portably across SQL engines
- * (no reliance on engine-specific collations, ILIKE, or extensions like PostgreSQL's unaccent).
+ * Normalizes text for case- and accent-insensitive search, portably across SQL engines.
+ *
+ * Column values are normalized once, at write time, into a plain dedicated column (see
+ * `Expense::$search_text`), and search terms are normalized the same way before filtering with a
+ * simple `LIKE`. This avoids relying on engine-specific collations, `ILIKE`, extensions like
+ * PostgreSQL's `unaccent`, or deeply nested `REPLACE()` SQL expressions — which SQLite's parser
+ * rejects past a certain nesting depth ("parser stack overflow").
  */
 final class SearchNormalizer
 {
@@ -30,29 +35,8 @@ final class SearchNormalizer
         'ý' => 'y', 'Ý' => 'y', 'ÿ' => 'y',
     ];
 
-    /**
-     * Normalizes a PHP string the same way {@see sqlExpression()} normalizes a column,
-     * so both sides of a `LIKE` comparison agree regardless of the underlying SQL engine.
-     */
     public static function normalize(string $value): string
     {
         return mb_strtolower(strtr($value, self::ACCENT_MAP));
-    }
-
-    /**
-     * Builds a SQL expression that strips accents and lower-cases the given column, using only
-     * `REPLACE`/`LOWER`, which behave identically on SQLite and PostgreSQL. `REPLACE` runs before
-     * `LOWER` so the result doesn't depend on the database's locale/collation for folding
-     * non-ASCII letters (only the final ASCII fold is delegated to `LOWER`).
-     */
-    public static function sqlExpression(string $column): string
-    {
-        $expression = $column;
-
-        foreach (self::ACCENT_MAP as $accented => $plain) {
-            $expression = "REPLACE({$expression}, '{$accented}', '{$plain}')";
-        }
-
-        return "LOWER({$expression})";
     }
 }

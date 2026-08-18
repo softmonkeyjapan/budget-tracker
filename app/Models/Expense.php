@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Support\SearchNormalizer;
 use Database\Factories\ExpenseFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,6 +16,13 @@ class Expense extends Model
 {
     /** @use HasFactory<ExpenseFactory> */
     use HasFactory;
+
+    protected static function booted(): void
+    {
+        static::saving(function (self $expense) {
+            $expense->search_text = SearchNormalizer::normalize((string) $expense->description);
+        });
+    }
 
     protected function casts(): array
     {
