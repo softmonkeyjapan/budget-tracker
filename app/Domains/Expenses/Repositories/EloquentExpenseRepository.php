@@ -9,6 +9,7 @@ use App\Domains\Shared\Contracts\ExpenseExistenceInterface;
 use App\Models\Category;
 use App\Models\Expense;
 use App\Models\User;
+use App\Support\SearchNormalizer;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -91,7 +92,10 @@ final class EloquentExpenseRepository implements ExpenseExistenceInterface, Expe
         }
 
         if (! empty($filters['search'])) {
-            $query->where('expenses.description', 'like', '%'.$filters['search'].'%');
+            $query->whereRaw(
+                SearchNormalizer::sqlExpression('expenses.description').' like ?',
+                ['%'.SearchNormalizer::normalize($filters['search']).'%'],
+            );
         }
 
         if (! empty($filters['date'])) {

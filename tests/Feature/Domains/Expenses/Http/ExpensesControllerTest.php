@@ -306,6 +306,38 @@ test('expenses can be filtered by a description search', function () {
     );
 });
 
+test('expenses description search is case insensitive', function () {
+    $user = User::factory()->create();
+    $root = Category::factory()->for($user)->create();
+    $child = Category::factory()->child($root)->create();
+    Expense::factory()->for($user)->for($child, 'category')->create(['date' => '2026-03-05', 'description' => 'Claude']);
+    Expense::factory()->for($user)->for($child, 'category')->create(['date' => '2026-03-10', 'description' => 'Pharmacie']);
+
+    $response = $this->actingAs($user)->get('/expenses?month=2026-03&search=claude');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Expenses/Index')
+        ->has('expenses.data', 1)
+        ->where('expenses.data.0.description', 'Claude')
+    );
+});
+
+test('expenses description search is accent insensitive', function () {
+    $user = User::factory()->create();
+    $root = Category::factory()->for($user)->create();
+    $child = Category::factory()->child($root)->create();
+    Expense::factory()->for($user)->for($child, 'category')->create(['date' => '2026-03-05', 'description' => 'Supermarché']);
+    Expense::factory()->for($user)->for($child, 'category')->create(['date' => '2026-03-10', 'description' => 'Pharmacie']);
+
+    $response = $this->actingAs($user)->get('/expenses?month=2026-03&search=supermarche');
+
+    $response->assertInertia(fn (Assert $page) => $page
+        ->component('Expenses/Index')
+        ->has('expenses.data', 1)
+        ->where('expenses.data.0.description', 'Supermarché')
+    );
+});
+
 test('expenses can be filtered by an exact date', function () {
     $user = User::factory()->create();
     $root = Category::factory()->for($user)->create();
