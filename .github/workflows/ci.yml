@@ -102,14 +102,8 @@ jobs:
   deploy:
     name: Deploy
     needs: [lint, test, test-pgsql]
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/feature/'))
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
-    env:
-      DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
-      DEPLOY_USER: ${{ vars.DEPLOY_USER }}
-      DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
-      PHP_FPM_SERVICE: ${{ vars.PHP_FPM_SERVICE }}
-      DEPLOY_BRANCH: ${{ github.ref_name }}
     steps:
       - uses: actions/checkout@v4
 
@@ -129,26 +123,30 @@ jobs:
 
       - run: npm run build
 
-      - name: Set up SSH
-        env:
-          DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+      - name: Configure SSH
         run: |
-          mkdir -p ~/.ssh
-          printf '%s\n' "$DEPLOY_SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          install -m 700 -d ~/.ssh
+          echo "${{ secrets.PROD_SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+          ssh-keyscan -H "${{ vars.PROD_SERVER_IP }}" >> ~/.ssh/known_hosts
 
-      - name: Check out pushed branch on server
-        run: ssh -i ~/.ssh/deploy_key "$DEPLOY_USER@$DEPLOY_HOST" "cd $DEPLOY_PATH && git fetch origin $DEPLOY_BRANCH && git checkout $DEPLOY_BRANCH && git reset --hard origin/$DEPLOY_BRANCH"
-
-      - name: Sync built vendor/ and public/build/
+      - name: Ensure shared directories exist
         run: |
-          rsync -az --delete -e "ssh -i ~/.ssh/deploy_key" vendor/ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/vendor/"
-          rsync -az --delete -e "ssh -i ~/.ssh/deploy_key" public/build/ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/public/build/"
+          ssh -i ~/.ssh/deploy_key "${{ vars.PROD_SERVER_USER }}@${{ vars.PROD_SERVER_IP }}" \
+            "mkdir -p '${{ vars.PROD_APP_PATH }}/shared/vendor' '${{ vars.PROD_APP_PATH }}/shared/build'"
 
-      - name: Migrate and refresh Laravel caches
+      - name: Rsync vendor/
         run: |
-          ssh -i ~/.ssh/deploy_key "$DEPLOY_USER@$DEPLOY_HOST" "cd $DEPLOY_PATH && rm -f bootstrap/cache/*.php && php artisan package:discover --ansi && php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan view:cache"
+          rsync -az --delete -e "ssh -i ~/.ssh/deploy_key" \
+            vendor/ "${{ vars.PROD_SERVER_USER }}@${{ vars.PROD_SERVER_IP }}:${{ vars.PROD_APP_PATH }}/shared/vendor/"
 
-      - name: Reload PHP-FPM
-        run: ssh -i ~/.ssh/deploy_key "$DEPLOY_USER@$DEPLOY_HOST" "sudo systemctl reload $PHP_FPM_SERVICE"
+      - name: Rsync built assets
+        run: |
+          rsync -az --delete -e "ssh -i ~/.ssh/deploy_key" \
+            public/build/ "${{ vars.PROD_SERVER_USER }}@${{ vars.PROD_SERVER_IP }}:${{ vars.PROD_APP_PATH }}/shared/build/"
+
+      - name: Trigger deployment
+        run: |
+          BRANCH="${{ github.ref_name }}"
+          ssh -i ~/.ssh/deploy_key "${{ vars.PROD_SERVER_USER }}@${{ vars.PROD_SERVER_IP }}" \
+            "bash /home/deploy/deploy.sh $(printf '%q' "$BRANCH") $(printf '%q' "${{ vars.PROD_APP_PATH }}")"
