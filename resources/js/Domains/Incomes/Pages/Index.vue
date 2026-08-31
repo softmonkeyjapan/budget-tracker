@@ -131,50 +131,54 @@ function destroy() {
 
         <div class="p-6">
             <div class="overflow-hidden rounded-xl bg-card shadow-soft">
-                <div
-                    class="grid grid-cols-[100px_1fr_140px_170px] gap-2 border-b border-border px-5 py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
-                >
-                    <span>Date</span>
-                    <span>Description</span>
-                    <span class="text-right">Montant</span>
-                    <span></span>
+                <div class="overflow-x-auto">
+                    <div class="min-w-[640px]">
+                        <div
+                            class="grid grid-cols-[100px_1fr_140px_170px] gap-2 border-b border-border px-5 py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                        >
+                            <span>Date</span>
+                            <span>Description</span>
+                            <span class="text-right">Montant</span>
+                            <span></span>
+                        </div>
+
+                        <div
+                            v-for="income in incomes.data"
+                            :key="income.id"
+                            class="grid grid-cols-[100px_1fr_140px_170px] items-center gap-2 border-b border-border px-5 py-3 last:border-b-0"
+                        >
+                            <span class="text-sm text-muted-foreground">
+                                {{ new Date(income.date).toLocaleDateString('fr-FR') }}
+                            </span>
+                            <span class="truncate text-sm font-medium text-foreground">
+                                {{ income.description ?? '—' }}
+                            </span>
+                            <strong class="whitespace-nowrap text-right text-sm text-income">
+                                <Amount :value="income.amount" prefix="+" />
+                            </strong>
+                            <span class="flex justify-end gap-3 whitespace-nowrap text-sm">
+                                <button
+                                    type="button"
+                                    class="text-muted-foreground hover:text-foreground"
+                                    @click="startEdit(income)"
+                                >
+                                    Modifier
+                                </button>
+                                <button
+                                    type="button"
+                                    class="text-expense hover:text-expense/80"
+                                    @click="confirmDestroy(income)"
+                                >
+                                    Supprimer
+                                </button>
+                            </span>
+                        </div>
+                    </div>
                 </div>
 
                 <p v-if="incomes.data.length === 0" class="p-5 text-sm text-muted-foreground">
                     Aucune entrée pour ce mois.
                 </p>
-
-                <div
-                    v-for="income in incomes.data"
-                    :key="income.id"
-                    class="grid grid-cols-[100px_1fr_140px_170px] items-center gap-2 border-b border-border px-5 py-3 last:border-b-0"
-                >
-                    <span class="text-sm text-muted-foreground">
-                        {{ new Date(income.date).toLocaleDateString('fr-FR') }}
-                    </span>
-                    <span class="truncate text-sm font-medium text-foreground">
-                        {{ income.description ?? '—' }}
-                    </span>
-                    <strong class="whitespace-nowrap text-right text-sm text-income">
-                        <Amount :value="income.amount" prefix="+" />
-                    </strong>
-                    <span class="flex justify-end gap-3 whitespace-nowrap text-sm">
-                        <button
-                            type="button"
-                            class="text-muted-foreground hover:text-foreground"
-                            @click="startEdit(income)"
-                        >
-                            Modifier
-                        </button>
-                        <button
-                            type="button"
-                            class="text-expense hover:text-expense/80"
-                            @click="confirmDestroy(income)"
-                        >
-                            Supprimer
-                        </button>
-                    </span>
-                </div>
 
                 <Pagination
                     :meta="incomes.meta"

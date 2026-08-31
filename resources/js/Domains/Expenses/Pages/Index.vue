@@ -242,77 +242,81 @@ function destroy() {
             />
 
             <div class="overflow-hidden rounded-xl bg-card shadow-soft">
-                <div
-                    class="grid grid-cols-[100px_1fr_1fr_140px_170px] gap-2 border-b border-border px-5 py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
-                >
-                    <button type="button" class="flex items-center gap-1 text-left hover:text-foreground" @click="toggleSort('date')">
-                        Date
-                        <span v-if="filters.sort === 'date'">{{ filters.direction === 'asc' ? '▲' : '▼' }}</span>
-                    </button>
-                    <button type="button" class="flex items-center gap-1 text-left hover:text-foreground" @click="toggleSort('category')">
-                        Catégorie
-                        <span v-if="filters.sort === 'category'">{{ filters.direction === 'asc' ? '▲' : '▼' }}</span>
-                    </button>
-                    <button type="button" class="flex items-center gap-1 text-left hover:text-foreground" @click="toggleSort('description')">
-                        Description
-                        <span v-if="filters.sort === 'description'">{{ filters.direction === 'asc' ? '▲' : '▼' }}</span>
-                    </button>
-                    <button type="button" class="flex items-center justify-end gap-1 text-right hover:text-foreground" @click="toggleSort('amount')">
-                        Montant
-                        <span v-if="filters.sort === 'amount'">{{ filters.direction === 'asc' ? '▲' : '▼' }}</span>
-                    </button>
-                    <span></span>
+                <div class="overflow-x-auto">
+                    <div class="min-w-[760px]">
+                        <div
+                            class="grid grid-cols-[100px_1fr_1fr_140px_170px] gap-2 border-b border-border px-5 py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                        >
+                            <button type="button" class="flex items-center gap-1 text-left hover:text-foreground" @click="toggleSort('date')">
+                                Date
+                                <span v-if="filters.sort === 'date'">{{ filters.direction === 'asc' ? '▲' : '▼' }}</span>
+                            </button>
+                            <button type="button" class="flex items-center gap-1 text-left hover:text-foreground" @click="toggleSort('category')">
+                                Catégorie
+                                <span v-if="filters.sort === 'category'">{{ filters.direction === 'asc' ? '▲' : '▼' }}</span>
+                            </button>
+                            <button type="button" class="flex items-center gap-1 text-left hover:text-foreground" @click="toggleSort('description')">
+                                Description
+                                <span v-if="filters.sort === 'description'">{{ filters.direction === 'asc' ? '▲' : '▼' }}</span>
+                            </button>
+                            <button type="button" class="flex items-center justify-end gap-1 text-right hover:text-foreground" @click="toggleSort('amount')">
+                                Montant
+                                <span v-if="filters.sort === 'amount'">{{ filters.direction === 'asc' ? '▲' : '▼' }}</span>
+                            </button>
+                            <span></span>
+                        </div>
+
+                        <div
+                            v-for="expense in expenses.data"
+                            :key="expense.id"
+                            class="grid grid-cols-[100px_1fr_1fr_140px_170px] items-center gap-2 border-b border-border px-5 py-3 last:border-b-0"
+                        >
+                            <span class="text-sm text-muted-foreground">
+                                {{ new Date(expense.date).toLocaleDateString('fr-FR') }}
+                            </span>
+                            <span class="flex min-w-0 items-center gap-2">
+                                <span
+                                    class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-sm"
+                                    :style="{
+                                        backgroundColor: (expense.category.resolved_color ?? '#676E80') + '22',
+                                        color: expense.category.resolved_color ?? '#676E80',
+                                    }"
+                                >
+                                    <CategoryIcon :icon="expense.category.resolved_icon" class="h-4 w-4" />
+                                </span>
+                                <span class="truncate text-sm font-medium text-foreground">
+                                    {{ expense.category.name }}
+                                </span>
+                            </span>
+                            <span class="truncate text-sm text-muted-foreground">
+                                {{ expense.description ?? '—' }}
+                            </span>
+                            <strong class="whitespace-nowrap text-right text-sm text-expense">
+                                <Amount :value="expense.amount" prefix="−" />
+                            </strong>
+                            <span class="flex justify-end gap-3 whitespace-nowrap text-sm">
+                                <button
+                                    type="button"
+                                    class="text-muted-foreground hover:text-foreground"
+                                    @click="startEdit(expense)"
+                                >
+                                    Modifier
+                                </button>
+                                <button
+                                    type="button"
+                                    class="text-expense hover:text-expense/80"
+                                    @click="confirmDestroy(expense)"
+                                >
+                                    Supprimer
+                                </button>
+                            </span>
+                        </div>
+                    </div>
                 </div>
 
                 <p v-if="expenses.data.length === 0" class="p-5 text-sm text-muted-foreground">
                     Aucune dépense pour ce mois ou ces filtres.
                 </p>
-
-                <div
-                    v-for="expense in expenses.data"
-                    :key="expense.id"
-                    class="grid grid-cols-[100px_1fr_1fr_140px_170px] items-center gap-2 border-b border-border px-5 py-3 last:border-b-0"
-                >
-                    <span class="text-sm text-muted-foreground">
-                        {{ new Date(expense.date).toLocaleDateString('fr-FR') }}
-                    </span>
-                    <span class="flex min-w-0 items-center gap-2">
-                        <span
-                            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-sm"
-                            :style="{
-                                backgroundColor: (expense.category.resolved_color ?? '#676E80') + '22',
-                                color: expense.category.resolved_color ?? '#676E80',
-                            }"
-                        >
-                            <CategoryIcon :icon="expense.category.resolved_icon" class="h-4 w-4" />
-                        </span>
-                        <span class="truncate text-sm font-medium text-foreground">
-                            {{ expense.category.name }}
-                        </span>
-                    </span>
-                    <span class="truncate text-sm text-muted-foreground">
-                        {{ expense.description ?? '—' }}
-                    </span>
-                    <strong class="whitespace-nowrap text-right text-sm text-expense">
-                        <Amount :value="expense.amount" prefix="−" />
-                    </strong>
-                    <span class="flex justify-end gap-3 whitespace-nowrap text-sm">
-                        <button
-                            type="button"
-                            class="text-muted-foreground hover:text-foreground"
-                            @click="startEdit(expense)"
-                        >
-                            Modifier
-                        </button>
-                        <button
-                            type="button"
-                            class="text-expense hover:text-expense/80"
-                            @click="confirmDestroy(expense)"
-                        >
-                            Supprimer
-                        </button>
-                    </span>
-                </div>
 
                 <Pagination
                     :meta="expenses.meta"

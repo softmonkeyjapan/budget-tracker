@@ -328,34 +328,38 @@ const donutTooltipLabel = computed(() => {
                     Aucune dépense pour ce mois.
                 </p>
 
-                <div
-                    v-for="expense in lastExpenses"
-                    :key="expense.id"
-                    class="grid grid-cols-[100px_1fr_1fr_140px] items-center gap-2 border-b border-border px-5 py-3 last:border-b-0"
-                >
-                    <span class="text-sm text-muted-foreground">
-                        {{ new Date(expense.date).toLocaleDateString('fr-FR') }}
-                    </span>
-                    <span class="flex min-w-0 items-center gap-2">
-                        <span
-                            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-sm"
-                            :style="{
-                                backgroundColor: (expense.category.resolved_color ?? '#676E80') + '22',
-                                color: expense.category.resolved_color ?? '#676E80',
-                            }"
+                <div v-else class="overflow-x-auto">
+                    <div class="min-w-[560px]">
+                        <div
+                            v-for="expense in lastExpenses"
+                            :key="expense.id"
+                            class="grid grid-cols-[100px_1fr_1fr_140px] items-center gap-2 border-b border-border px-5 py-3 last:border-b-0"
                         >
-                            <CategoryIcon :icon="expense.category.resolved_icon" class="h-4 w-4" />
-                        </span>
-                        <span class="truncate text-sm font-medium text-foreground">
-                            {{ expense.category.name }}
-                        </span>
-                    </span>
-                    <span class="truncate text-sm text-muted-foreground">
-                        {{ expense.description ?? '—' }}
-                    </span>
-                    <strong class="whitespace-nowrap text-right text-sm text-expense">
-                        <Amount :value="expense.amount" prefix="−" />
-                    </strong>
+                            <span class="text-sm text-muted-foreground">
+                                {{ new Date(expense.date).toLocaleDateString('fr-FR') }}
+                            </span>
+                            <span class="flex min-w-0 items-center gap-2">
+                                <span
+                                    class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-sm"
+                                    :style="{
+                                        backgroundColor: (expense.category.resolved_color ?? '#676E80') + '22',
+                                        color: expense.category.resolved_color ?? '#676E80',
+                                    }"
+                                >
+                                    <CategoryIcon :icon="expense.category.resolved_icon" class="h-4 w-4" />
+                                </span>
+                                <span class="truncate text-sm font-medium text-foreground">
+                                    {{ expense.category.name }}
+                                </span>
+                            </span>
+                            <span class="truncate text-sm text-muted-foreground">
+                                {{ expense.description ?? '—' }}
+                            </span>
+                            <strong class="whitespace-nowrap text-right text-sm text-expense">
+                                <Amount :value="expense.amount" prefix="−" />
+                            </strong>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
