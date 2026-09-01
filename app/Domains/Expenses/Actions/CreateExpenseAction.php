@@ -6,6 +6,7 @@ namespace App\Domains\Expenses\Actions;
 
 use App\Domains\Expenses\Actions\Concerns\ResolvesChildCategory;
 use App\Domains\Expenses\DataTransferObjects\CreateExpenseData;
+use App\Domains\Expenses\Enums\ExpenseStatus;
 use App\Domains\Expenses\Repositories\Contracts\ExpenseRepositoryInterface;
 use App\Domains\Shared\Contracts\CategoryLookupInterface;
 use App\Models\Expense;
@@ -30,6 +31,7 @@ final class CreateExpenseAction
             'amount' => $data->amount,
             'date' => $data->date,
             'description' => $data->description,
+            'status' => ExpenseStatus::Validated,
         ]);
     }
 }

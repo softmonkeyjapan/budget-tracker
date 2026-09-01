@@ -2,6 +2,7 @@
 
 use App\Domains\Expenses\Actions\UpdateExpenseAction;
 use App\Domains\Expenses\DataTransferObjects\UpdateExpenseData;
+use App\Domains\Expenses\Enums\ExpenseStatus;
 use App\Domains\Expenses\Exceptions\ExpenseCategoryMustBeChildException;
 use App\Domains\Expenses\Repositories\Contracts\ExpenseRepositoryInterface;
 use App\Domains\Shared\Contracts\CategoryLookupInterface;
@@ -42,6 +43,7 @@ it('updates an expense under a child category', function () {
             'amount' => 5000,
             'date' => '2026-08-10',
             'description' => 'Mise à jour',
+            'status' => ExpenseStatus::Validated,
         ])
         ->andReturn($expense);
 

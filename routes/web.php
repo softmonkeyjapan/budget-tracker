@@ -1,7 +1,9 @@
 <?php
 
 use App\Domains\Categories\Http\Controllers\CategoriesController;
+use App\Domains\Expenses\Http\Controllers\BciWebhookController;
 use App\Domains\Expenses\Http\Controllers\ExpensesController;
+use App\Domains\Expenses\Http\Controllers\PendingExpensesController;
 use App\Domains\Feedback\Http\Controllers\FeedbackController;
 use App\Domains\Incomes\Http\Controllers\IncomesController;
 use App\Domains\Reporting\Http\Controllers\ComparisonController;
@@ -29,6 +31,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('categories', CategoriesController::class)->only(['index', 'store', 'update', 'destroy']);
 
     Route::get('expenses/create', [ExpensesController::class, 'create'])->name('expenses.create');
+    Route::get('expenses/pending', [PendingExpensesController::class, 'index'])->name('pending-expenses.index');
+    Route::patch('expenses/{expense}/reject', [PendingExpensesController::class, 'reject'])->name('pending-expenses.reject');
     Route::resource('expenses', ExpensesController::class)->only(['index', 'store', 'update', 'destroy']);
 
     Route::get('incomes/create', [IncomesController::class, 'create'])->name('incomes.create');
@@ -38,5 +42,9 @@ Route::middleware('auth')->group(function () {
         ->middleware('throttle:5,1')
         ->name('feedback.store');
 });
+
+Route::post('/webhooks/bci', [BciWebhookController::class, 'store'])
+    ->middleware(['throttle:60,1', 'webhook.bci'])
+    ->name('webhooks.bci.store');
 
 require __DIR__.'/auth.php';

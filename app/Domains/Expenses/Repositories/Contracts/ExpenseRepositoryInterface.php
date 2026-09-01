@@ -61,4 +61,13 @@ interface ExpenseRepositoryInterface
     public function latestForUser(User $user, int $limit): Collection;
 
     public function existsForCategory(Category $category): bool;
+
+    /**
+     * Draft and rejected expenses awaiting triage, most recent first.
+     *
+     * @return Collection<int, Expense>
+     */
+    public function pendingForUser(User $user): Collection;
+
+    public function countPendingForUser(User $user): int;
 }

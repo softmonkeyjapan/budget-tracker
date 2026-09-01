@@ -17,20 +17,26 @@ import {
     SidebarFooter,
     SidebarHeader,
     SidebarMenu,
+    SidebarMenuBadge,
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarRail,
     useSidebar,
 } from '@/Shared/Components/ui/sidebar';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import { ChevronsUpDown } from '@lucide/vue';
+import { computed } from 'vue';
 
 const { isMobile } = useSidebar();
+const page = usePage();
+
+const pendingExpensesCount = computed(() => page.props.pendingExpensesCount ?? 0);
 
 const navItems = [
     { label: 'Dashboard', route: 'dashboard', pattern: 'dashboard' },
     { label: 'Catégories', route: 'categories.index', pattern: 'categories.*' },
     { label: 'Dépenses', route: 'expenses.index', pattern: 'expenses.*' },
+    { label: 'À traiter', route: 'pending-expenses.index', pattern: 'pending-expenses.*', badge: 'pending' },
     { label: 'Entrées', route: 'incomes.index', pattern: 'incomes.*' },
     { label: 'Comparaison', route: 'comparison', pattern: 'comparison' },
 ];
@@ -60,6 +66,9 @@ const navItems = [
                             <span>{{ item.label }}</span>
                         </Link>
                     </SidebarMenuButton>
+                    <SidebarMenuBadge v-if="item.badge === 'pending' && pendingExpensesCount > 0">
+                        {{ pendingExpensesCount }}
+                    </SidebarMenuBadge>
                 </SidebarMenuItem>
             </SidebarMenu>
         </SidebarContent>

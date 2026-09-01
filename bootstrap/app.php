@@ -1,5 +1,6 @@
 <?php
 
+use App\Domains\Expenses\Http\Middleware\VerifyBciWebhookApiKey;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -19,7 +20,15 @@ return Application::configure(basePath: dirname(__DIR__))
             AddLinkHeadersForPreloadedAssets::class,
         ]);
 
-        //
+        $middleware->alias([
+            'webhook.bci' => VerifyBciWebhookApiKey::class,
+        ]);
+
+        // External callers (MacroDroid) can't supply a Laravel session/CSRF token —
+        // this endpoint is protected by VerifyBciWebhookApiKey instead.
+        $middleware->validateCsrfTokens(except: [
+            'webhooks/bci',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

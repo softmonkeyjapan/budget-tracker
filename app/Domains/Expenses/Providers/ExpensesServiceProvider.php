@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domains\Expenses\Providers;
 
+use App\Domains\Expenses\Adapters\FrankfurterExchangeRateProvider;
+use App\Domains\Expenses\Contracts\ExchangeRateProviderInterface;
 use App\Domains\Expenses\Policies\ExpensePolicy;
 use App\Domains\Expenses\Repositories\Contracts\ExpenseRepositoryInterface;
 use App\Domains\Expenses\Repositories\EloquentExpenseRepository;
@@ -20,6 +22,7 @@ final class ExpensesServiceProvider extends ServiceProvider
     public array $bindings = [
         ExpenseRepositoryInterface::class => EloquentExpenseRepository::class,
         ExpenseExistenceInterface::class => EloquentExpenseRepository::class,
+        ExchangeRateProviderInterface::class => FrankfurterExchangeRateProvider::class,
     ];
 
     public function boot(): void

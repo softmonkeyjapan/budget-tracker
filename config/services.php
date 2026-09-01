@@ -44,4 +44,15 @@ return [
         'key' => env('ANTHROPIC_API_KEY'),
     ],
 
+    'bci_webhook' => [
+        'key' => env('BCI_WEBHOOK_API_KEY'),
+        'user_id' => env('BCI_WEBHOOK_USER_ID'),
+    ],
+
+    'exchange_rate' => [
+        // Fallback used when the live USD→EUR rate can't be fetched. Adjust
+        // occasionally — it doesn't need to be exact, only roughly current.
+        'usd_xpf_fallback' => env('USD_XPF_FALLBACK_RATE', 112),
+    ],
+
 ];

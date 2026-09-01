@@ -2,6 +2,7 @@
 
 use App\Domains\Expenses\Actions\CreateExpenseAction;
 use App\Domains\Expenses\DataTransferObjects\CreateExpenseData;
+use App\Domains\Expenses\Enums\ExpenseStatus;
 use App\Domains\Expenses\Exceptions\ExpenseCategoryMustBeChildException;
 use App\Domains\Expenses\Exceptions\ExpenseCategoryNotFoundException;
 use App\Domains\Expenses\Repositories\Contracts\ExpenseRepositoryInterface;
@@ -26,6 +27,7 @@ test('creating an expense under a child category succeeds', function () {
             'amount' => 14850,
             'date' => '2026-08-05',
             'description' => 'Supermarché',
+            'status' => ExpenseStatus::Validated,
         ])
         ->andReturn(new Expense);
 

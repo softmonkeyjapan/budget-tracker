@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Domains\Expenses\Repositories\Contracts\ExpenseRepositoryInterface;
 use App\Domains\Users\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -16,6 +17,10 @@ final class HandleInertiaRequests extends Middleware
      * @var string
      */
     protected $rootView = 'app';
+
+    public function __construct(
+        private readonly ExpenseRepositoryInterface $expenses,
+    ) {}
 
     /**
      * Determine the current asset version.
@@ -37,6 +42,9 @@ final class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user() ? UserResource::make($request->user()) : null,
             ],
+            'pendingExpensesCount' => $request->user()
+                ? $this->expenses->countPendingForUser($request->user())
+                : null,
         ];
     }
 }

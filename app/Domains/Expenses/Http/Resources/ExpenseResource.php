@@ -23,13 +23,15 @@ final class ExpenseResource extends JsonResource
             'amount' => $this->amount,
             'date' => $this->date->toDateString(),
             'description' => $this->description,
-            'category' => [
+            'status' => $this->status->value,
+            'raw_payload' => $this->raw_payload,
+            'category' => $this->category !== null ? [
                 'id' => $this->category->id,
                 'name' => $this->category->name,
                 'root_name' => $this->category->parent?->name,
                 'resolved_color' => $this->category->resolvedColor(),
                 'resolved_icon' => $this->category->resolvedIcon(),
-            ],
+            ] : null,
         ];
     }
 }

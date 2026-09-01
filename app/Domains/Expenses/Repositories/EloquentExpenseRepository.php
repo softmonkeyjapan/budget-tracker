@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domains\Expenses\Repositories;
 
+use App\Domains\Expenses\Enums\ExpenseStatus;
 use App\Domains\Expenses\Repositories\Contracts\ExpenseRepositoryInterface;
 use App\Domains\Shared\Contracts\ExpenseExistenceInterface;
 use App\Models\Category;
@@ -83,6 +84,7 @@ final class EloquentExpenseRepository implements ExpenseExistenceInterface, Expe
     ): Builder {
         $query = Expense::query()
             ->where('expenses.user_id', $user->id)
+            ->where('expenses.status', ExpenseStatus::Validated)
             ->whereYear('expenses.date', substr($month, 0, 4))
             ->whereMonth('expenses.date', substr($month, 5, 2))
             ->with('category.parent');
@@ -124,6 +126,7 @@ final class EloquentExpenseRepository implements ExpenseExistenceInterface, Expe
     {
         return Expense::query()
             ->where('user_id', $user->id)
+            ->where('status', ExpenseStatus::Validated)
             ->whereBetween('date', [$start, $end])
             ->get();
     }
@@ -135,6 +138,7 @@ final class EloquentExpenseRepository implements ExpenseExistenceInterface, Expe
     {
         return Expense::query()
             ->where('user_id', $user->id)
+            ->where('status', ExpenseStatus::Validated)
             ->with('category.parent')
             ->orderByDesc('date')
             ->limit($limit)
@@ -144,5 +148,25 @@ final class EloquentExpenseRepository implements ExpenseExistenceInterface, Expe
     public function existsForCategory(Category $category): bool
     {
         return Expense::query()->where('category_id', $category->id)->exists();
+    }
+
+    /**
+     * @return Collection<int, Expense>
+     */
+    public function pendingForUser(User $user): Collection
+    {
+        return Expense::query()
+            ->where('user_id', $user->id)
+            ->whereIn('status', [ExpenseStatus::Draft, ExpenseStatus::Rejected])
+            ->orderByDesc('created_at')
+            ->get();
+    }
+
+    public function countPendingForUser(User $user): int
+    {
+        return Expense::query()
+            ->where('user_id', $user->id)
+            ->whereIn('status', [ExpenseStatus::Draft, ExpenseStatus::Rejected])
+            ->count();
     }
 }

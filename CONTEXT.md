@@ -9,8 +9,12 @@ Regroupement de Dépenses défini par l'utilisateur, organisé en hiérarchie au
 _Avoid_: Grande catégorie / Sous-catégorie (ce sont des rôles selon la position dans la hiérarchie, pas des types distincts), Type de dépense, Poste budgétaire
 
 **Dépense** (`Expense`):
-Mouvement d'argent réel sortant, toujours arrivé (jamais un état "peut-être"), rattaché obligatoirement à une catégorie enfant. Porte un montant, une date précise, et une description libre optionnelle.
+Mouvement d'argent sortant, saisi manuellement ou détecté automatiquement depuis une notification bancaire (voir Webhook bancaire). Porte un statut : *validée* (mouvement confirmé, rattaché obligatoirement à une catégorie enfant, compte dans les totaux et budgets), *brouillon* (détectée automatiquement, montant/description encore incertains, catégorie non assignée, exclue des totaux), ou *rejetée* (notification qui ne correspond pas à une dépense reconnue, conservée pour debug). Porte un montant (optionnel tant que non validée), une date précise, une description libre optionnelle, et pour une dépense brouillon/rejetée, le texte brut de la notification d'origine.
 _Avoid_: Transaction (terme abandonné — désignait avant cette itération aussi bien les dépenses que les revenus), Achat
+
+**Webhook bancaire**:
+Point d'entrée HTTP statique, protégé par une clé API, qui reçoit le texte brut d'une notification bancaire (relayée par MacroDroid depuis le téléphone) et la transforme en Dépense brouillon ou rejetée. Le format de notification reconnu (aujourd'hui uniquement "Paiement carte" de la banque BCI) est codé en dur ; un nouveau format s'ajoute par modification du code, pas par configuration.
+_Avoid_: Webhook dynamique, Snippet de transformation (approche envisagée puis écartée au profit d'un traitement codé en dur, un seul cas d'usage existant)
 
 **Entrée d'argent** (`Income`):
 Mouvement d'argent réel entrant (salaire, freelance, etc.), indépendant de toute Catégorie. Porte un montant, une date précise, et une description libre optionnelle. Plusieurs Entrées d'argent peuvent coexister sur un même mois (ex: salaire + revenu freelance).
