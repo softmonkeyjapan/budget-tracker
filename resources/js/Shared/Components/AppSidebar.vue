@@ -37,6 +37,7 @@ const navItems = [
     { label: 'Catégories', route: 'categories.index', pattern: 'categories.*' },
     { label: 'Dépenses', route: 'expenses.index', pattern: 'expenses.*' },
     { label: 'À traiter', route: 'pending-expenses.index', pattern: 'pending-expenses.*', badge: 'pending' },
+    { label: 'Échéances', route: 'echeances.index', pattern: 'echeances.*' },
     { label: 'Entrées', route: 'incomes.index', pattern: 'incomes.*' },
     { label: 'Comparaison', route: 'comparison', pattern: 'comparison' },
 ];

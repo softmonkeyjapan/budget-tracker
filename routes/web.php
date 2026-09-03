@@ -2,6 +2,8 @@
 
 use App\Domains\Categories\Http\Controllers\CategoriesController;
 use App\Domains\Expenses\Http\Controllers\BciWebhookController;
+use App\Domains\Expenses\Http\Controllers\EcheanceOccurrencesController;
+use App\Domains\Expenses\Http\Controllers\EcheancesController;
 use App\Domains\Expenses\Http\Controllers\ExpensesController;
 use App\Domains\Expenses\Http\Controllers\PendingExpensesController;
 use App\Domains\Feedback\Http\Controllers\FeedbackController;
@@ -34,6 +36,12 @@ Route::middleware('auth')->group(function () {
     Route::get('expenses/pending', [PendingExpensesController::class, 'index'])->name('pending-expenses.index');
     Route::patch('expenses/{expense}/reject', [PendingExpensesController::class, 'reject'])->name('pending-expenses.reject');
     Route::resource('expenses', ExpensesController::class)->only(['index', 'store', 'update', 'destroy']);
+
+    Route::get('echeances/create', [EcheancesController::class, 'create'])->name('echeances.create');
+    Route::get('echeances', [EcheancesController::class, 'index'])->name('echeances.index');
+    Route::post('echeances', [EcheancesController::class, 'store'])->name('echeances.store');
+    Route::patch('echeances/{echeance}/cancel', [EcheancesController::class, 'cancel'])->name('echeances.cancel');
+    Route::patch('echeances/occurrences/{echeanceOccurrence}', [EcheanceOccurrencesController::class, 'update'])->name('echeance-occurrences.update');
 
     Route::get('incomes/create', [IncomesController::class, 'create'])->name('incomes.create');
     Route::resource('incomes', IncomesController::class)->only(['index', 'store', 'update', 'destroy']);
